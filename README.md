@@ -1,2 +1,2 @@
 # karma-app-posts
-posts microservice for karma-app
+Posts microservice for karma-app
