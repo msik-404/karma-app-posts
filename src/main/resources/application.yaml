@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:27017
+      database: ${DB_NAME}
