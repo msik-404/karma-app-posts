@@ -1,11 +1,12 @@
 package com.msik404.karmaappposts.post;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "posts")
+@Document(collection = "posts")
 public class PostDocument {
 
-    public String id;
+    public ObjectId id;
 
     public String userId;
 

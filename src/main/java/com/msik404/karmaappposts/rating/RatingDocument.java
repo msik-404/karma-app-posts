@@ -1,5 +1,6 @@
 package com.msik404.karmaappposts.rating;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /*
@@ -7,10 +8,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * of ratings could be associated with given post. Most liked reddit post has at least 400.000 ratings.
  */
 
-@Document(collation = "ratings")
+@Document(collection = "ratings")
 public class RatingDocument {
 
-    private String postId;
+    private ObjectId postId;
 
     private String userId;
 
