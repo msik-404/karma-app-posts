@@ -1,6 +1,6 @@
-package com.msik404.karmaappposts.image;
+package com.msik404.karmaappposts.image.repository;
 
-import com.msik404.karmaappposts.image.repository.CustomImageRepository;
+import com.msik404.karmaappposts.image.ImageDocument;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

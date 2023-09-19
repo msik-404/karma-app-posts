@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.msik404.karmaappposts.MongoConfiguration;
 import com.msik404.karmaappposts.image.repository.CustomImageRepository;
 import com.msik404.karmaappposts.image.repository.CustomImageRepositoryImpl;
+import com.msik404.karmaappposts.image.repository.ImageRepository;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
@@ -50,24 +51,25 @@ class ImageRepositoryTest {
     private final MongoOperations ops;
     private final ImageRepository repository;
 
-    private static List<ImageDocument> getTestImageDocs() {
-
-        final List<ImageDocument> docs = new ArrayList<>(5);
-        final var dummyData = new Binary("data".getBytes());
-        for(int i = 0; i < 5; i++) {
-            docs.add(new ImageDocument(ObjectId.get(), dummyData));
-        }
-        return docs;
-    }
-
-    private static final List<ImageDocument> TEST_IMAGE_DOCS = getTestImageDocs();
-
     @Autowired
     ImageRepositoryTest(MongoTemplate template, ImageRepository repository) {
 
         this.ops = template;
         this.repository = repository;
     }
+
+    private static List<ImageDocument> getTestImageDocs() {
+
+        final int size = 5;
+        final List<ImageDocument> docs = new ArrayList<>(size);
+        final var dummyData = new Binary("data".getBytes());
+        for(int i = 0; i < size; i++) {
+            docs.add(new ImageDocument(ObjectId.get(), dummyData));
+        }
+        return docs;
+    }
+
+    private static final List<ImageDocument> TEST_IMAGE_DOCS = getTestImageDocs();
 
     @BeforeEach
     void setUp() {
@@ -87,7 +89,7 @@ class ImageRepositoryTest {
         final var groundTruth = TEST_IMAGE_DOCS.get(idx);
 
         // when
-        final Optional<Binary> optionalImageData = repository.findImageDataById(groundTruth.getId());
+        final Optional<Binary> optionalImageData = repository.findImageDataById(groundTruth.getPostId());
 
         // then
         assertTrue(optionalImageData.isPresent());
