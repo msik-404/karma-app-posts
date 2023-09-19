@@ -1,6 +1,8 @@
 package com.msik404.karmaappposts.rating;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /*
@@ -9,11 +11,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection = "ratings")
+@CompoundIndex(name = "postId_userId", def = "{'_id': 1, 'userId': 1}")
 public class RatingDocument {
 
+    @Id
     private ObjectId postId;
 
-    private String userId;
+    private ObjectId userId;
 
     private boolean isPositive;
 
