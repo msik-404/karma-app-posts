@@ -64,6 +64,7 @@ class ImageRepositoryTest {
 
     @Autowired
     ImageRepositoryTest(MongoTemplate template, ImageRepository repository) {
+
         this.ops = template;
         this.repository = repository;
     }
