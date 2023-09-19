@@ -92,4 +92,17 @@ class ImageRepositoryTest {
         assertTrue(optionalImageData.isPresent());
         assertArrayEquals(groundTruth.getImageData().getData(), optionalImageData.get().getData());
     }
+
+    @Test
+    void findImageDataById_RequestedDocDoesNotExist_OptionalEmpty() {
+
+        // given
+        final ObjectId nonExistingId = ObjectId.get();
+
+        // when
+        final Optional<Binary> optionalImageData = repository.findImageDataById(nonExistingId);
+
+        // then
+        assertTrue(optionalImageData.isEmpty());
+    }
 }
