@@ -1,5 +1,6 @@
 package com.msik404.karmaappposts.rating;
 
+import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * of ratings could be associated with given post. Most liked reddit post has at least 400.000 ratings.
  */
 
+@AllArgsConstructor
 @Document(collection = "ratings")
 @CompoundIndex(name = "postId_userId", def = "{'_id': 1, 'userId': 1}")
 public class RatingDocument {
