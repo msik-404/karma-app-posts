@@ -1,13 +1,10 @@
-package com.msik404.karmaappposts.image;
+package com.msik404.karmaappposts.image.repository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import com.msik404.karmaappposts.MongoConfiguration;
-import com.msik404.karmaappposts.image.repository.CustomImageRepository;
-import com.msik404.karmaappposts.image.repository.CustomImageRepositoryImpl;
-import com.msik404.karmaappposts.image.repository.ImageRepository;
+import com.msik404.karmaappposts.TestingDataGenerator;
+import com.msik404.karmaappposts.image.ImageDocument;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
@@ -51,29 +48,20 @@ class ImageRepositoryTest {
     private final MongoOperations ops;
     private final ImageRepository repository;
 
+    private final TestingDataGenerator dataGenerator;
+
     @Autowired
     ImageRepositoryTest(MongoTemplate template, ImageRepository repository) {
 
         this.ops = template;
         this.repository = repository;
+
+        dataGenerator = new TestingDataGenerator();
     }
-
-    private static List<ImageDocument> getTestImageDocs() {
-
-        final int size = 5;
-        final List<ImageDocument> docs = new ArrayList<>(size);
-        final var dummyData = new Binary("data".getBytes());
-        for(int i = 0; i < size; i++) {
-            docs.add(new ImageDocument(ObjectId.get(), dummyData));
-        }
-        return docs;
-    }
-
-    private static final List<ImageDocument> TEST_IMAGE_DOCS = getTestImageDocs();
 
     @BeforeEach
     void setUp() {
-        repository.insert(TEST_IMAGE_DOCS);
+        repository.insert(dataGenerator.getTestImageDocs());
     }
 
     @AfterEach
@@ -86,7 +74,7 @@ class ImageRepositoryTest {
 
         // given
         final int idx = 0;
-        final var groundTruth = TEST_IMAGE_DOCS.get(idx);
+        final var groundTruth = dataGenerator.getTestImageDocs().get(idx);
 
         // when
         final Optional<Binary> optionalImageData = repository.findImageDataById(groundTruth.getPostId());
@@ -108,4 +96,5 @@ class ImageRepositoryTest {
         // then
         assertTrue(optionalImageData.isEmpty());
     }
+
 }
