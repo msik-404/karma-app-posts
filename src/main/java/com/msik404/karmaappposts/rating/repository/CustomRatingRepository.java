@@ -9,12 +9,14 @@ import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionC
 import com.msik404.karmaappposts.rating.dto.RatingDocDto;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 public interface CustomRatingRepository {
 
     List<RatingDocDto> findFirstN(
             int size,
-            @NonNull ObjectId userId,
+            @Nullable ObjectId creatorId,
+            @NonNull ObjectId clientId,
             @NonNull PostDocScrollPositionConcrete position,
             @NonNull Collection<Visibility> visibilities,
             @NonNull PostDocRetrievalOrderStrategy order

@@ -89,19 +89,26 @@ class RatingRepositoryTest {
 
         // given
         final int userId = 2;
-        final ObjectId userObjectId = TestingDataGenerator.TEST_USER_IDS.get(userId);
+        final ObjectId clientObjectId = TestingDataGenerator.TEST_USER_IDS.get(userId);
         final int size = 30;
         final List<Visibility> visibilities = List.of(Visibility.ACTIVE, Visibility.HIDDEN, Visibility.DELETED);
-        final List<RatingDocDto> groundTruth = dataGenerator.getRatings(userObjectId, visibilities, size, 0);
+        List<RatingDocDto> groundTruth = TestingDataGenerator.getRatings(
+                dataGenerator.getTestPostDocs(),
+                dataGenerator.getTestRatingDocs(),
+                clientObjectId,
+                visibilities
+        );
+
+        groundTruth = groundTruth.subList(0, Math.min(groundTruth.size(), size));
 
         // when
         final List<RatingDocDto> results = ratingRepository.findFirstN(
                 size,
-                userObjectId,
+                null,
+                clientObjectId,
                 PostDocScrollPosition.initial(),
                 visibilities,
-                PostDocRetrievalOrder.desc()
-        );
+                PostDocRetrievalOrder.desc());
 
         // then
         assertEquals(groundTruth.size(), results.size());
@@ -115,21 +122,72 @@ class RatingRepositoryTest {
 
         // given
         final int userId = 2;
-        final ObjectId userObjectId = TestingDataGenerator.TEST_USER_IDS.get(userId);
+        final ObjectId clientObjectId = TestingDataGenerator.TEST_USER_IDS.get(userId);
         final int size = 30;
         final int skip = 3;
-        final PostDocument lastDoc = dataGenerator.getTestPostDocs().get(skip-1);
+        final PostDocument lastDoc = dataGenerator.getTestPostDocs().get(skip - 1);
         final List<Visibility> visibilities = List.of(Visibility.ACTIVE, Visibility.HIDDEN);
-        final List<RatingDocDto> groundTruth = dataGenerator.getRatings(userObjectId, visibilities, size, skip);
+        List<RatingDocDto> groundTruth = TestingDataGenerator.getRatings(
+                dataGenerator.getTestPostDocs(),
+                dataGenerator.getTestRatingDocs(),
+                clientObjectId,
+                visibilities
+        );
+
+        groundTruth = groundTruth.subList(skip, Math.min(groundTruth.size(), size));
 
         // when
         final List<RatingDocDto> results = ratingRepository.findFirstN(
                 size,
-                userObjectId,
+                null,
+                clientObjectId,
                 PostDocScrollPosition.of(lastDoc.getKarmaScore(), lastDoc.getId()),
                 visibilities,
-                PostDocRetrievalOrder.desc()
+                PostDocRetrievalOrder.desc());
+
+        // then
+        assertEquals(groundTruth.size(), results.size());
+        for (int i = 0; i < groundTruth.size(); i++) {
+            assertEquals(groundTruth.get(i), results.get(i));
+        }
+    }
+
+    @Test
+    void findFirstN_NonInitialAndNotEnoughPostsCreatorIdProvided_AsMuchAsPossibleReturnedInProperOrder() {
+
+        // given
+        final int clientId = 2;
+        final ObjectId clientObjectId = TestingDataGenerator.TEST_USER_IDS.get(clientId);
+
+        final int creatorId = 0;
+        final ObjectId creatorObjectId = TestingDataGenerator.TEST_USER_IDS.get(creatorId);
+
+        final int size = 30;
+        final int skip = 1;
+
+        final List<PostDocument> posts = dataGenerator.getTestPostDocs().stream().
+                filter(post -> post.getUserId().equals(creatorObjectId))
+                .toList();
+        final PostDocument lastDoc = posts.get(skip - 1);
+
+        final List<Visibility> visibilities = List.of(Visibility.ACTIVE, Visibility.HIDDEN);
+        List<RatingDocDto> groundTruth = TestingDataGenerator.getRatings(
+                posts,
+                dataGenerator.getTestRatingDocs(),
+                clientObjectId,
+                visibilities
         );
+
+        groundTruth = groundTruth.subList(skip, Math.min(groundTruth.size(), size));
+
+        // when
+        final List<RatingDocDto> results = ratingRepository.findFirstN(
+                size,
+                creatorObjectId,
+                clientObjectId,
+                PostDocScrollPosition.of(lastDoc.getKarmaScore(), lastDoc.getId()),
+                visibilities,
+                PostDocRetrievalOrder.desc());
 
         // then
         assertEquals(groundTruth.size(), results.size());

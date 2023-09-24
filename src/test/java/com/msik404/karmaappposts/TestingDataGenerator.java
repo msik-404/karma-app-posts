@@ -49,14 +49,11 @@ public class TestingDataGenerator {
 
     }
 
-    private static List<RatingDocDto> getRatings(
+    public static List<RatingDocDto> getRatings(
             @NonNull List<PostDocument> postDocs,
             @NonNull List<RatingDocument> ratingDocs,
             @NonNull ObjectId userId,
-            @NonNull Collection<Visibility> visibilities,
-            int size,
-            int skip
-            ) {
+            @NonNull Collection<Visibility> visibilities) {
 
         final Map<ObjectId, Boolean> ratedDocsByUser = ratingDocs.stream()
                 .filter(rating -> rating.getUserId().equals(userId))
@@ -66,18 +63,7 @@ public class TestingDataGenerator {
                 .filter(post -> visibilities.contains(post.getVisibility()))
                 .map(post -> new RatingDocDto(
                         post.getId(), ratedDocsByUser.getOrDefault(post.getId(), null)))
-                .skip(skip)
-                .limit(size)
                 .toList();
-    }
-
-    public List<RatingDocDto> getRatings(
-            @NonNull ObjectId userId,
-            @NonNull Collection<Visibility> visibilities,
-            int size,
-            int skip
-    ) {
-        return getRatings(testPostDocs, testRatingDocs, userId, visibilities, size, skip);
     }
 
     private static List<ObjectId> getTestUserIds() {

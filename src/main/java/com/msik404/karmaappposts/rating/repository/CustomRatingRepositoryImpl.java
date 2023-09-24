@@ -23,6 +23,7 @@ import org.springframework.data.mongodb.core.aggregation.VariableOperators.Let;
 import org.springframework.data.mongodb.core.aggregation.VariableOperators.Let.ExpressionVariable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 @RequiredArgsConstructor
 public class CustomRatingRepositoryImpl implements CustomRatingRepository {
@@ -32,7 +33,8 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     @Override
     public List<RatingDocDto> findFirstN(
             int size,
-            @NonNull ObjectId userId,
+            @Nullable ObjectId creatorId,
+            @NonNull ObjectId clientId,
             @NonNull PostDocScrollPositionConcrete position,
             @NonNull Collection<Visibility> visibilities,
             @NonNull PostDocRetrievalOrderStrategy order) {
@@ -43,9 +45,19 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
         var matchCriteria = Criteria.where("visibility").in(visibilities);
 
+        List<Criteria> additionalCriteria = new ArrayList<>();
+
         if (!position.isInitial()) {
-            matchCriteria.andOperator(
+            additionalCriteria.add(
                     PostDocScrollingCriteria.getNonInitial(position.getKarmaScore(), position.getPostId()));
+        }
+
+        if (creatorId != null) {
+            additionalCriteria.add(Criteria.where("userId").is(creatorId));
+        }
+
+        if (!additionalCriteria.isEmpty()) {
+            matchCriteria.andOperator(additionalCriteria);
         }
 
         aggOps.add(new MatchOperation(matchCriteria));
@@ -58,7 +70,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
                 new Document("$expr",
                         new Document("$and", List.of(
                                 new Document("$eq", Arrays.asList("$postId", "$$postId")),
-                                new Document("$eq", Arrays.asList("$userId", userId))
+                                new Document("$eq", Arrays.asList("$userId", clientId))
                         ))
                 )
         );
