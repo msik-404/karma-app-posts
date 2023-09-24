@@ -9,10 +9,12 @@ import com.msik404.karmaappposts.post.repository.criteria.PostDocScrollingCriter
 import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 @RequiredArgsConstructor
 public class CustomPostRepositoryImpl implements CustomPostRepository {
@@ -22,6 +24,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     @Override
     public List<PostDocument> findFirstN(
             int size,
+            @Nullable ObjectId creatorId,
             @NonNull PostDocScrollPositionConcrete position,
             @NonNull Collection<Visibility> visibilities,
             @NonNull PostDocRetrievalOrderStrategy order) {
@@ -32,6 +35,10 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 PostDocScrollingCriteria.getNonInitial(position.getKarmaScore(), position.getPostId()));
 
         query.addCriteria(Criteria.where("visibility").in(visibilities));
+
+        if (creatorId != null) {
+            query.addCriteria(Criteria.where("userId").is(creatorId));
+        }
 
         query.limit(size);
         query.with(order.getOrderStrategy());

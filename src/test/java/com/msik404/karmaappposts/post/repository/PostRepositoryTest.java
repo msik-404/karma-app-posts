@@ -158,10 +158,10 @@ class PostRepositoryTest {
         // when
         final List<PostDocument> results = repository.findFirstN(
                 size,
+                null,
                 PostDocScrollPosition.initial(),
                 visibilities,
-                PostDocRetrievalOrder.desc()
-        );
+                PostDocRetrievalOrder.desc());
 
         // then
         assertEquals(size, groundTruth.size());
@@ -189,10 +189,42 @@ class PostRepositoryTest {
         // when
         final List<PostDocument> results = repository.findFirstN(
                 size,
+                null,
                 PostDocScrollPosition.of(lastPostDoc.getKarmaScore(), lastPostDoc.getId()),
                 visibilities,
-                PostDocRetrievalOrder.desc()
-        );
+                PostDocRetrievalOrder.desc());
+
+        // then
+        assertEquals(groundTruth.size(), results.size());
+        for (int i = 0; i < groundTruth.size(); i++) {
+            assertEquals(groundTruth.get(i), results.get(i));
+        }
+
+    }
+
+    @Test
+    void findFirstN_NotEnoughDataPersistedCreatorIdProvided_AsMuchAsPossibleReturnedInProperOrder() {
+
+        // given
+        final int lastPostDocIdx = 0;
+        final ObjectId creatorId = TestingDataGenerator.TEST_USER_IDS.get(0);
+
+        final int size = 15;
+        final Set<Visibility> visibilities = Set.of(Visibility.ACTIVE, Visibility.HIDDEN);
+        List<PostDocument> groundTruth = dataGenerator.getTestPostDocs().stream()
+                .filter(post -> visibilities.contains(post.getVisibility()) && post.getUserId().equals(creatorId))
+                .toList();
+
+        final PostDocument lastPostDoc = groundTruth.get(lastPostDocIdx);
+        groundTruth = groundTruth.subList(1, 3);
+
+        // when
+        final List<PostDocument> results = repository.findFirstN(
+                size,
+                creatorId,
+                PostDocScrollPosition.of(lastPostDoc.getKarmaScore(), lastPostDoc.getId()),
+                visibilities,
+                PostDocRetrievalOrder.desc());
 
         // then
         assertEquals(groundTruth.size(), results.size());
@@ -219,10 +251,10 @@ class PostRepositoryTest {
         // when
         final List<PostDocument> results = repository.findFirstN(
                 size,
+                null,
                 position,
                 visibilities,
-                PostDocRetrievalOrder.desc()
-        );
+                PostDocRetrievalOrder.desc());
 
         // then
         assertEquals(groundTruth.size(), results.size());
