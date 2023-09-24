@@ -1,13 +1,13 @@
 package com.msik404.karmaappposts;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.msik404.karmaappposts.image.ImageDocument;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.rating.RatingDocument;
+import com.msik404.karmaappposts.rating.dto.RatingDocDto;
 import lombok.Getter;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
@@ -17,7 +17,7 @@ import org.springframework.lang.Nullable;
 @Getter
 public class TestingDataGenerator {
 
-    private static final List<ObjectId> TEST_USER_IDS = getTestUserIds();
+    public static final List<ObjectId> TEST_USER_IDS = getTestUserIds();
 
     private final List<PostDocument> testPostDocs;
 
@@ -42,11 +42,42 @@ public class TestingDataGenerator {
         public int compare(PostDocument first, PostDocument second) {
 
             if (first.getKarmaScore().equals(second.getKarmaScore())) {
-                return - first.getId().compareTo(second.getId());
+                return -first.getId().compareTo(second.getId());
             }
             return first.getKarmaScore().compareTo(second.getKarmaScore());
         }
 
+    }
+
+    private static List<RatingDocDto> getRatings(
+            @NonNull List<PostDocument> postDocs,
+            @NonNull List<RatingDocument> ratingDocs,
+            @NonNull ObjectId userId,
+            @NonNull Collection<Visibility> visibilities,
+            int size,
+            int skip
+            ) {
+
+        final Map<ObjectId, Boolean> ratedDocsByUser = ratingDocs.stream()
+                .filter(rating -> rating.getUserId().equals(userId))
+                .collect(Collectors.toMap(RatingDocument::getPostId, RatingDocument::isPositive));
+
+        return postDocs.stream()
+                .filter(post -> visibilities.contains(post.getVisibility()))
+                .map(post -> new RatingDocDto(
+                        post.getId(), ratedDocsByUser.getOrDefault(post.getId(), null)))
+                .skip(skip)
+                .limit(size)
+                .toList();
+    }
+
+    public List<RatingDocDto> getRatings(
+            @NonNull ObjectId userId,
+            @NonNull Collection<Visibility> visibilities,
+            int size,
+            int skip
+    ) {
+        return getRatings(testPostDocs, testRatingDocs, userId, visibilities, size, skip);
     }
 
     private static List<ObjectId> getTestUserIds() {
@@ -82,8 +113,8 @@ public class TestingDataGenerator {
 
         final boolean isPositive = karmaScore > 0;
 
-        for (int i = 0; i < karmaScore; i++) {
-            ratingsDocs.add(new RatingDocument(postId, TEST_USER_IDS.get(i), isPositive));
+        for (int i = 0; i < Math.abs(karmaScore); i++) {
+            ratingsDocs.add(new RatingDocument(ObjectId.get(), postId, TEST_USER_IDS.get(i), isPositive));
         }
     }
 
