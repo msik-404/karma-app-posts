@@ -15,7 +15,14 @@ public interface CustomPostRepository {
 
     List<PostDocument> findFirstN(
             int size,
-            @Nullable ObjectId creatorId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order
+    );
+
+    List<PostDocument> findFirstN(
+            int size,
+            @NonNull ObjectId creatorId,
             @NonNull PostDocScrollPositionConcrete position,
             @NonNull Collection<Visibility> visibilities,
             @NonNull PostDocRetrievalOrderStrategy order

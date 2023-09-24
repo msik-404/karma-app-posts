@@ -21,8 +21,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
     private final MongoOperations ops;
 
-    @Override
-    public List<PostDocument> findFirstN(
+    private List<PostDocument> findFirstNImpl(
             int size,
             @Nullable ObjectId creatorId,
             @NonNull PostDocScrollPositionConcrete position,
@@ -44,6 +43,27 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         query.with(order.getOrderStrategy());
 
         return ops.find(query, PostDocument.class);
+    }
+
+    @Override
+    public List<PostDocument> findFirstN(
+            int size,
+            @NonNull ObjectId creatorId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
+
+        return findFirstNImpl(size, creatorId, position, visibilities, order);
+    }
+
+    @Override
+    public List<PostDocument> findFirstN(
+            int size,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
+
+        return findFirstNImpl(size, null, position, visibilities, order);
     }
 
 }

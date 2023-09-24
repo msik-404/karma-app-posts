@@ -30,8 +30,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
     private final MongoOperations ops;
 
-    @Override
-    public List<RatingDocDto> findFirstN(
+    private List<RatingDocDto> findFirstNImpl(
             int size,
             @Nullable ObjectId creatorId,
             @NonNull ObjectId clientId,
@@ -103,6 +102,29 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         AggregationResults<RatingDocDto> results = ops.aggregate(agg, RatingDocDto.class);
 
         return results.getMappedResults();
+    }
+
+    @Override
+    public List<RatingDocDto> findFirstN(
+            int size,
+            @NonNull ObjectId clientId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
+
+        return findFirstNImpl(size, null, clientId, position, visibilities, order);
+    }
+
+    @Override
+    public List<RatingDocDto> findFirstN(
+            int size,
+            @NonNull ObjectId creatorId,
+            @NonNull ObjectId clientId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
+
+        return findFirstNImpl(size, creatorId, clientId, position, visibilities, order);
     }
 
 }

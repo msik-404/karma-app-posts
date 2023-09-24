@@ -15,7 +15,15 @@ public interface CustomRatingRepository {
 
     List<RatingDocDto> findFirstN(
             int size,
-            @Nullable ObjectId creatorId,
+            @NonNull ObjectId clientId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order
+    );
+
+    List<RatingDocDto> findFirstN(
+            int size,
+            @NonNull ObjectId creatorId,
             @NonNull ObjectId clientId,
             @NonNull PostDocScrollPositionConcrete position,
             @NonNull Collection<Visibility> visibilities,

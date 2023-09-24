@@ -104,7 +104,6 @@ class RatingRepositoryTest {
         // when
         final List<RatingDocDto> results = ratingRepository.findFirstN(
                 size,
-                null,
                 clientObjectId,
                 PostDocScrollPosition.initial(),
                 visibilities,
@@ -139,7 +138,6 @@ class RatingRepositoryTest {
         // when
         final List<RatingDocDto> results = ratingRepository.findFirstN(
                 size,
-                null,
                 clientObjectId,
                 PostDocScrollPosition.of(lastDoc.getKarmaScore(), lastDoc.getId()),
                 visibilities,

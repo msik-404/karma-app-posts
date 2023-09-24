@@ -158,7 +158,6 @@ class PostRepositoryTest {
         // when
         final List<PostDocument> results = repository.findFirstN(
                 size,
-                null,
                 PostDocScrollPosition.initial(),
                 visibilities,
                 PostDocRetrievalOrder.desc());
@@ -189,7 +188,6 @@ class PostRepositoryTest {
         // when
         final List<PostDocument> results = repository.findFirstN(
                 size,
-                null,
                 PostDocScrollPosition.of(lastPostDoc.getKarmaScore(), lastPostDoc.getId()),
                 visibilities,
                 PostDocRetrievalOrder.desc());
@@ -251,7 +249,6 @@ class PostRepositoryTest {
         // when
         final List<PostDocument> results = repository.findFirstN(
                 size,
-                null,
                 position,
                 visibilities,
                 PostDocRetrievalOrder.desc());
