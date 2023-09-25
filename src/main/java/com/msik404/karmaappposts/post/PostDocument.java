@@ -1,12 +1,15 @@
 package com.msik404.karmaappposts.post;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.lang.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@AllArgsConstructor
 @Builder
 @Document(collection = "posts")
 @CompoundIndex(name = "karmaScore_id", def = "{'karmaScore': -1, '_id': 1}")
@@ -23,5 +26,18 @@ public class PostDocument {
     private Long karmaScore;
 
     private Visibility visibility;
+
+    public PostDocument(
+            @NonNull ObjectId userId,
+            @NonNull String headline,
+            @NonNull String text) {
+
+        this.id = ObjectId.get();
+        this.userId = userId;
+        this.headline = headline;
+        this.text = text;
+        this.karmaScore = 0L;
+        this.visibility = Visibility.ACTIVE;
+    }
 
 }
