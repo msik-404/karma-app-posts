@@ -42,6 +42,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
         List<AggregationOperation> aggOps = new ArrayList<>();
 
+        // matching - query
         var matchCriteria = Criteria.where("visibility").in(visibilities);
 
         List<Criteria> additionalCriteria = new ArrayList<>();
@@ -60,9 +61,14 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         }
 
         aggOps.add(new MatchOperation(matchCriteria));
+
+        // limit results
         aggOps.add(new LimitOperation(size));
+
+        // sort results
         aggOps.add(new SortOperation(order.getOrderStrategy()));
 
+        // lookup - outer left join
         final var postIdVar = ExpressionVariable.newVariable("postId").forField("_id");
 
         final Bson bsonQuery = new Document("$match",
@@ -83,6 +89,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
                 Fields.field("rating")
         ));
 
+        // projection
         final AggregationExpression arrayIsNotEmpty = ComparisonOperators.Gt.valueOf(
                         ArrayOperators.Size.lengthOfArray("rating.isPositive"))
                 .greaterThanValue(0);
@@ -97,8 +104,10 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
         aggOps.add(projectionOperation);
 
+        // build aggregation query
         TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
 
+        // run query
         AggregationResults<PostIdAndIsPositiveOnlyDto> results = ops.aggregate(agg, PostIdAndIsPositiveOnlyDto.class);
 
         return results.getMappedResults();
