@@ -11,7 +11,7 @@ import com.msik404.karmaappposts.post.repository.criteria.PostDocScrollingCriter
 import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.rating.RatingDocument;
-import com.msik404.karmaappposts.rating.dto.RatingDocDto;
+import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -30,7 +30,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
     private final MongoOperations ops;
 
-    private List<RatingDocDto> findFirstNImpl(
+    private List<PostIdAndIsPositiveOnlyDto> findFirstNImpl(
             int size,
             @Nullable ObjectId creatorId,
             @NonNull ObjectId clientId,
@@ -99,13 +99,13 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
         TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
 
-        AggregationResults<RatingDocDto> results = ops.aggregate(agg, RatingDocDto.class);
+        AggregationResults<PostIdAndIsPositiveOnlyDto> results = ops.aggregate(agg, PostIdAndIsPositiveOnlyDto.class);
 
         return results.getMappedResults();
     }
 
     @Override
-    public List<RatingDocDto> findFirstN(
+    public List<PostIdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId clientId,
             @NonNull PostDocScrollPositionConcrete position,
@@ -116,7 +116,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     }
 
     @Override
-    public List<RatingDocDto> findFirstN(
+    public List<PostIdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId creatorId,
             @NonNull ObjectId clientId,

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @AllArgsConstructor
-public class RatingDocDto {
+public class PostIdAndIsPositiveOnlyDto {
 
     @Field("_id")
     private ObjectId postId;

@@ -6,14 +6,13 @@ import java.util.List;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
-import com.msik404.karmaappposts.rating.dto.RatingDocDto;
+import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 public interface CustomRatingRepository {
 
-    List<RatingDocDto> findFirstN(
+    List<PostIdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId clientId,
             @NonNull PostDocScrollPositionConcrete position,
@@ -21,7 +20,7 @@ public interface CustomRatingRepository {
             @NonNull PostDocRetrievalOrderStrategy order
     );
 
-    List<RatingDocDto> findFirstN(
+    List<PostIdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId creatorId,
             @NonNull ObjectId clientId,
