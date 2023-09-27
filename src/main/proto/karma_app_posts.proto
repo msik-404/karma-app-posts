@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package karmaappposts;
+
+option java_multiple_files = true;
+option java_package = "com.msik404.karmaappposts.grpc";
+option java_outer_classname = "KarmaAppPostsProtos";
+
+import "google/protobuf/empty.proto";
+
+service Posts {
+
+  rpc createPost(CreatePostRequest) returns (google.protobuf.Empty) {}
+  rpc ratePost(RatePostRequest) returns (google.protobuf.Empty) {}
+  rpc unratePost(UnratePostRequest) returns (google.protobuf.Empty) {}
+  rpc changePostVisibility(ChangePostVisibilityRequest) returns (google.protobuf.Empty) {}
+  rpc findPosts(PostsRequest) returns (PostsResponse) {}
+  rpc findPostsWithCreatorId(PostsWithCreatorIdRequest) returns (PostsResponse) {}
+  rpc findImage(ImageRequest) returns (ImageResponse) {}
+  rpc findPostRatings(PostRatingsRequest) returns (PostRatingsResponse) {}
+  rpc findPostRatingsWithCreatorId(PostRatingsWithCreatorIdRequest) returns (PostRatingsResponse) {}
+
+}
+
+message CreatePostRequest {
+  optional string user_id = 1;
+  optional string headline = 2;
+  optional string text = 3;
+  optional bytes image_data = 4;
+}
+
+message RatePostRequest {
+  optional string post_id = 1;
+  optional string user_id = 2;
+  optional bool is_positive = 3;
+}
+
+message UnratePostRequest {
+  optional string post_id = 1;
+  optional string user_id = 2;
+}
+
+enum PostVisibility {
+  VIS_ACTIVE = 0;
+  VIS_HIDDEN = 1;
+  VIS_DELETED = 2;
+}
+
+message ChangePostVisibilityRequest {
+  optional string post_id = 1;
+  optional PostVisibility visibility = 2;
+}
+
+message ScrollPosition {
+  optional uint64 karma_score = 1;
+  optional string post_id = 2;
+}
+
+message PostsRequest {
+  optional uint32 size = 1;
+  optional ScrollPosition position = 2;
+  repeated PostVisibility visibilities = 3;
+  optional bool is_descending = 4;
+}
+
+message Post {
+  optional string post_id = 1;
+  optional string user_id = 2;
+  optional string headline = 3;
+  optional string text = 4;
+  optional sint64 karma_score = 5;
+  optional PostVisibility visibility = 6;
+}
+
+message PostsResponse {
+  repeated Post posts = 1;
+}
+
+message PostsWithCreatorIdRequest {
+  optional PostsRequest posts_request = 1;
+  optional string creator_id = 2;
+}
+
+message ImageRequest {
+  optional string post_id = 1;
+}
+
+message ImageResponse {
+  optional bytes image_data = 1;
+}
+
+message PostRatingsRequest {
+  optional PostsRequest posts_request = 1;
+  optional string client_id = 2;
+}
+
+message PostRating {
+  optional string post_id = 1;
+  optional bool is_positive = 2;
+}
+
+message PostRatingsResponse {
+  repeated PostRating post_ratings = 1;
+}
+
+message PostRatingsWithCreatorIdRequest {
+    optional PostRatingsRequest posts_ratings_request = 1;
+    optional string creator_id = 2;
+}
