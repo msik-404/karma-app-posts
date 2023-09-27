@@ -7,6 +7,7 @@ import org.springframework.lang.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.Nullable;
 
 @Data
 @AllArgsConstructor
@@ -29,8 +30,8 @@ public class PostDocument {
 
     public PostDocument(
             @NonNull ObjectId userId,
-            @NonNull String headline,
-            @NonNull String text) {
+            @Nullable String headline,
+            @Nullable String text) {
 
         this.id = ObjectId.get();
         this.userId = userId;
