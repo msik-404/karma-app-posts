@@ -12,3 +12,9 @@ logging:
           mongodb:
             core:
               MongoTemplate: DEBUG
+
+KarmaAppPosts:
+  grpc:
+    default:
+      port: 50051
+      threadAmount: 8
