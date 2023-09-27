@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
+import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.repository.PostRepository;
 import com.msik404.karmaappposts.rating.RatingDocument;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
@@ -13,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +25,29 @@ public class PostService {
 
     private final ImageService imageService;
 
+    public void findAndIncrementKarmaScoreById(@NonNull ObjectId id, int increment) throws PostNotFoundException {
+
+        final long affectedDocs = postRepository.findAndIncrementKarmaScoreById(id, increment);
+        if (affectedDocs == 0) {
+            throw new PostNotFoundException();
+        }
+    }
+
+    public void findAndSetVisibilityById(
+            @NonNull ObjectId id,
+            @NonNull Visibility visibility) throws PostNotFoundException {
+
+        final long affectedDocs = postRepository.findAndSetVisibilityById(id, visibility);
+        if (affectedDocs == 0) {
+            throw new PostNotFoundException();
+        }
+    }
+
+    @Transactional
     public void create(
             @NonNull ObjectId userId,
-            @NonNull String headline,
-            @NonNull String text,
+            @Nullable String headline,
+            @Nullable String text,
             @Nullable byte[] imageData) throws FileProcessingException {
 
         final PostDocument post = new PostDocument(userId, headline, text);
@@ -36,7 +57,11 @@ public class PostService {
         }
     }
 
-    public void rate(@NonNull ObjectId postId, @NonNull ObjectId userId, boolean isPositive) {
+    @Transactional
+    public void rate(
+            @NonNull ObjectId postId,
+            @NonNull ObjectId userId,
+            boolean isPositive) throws PostNotFoundException {
 
         final Optional<IdAndIsPositiveOnlyDto> optionalDoc = ratingRepository.findByPostIdAndUserId(postId, userId);
 
@@ -55,10 +80,11 @@ public class PostService {
             ratingRepository.findAndSetIsPositiveById(ratingDoc.id(), isPositive);
         }
 
-        postRepository.findAndIncrementKarmaScoreById(postId, delta);
+        findAndIncrementKarmaScoreById(postId, delta);
     }
 
-    public void unrate(@NonNull ObjectId postId, @NonNull ObjectId userId) {
+    @Transactional
+    public void unrate(@NonNull ObjectId postId, @NonNull ObjectId userId) throws PostNotFoundException {
 
         final Optional<IdAndIsPositiveOnlyDto> optionalDoc = ratingRepository.findByPostIdAndUserId(postId, userId);
 
@@ -71,7 +97,7 @@ public class PostService {
 
         int delta = ratingDoc.isPositive() ? -1 : 1;
 
-        postRepository.findAndIncrementKarmaScoreById(postId, delta);
+        findAndIncrementKarmaScoreById(postId, delta);
         ratingRepository.deleteById(ratingDoc.id());
     }
 
