@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:27017
+      uri: mongodb://${DB_HOST}:27017/?replicaSet=rs0
       database: ${DB_NAME}
 
 logging:

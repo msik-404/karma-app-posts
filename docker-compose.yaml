@@ -20,12 +20,11 @@ services:
     networks:
       - karma-app-net
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
-      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
       - MONGO_INITDB_ROOT_DATABASE=${DB_NAME}
     volumes:
       - db-data:/data/db
       - db-config:/data/configdb
+    command: mongod --replSet rs0
 
   mongo-express:
     image: mongo-express
@@ -35,8 +34,6 @@ services:
     networks:
       - karma-app-net
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USER}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASSWORD}
       ME_CONFIG_MONGODB_SERVER: ${DB_NAME}
       ME_CONFIG_MONGODB_PORT: "27017"
 
