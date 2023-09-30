@@ -35,9 +35,9 @@ public class KarmaAppPostsApplication {
         return (args) -> {
             System.out.println("GRPC SERVER WILL RUN HERE");
 
-            ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(threadPoolSize);
+            final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(threadPoolSize);
 
-            Server server = ServerBuilder
+            final Server server = ServerBuilder
                     .forPort(defaultGrpcPort)
                     .executor(threadPoolExecutor)
                     .addService(grpcImpl)

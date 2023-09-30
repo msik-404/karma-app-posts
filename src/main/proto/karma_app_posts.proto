@@ -7,6 +7,7 @@ option java_package = "com.msik404.karmaappposts.grpc";
 option java_outer_classname = "KarmaAppPostsProtos";
 
 import "google/protobuf/empty.proto";
+import "buf/validate/validate.proto";
 
 service Posts {
 
@@ -23,7 +24,7 @@ service Posts {
 }
 
 message CreatePostRequest {
-  optional string user_id = 1;
+  optional string user_id = 1 [(buf.validate.field).string.len=24];
   optional string headline = 2;
   optional string text = 3;
   optional bytes image_data = 4;

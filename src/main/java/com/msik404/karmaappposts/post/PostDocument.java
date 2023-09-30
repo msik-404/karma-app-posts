@@ -3,6 +3,7 @@ package com.msik404.karmaappposts.post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -11,6 +12,7 @@ import org.springframework.lang.Nullable;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Document(collection = "posts")
 @CompoundIndex(name = "karmaScore_id", def = "{'karmaScore': -1, '_id': 1}")

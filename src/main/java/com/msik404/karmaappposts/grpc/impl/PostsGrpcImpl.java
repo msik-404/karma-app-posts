@@ -3,20 +3,12 @@ package com.msik404.karmaappposts.grpc.impl;
 import java.util.List;
 import java.util.Optional;
 
+import build.buf.protovalidate.ValidationResult;
+import build.buf.protovalidate.Validator;
+import build.buf.protovalidate.exceptions.ValidationException;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import com.msik404.karmaappposts.grpc.ChangePostVisibilityRequest;
-import com.msik404.karmaappposts.grpc.CreatePostRequest;
-import com.msik404.karmaappposts.grpc.ImageRequest;
-import com.msik404.karmaappposts.grpc.ImageResponse;
-import com.msik404.karmaappposts.grpc.PostRatingsRequest;
-import com.msik404.karmaappposts.grpc.PostRatingsResponse;
-import com.msik404.karmaappposts.grpc.PostsGrpc;
-import com.msik404.karmaappposts.grpc.PostsRequest;
-import com.msik404.karmaappposts.grpc.PostsResponse;
-import com.msik404.karmaappposts.grpc.PostsWithCreatorIdRequest;
-import com.msik404.karmaappposts.grpc.RatePostRequest;
-import com.msik404.karmaappposts.grpc.UnratePostRequest;
+import com.msik404.karmaappposts.grpc.*;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsWithCreatorIdRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostsRequestDto;
@@ -30,6 +22,7 @@ import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.PostService;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
+import com.msik404.karmaappposts.post.repository.PostRepository;
 import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -42,13 +35,36 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
-    PostService postService;
-    PostRepositoryGrpcHandler postRepositoryHandler;
-    RatingRepositoryGrpcHandler ratingRepositoryHandler;
-    ImageRepository imageRepository;
+    private final PostService postService;
+    private final PostRepositoryGrpcHandler postRepositoryHandler;
+    private final RatingRepositoryGrpcHandler ratingRepositoryHandler;
+    private final ImageRepository imageRepository;
+
+    private final PostRepository postRepository;
 
     @Override
     public void createPost(CreatePostRequest request, StreamObserver<Empty> responseObserver) {
+
+        final Validator validator = new Validator();
+        try {
+            final ValidationResult result = validator.validate(request);
+            // Check if there are any validation violations
+            if (result.getViolations().isEmpty()) {
+                // No violations, validation successful
+                System.out.println("Validation succeeded");
+            } else {
+                // Print the violations if any found
+                System.out.println(result);
+                return;
+            }
+        } catch (ValidationException ex) {
+            System.out.println("NIE UDAŁO SIĘ");
+            System.out.println(ex.getMessage());
+            return;
+        }
+
+        assert request.getImageData() != null;
+        assert request.getImageData().toByteArray() != null;
 
         try {
             postService.create(
@@ -57,13 +73,19 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
                     request.getText(),
                     request.getImageData().toByteArray()
             );
+            System.out.println("udało się");
         } catch (FileProcessingException ex) {
             responseObserver.onError(Status.INTERNAL
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
+            System.out.println(ex.getMessage());
             return;
         }
+
+        System.out.println("TO TU");
+        System.out.println(postRepository.findAll());
+        System.out.println("TO TAM");
 
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
