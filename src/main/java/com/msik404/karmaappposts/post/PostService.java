@@ -52,7 +52,7 @@ public class PostService {
 
         final PostDocument post = new PostDocument(userId, headline, text);
         postRepository.save(post);
-        if (imageService != null) {
+        if (imageData != null) {
             imageService.save(post.getId(), imageData);
         }
     }
