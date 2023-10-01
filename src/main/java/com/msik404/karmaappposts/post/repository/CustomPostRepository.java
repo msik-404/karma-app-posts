@@ -9,7 +9,6 @@ import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStra
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 public interface CustomPostRepository {
 
