@@ -18,7 +18,7 @@ public class PostRatingsRequestDto {
 
     public PostRatingsRequestDto(PostRatingsRequest request) throws UnsupportedVisibilityException {
 
-        this.postsRequestDto = new PostsRequestDto(request.getPostsRequest());
+        this.postsRequestDto = request.hasPostsRequest() ? new PostsRequestDto(request.getPostsRequest()) : new PostsRequestDto();
         this.clientId = new ObjectId(request.getClientId());
     }
 

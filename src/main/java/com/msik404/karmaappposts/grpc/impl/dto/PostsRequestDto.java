@@ -13,16 +13,17 @@ import com.msik404.karmaappposts.post.repository.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
 import lombok.Getter;
 import org.bson.types.ObjectId;
+import org.springframework.lang.NonNull;
 
 @Getter
 public class PostsRequestDto {
 
-    private final int size;
+    private final Integer size;
     private final PostDocScrollPositionConcrete position;
     private final List<Visibility> visibilities;
     private final PostDocRetrievalOrderStrategy order;
 
-    public static PostDocScrollPositionConcrete map(ScrollPosition position) {
+    public static PostDocScrollPositionConcrete map(@NonNull ScrollPosition position) {
 
         return PostDocScrollPosition.of(
                 position.getKarmaScore(),
@@ -34,12 +35,20 @@ public class PostsRequestDto {
         return isDescending ? PostDocRetrievalOrder.desc() : PostDocRetrievalOrder.asc();
     }
 
+    public PostsRequestDto() {
+
+        this.size = null;
+        this.position = null;
+        this.visibilities = null;
+        this.order = null;
+    }
+
     public PostsRequestDto(PostsRequest request) throws UnsupportedVisibilityException {
 
-        this.size = request.getSize();
-        this.position = PostsRequestDto.map(request.getPosition());
-        this.visibilities = request.getVisibilitiesList().stream().map(VisibilityMapper::map).toList();
-        this.order = PostsRequestDto.map(request.getIsDescending());
+        this.size = request.hasSize() ? request.getSize() : null;
+        this.position = request.hasPosition() ? PostsRequestDto.map(request.getPosition()) : null;
+        this.visibilities = request.getVisibilitiesCount() != 0 ? request.getVisibilitiesList().stream().map(VisibilityMapper::map).toList() : null;
+        this.order = request.hasIsDescending() ? PostsRequestDto.map(request.getIsDescending()) : null;
     }
 
 }

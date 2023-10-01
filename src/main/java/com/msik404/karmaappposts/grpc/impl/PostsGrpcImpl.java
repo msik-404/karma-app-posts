@@ -8,6 +8,7 @@ import build.buf.protovalidate.Validator;
 import build.buf.protovalidate.exceptions.ValidationException;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
+import com.google.protobuf.Message;
 import com.msik404.karmaappposts.grpc.*;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsWithCreatorIdRequestDto;
@@ -22,7 +23,6 @@ import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.PostService;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
-import com.msik404.karmaappposts.post.repository.PostRepository;
 import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -40,52 +40,56 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     private final RatingRepositoryGrpcHandler ratingRepositoryHandler;
     private final ImageRepository imageRepository;
 
-    private final PostRepository postRepository;
-
-    @Override
-    public void createPost(CreatePostRequest request, StreamObserver<Empty> responseObserver) {
+    private static <T> boolean validate(Message request, StreamObserver<T> responseObserver) {
 
         final Validator validator = new Validator();
         try {
             final ValidationResult result = validator.validate(request);
             // Check if there are any validation violations
-            if (result.getViolations().isEmpty()) {
-                // No violations, validation successful
-                System.out.println("Validation succeeded");
-            } else {
-                // Print the violations if any found
-                System.out.println(result);
-                return;
+            if (!result.isSuccess()) {
+                responseObserver.onError(Status.INVALID_ARGUMENT
+                        .withDescription(result.toString())
+                        .asRuntimeException()
+                );
+                return false;
             }
         } catch (ValidationException ex) {
-            System.out.println("NIE UDAŁO SIĘ");
-            System.out.println(ex.getMessage());
+            // Catch and print any ValidationExceptions thrown during the validation process
+            final String errMessage = ex.getMessage();
+            System.out.println("Validation failed: " + errMessage);
+            responseObserver.onError(Status.INTERNAL
+                    .withDescription(errMessage)
+                    .asRuntimeException()
+            );
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void createPost(CreatePostRequest request, StreamObserver<Empty> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
             return;
         }
-
-        assert request.getImageData() != null;
-        assert request.getImageData().toByteArray() != null;
 
         try {
             postService.create(
                     new ObjectId(request.getUserId()),
-                    request.getHeadline(),
-                    request.getText(),
-                    request.getImageData().toByteArray()
+                    request.hasHeadline() ? request.getHeadline() : null,
+                    request.hasText() ? request.getText() : null,
+                    request.hasImageData() ? request.getImageData().toByteArray() : null
             );
-            System.out.println("udało się");
         } catch (FileProcessingException ex) {
+            final String errMessage = ex.getMessage();
+            System.out.println(errMessage);
             responseObserver.onError(Status.INTERNAL
-                    .withDescription(ex.getMessage())
+                    .withDescription(errMessage)
                     .asRuntimeException()
             );
-            System.out.println(ex.getMessage());
             return;
         }
-
-        System.out.println("TO TU");
-        System.out.println(postRepository.findAll());
-        System.out.println("TO TAM");
 
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
@@ -93,6 +97,11 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void ratePost(RatePostRequest request, StreamObserver<Empty> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
 
         try {
             postService.rate(
@@ -115,6 +124,11 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     @Override
     public void unratePost(UnratePostRequest request, StreamObserver<Empty> responseObserver) {
 
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
+
         try {
             postService.unrate(
                     new ObjectId(request.getPostId()),
@@ -135,8 +149,13 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     @Override
     public void changePostVisibility(ChangePostVisibilityRequest request, StreamObserver<Empty> responseObserver) {
 
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
+
         try {
-            Visibility visibility = VisibilityMapper.map(request.getVisibility());
+            final Visibility visibility = VisibilityMapper.map(request.getVisibility());
             postService.findAndSetVisibilityById(new ObjectId(request.getPostId()), visibility);
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(Status.INVALID_ARGUMENT
@@ -156,6 +175,11 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPosts(PostsRequest request, StreamObserver<PostsResponse> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
 
         PostsRequestDto mappedRequest;
 
@@ -180,7 +204,14 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void findPostsWithCreatorId(PostsWithCreatorIdRequest request, StreamObserver<PostsResponse> responseObserver) {
+    public void findPostsWithCreatorId(
+            PostsWithCreatorIdRequest request,
+            StreamObserver<PostsResponse> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
 
         PostsWithCreatorIdRequestDto mappedRequest;
 
@@ -205,7 +236,14 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void findImage(ImageRequest request, StreamObserver<com.msik404.karmaappposts.grpc.ImageResponse> responseObserver) {
+    public void findImage(
+            ImageRequest request,
+            StreamObserver<ImageResponse> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
 
         Optional<Binary> optionalData = imageRepository.findImageDataById(new ObjectId(request.getPostId()));
         if (optionalData.isEmpty()) {
@@ -226,6 +264,11 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostRatings(PostRatingsRequest request, StreamObserver<PostRatingsResponse> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
 
         PostRatingsRequestDto mappedRequest;
 
@@ -251,7 +294,14 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void findPostRatingsWithCreatorId(com.msik404.karmaappposts.grpc.PostRatingsWithCreatorIdRequest request, StreamObserver<PostRatingsResponse> responseObserver) {
+    public void findPostRatingsWithCreatorId(
+            PostRatingsWithCreatorIdRequest request,
+            StreamObserver<PostRatingsResponse> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
 
         PostRatingsWithCreatorIdRequestDto mappedRequest;
         try {

@@ -18,7 +18,7 @@ public class PostsWithCreatorIdRequestDto {
 
     public PostsWithCreatorIdRequestDto(PostsWithCreatorIdRequest request) throws UnsupportedVisibilityException {
 
-        this.postsRequestDto = new PostsRequestDto(request.getPostsRequest());
+        this.postsRequestDto = request.hasPostsRequest() ? new PostsRequestDto(request.getPostsRequest()) : new PostsRequestDto();
         this.creatorId = new ObjectId(request.getCreatorId());
     }
 
