@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsWithCreatorIdRequestDto;
+import com.msik404.karmaappposts.rating.RatingService;
 import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
-import com.msik404.karmaappposts.rating.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RatingRepositoryGrpcHandler {
 
-    RatingRepository ratingRepository;
+    RatingService ratingService;
 
     List<PostIdAndIsPositiveOnlyDto> findFirstN(PostRatingsRequestDto request) {
 
-        return ratingRepository.findFirstN(
+        return ratingService.findFirstN(
                 request.getSize(),
                 request.getClientId(),
                 request.getPosition(),
@@ -28,7 +28,7 @@ public class RatingRepositoryGrpcHandler {
 
     List<PostIdAndIsPositiveOnlyDto> findFirstN(PostRatingsWithCreatorIdRequestDto request) {
 
-        return ratingRepository.findFirstN(
+        return ratingService.findFirstN(
                 request.getSize(),
                 request.getCreatorId(),
                 request.getClientId(),
