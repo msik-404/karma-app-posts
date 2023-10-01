@@ -1,11 +1,16 @@
 package com.msik404.karmaappposts.post;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.repository.PostRepository;
+import com.msik404.karmaappposts.post.repository.dto.FindParametersDto;
+import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
+import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.rating.RatingDocument;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import com.msik404.karmaappposts.rating.repository.RatingRepository;
@@ -99,6 +104,40 @@ public class PostService {
 
         findAndIncrementKarmaScoreById(postId, delta);
         ratingRepository.deleteById(ratingDoc.id());
+    }
+
+    public List<PostDocument> findFirstN(
+            @Nullable Integer size,
+            @Nullable PostDocScrollPositionConcrete position,
+            @Nullable Collection<Visibility> visibilities,
+            @Nullable PostDocRetrievalOrderStrategy order) {
+
+        final var params = new FindParametersDto(size, position, visibilities, order);
+
+        return postRepository.findFirstN(
+                params.getSize(),
+                params.getPosition(),
+                params.getVisibilities(),
+                params.getOrder()
+        );
+    }
+
+    public List<PostDocument> findFirstN(
+            @Nullable Integer size,
+            @NonNull ObjectId creatorId,
+            @Nullable PostDocScrollPositionConcrete position,
+            @Nullable Collection<Visibility> visibilities,
+            @Nullable PostDocRetrievalOrderStrategy order) {
+
+        final var params = new FindParametersDto(size, position, visibilities, order);
+
+        return postRepository.findFirstN(
+                params.getSize(),
+                creatorId,
+                params.getPosition(),
+                params.getVisibilities(),
+                params.getOrder()
+        );
     }
 
 }
