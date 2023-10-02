@@ -40,12 +40,12 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
         assert !visibilities.isEmpty();
 
-        List<AggregationOperation> aggOps = new ArrayList<>();
+        final List<AggregationOperation> aggOps = new ArrayList<>();
 
         // matching - query
-        var matchCriteria = Criteria.where("visibility").in(visibilities);
+        final var matchCriteria = Criteria.where("visibility").in(visibilities);
 
-        List<Criteria> additionalCriteria = new ArrayList<>();
+        final List<Criteria> additionalCriteria = new ArrayList<>();
 
         if (!position.isInitial()) {
             additionalCriteria.add(
@@ -105,10 +105,11 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         aggOps.add(projectionOperation);
 
         // build aggregation query
-        TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
+        final TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
 
         // run query
-        AggregationResults<PostIdAndIsPositiveOnlyDto> results = ops.aggregate(agg, PostIdAndIsPositiveOnlyDto.class);
+        final AggregationResults<PostIdAndIsPositiveOnlyDto> results = ops.aggregate(
+                agg, PostIdAndIsPositiveOnlyDto.class);
 
         return results.getMappedResults();
     }

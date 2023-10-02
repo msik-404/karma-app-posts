@@ -248,7 +248,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        Optional<Binary> optionalData = imageRepository.findImageDataById(new ObjectId(request.getPostId()));
+        final Optional<Binary> optionalData = imageRepository.findImageDataById(new ObjectId(request.getPostId()));
         if (optionalData.isEmpty()) {
             responseObserver.onError(Status.NOT_FOUND
                     .withDescription("Image for post with provided post_id was not found")

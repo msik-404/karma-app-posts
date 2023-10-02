@@ -19,7 +19,7 @@ public class CustomImageRepositoryImpl implements CustomImageRepository {
     @Override
     public Optional<Binary> findImageDataById(@NonNull ObjectId id) {
 
-        var query = new Query(Criteria.where("_id").is(id));
+        final var query = new Query(Criteria.where("_id").is(id));
         query.fields().exclude("_id");
 
         final ImageDocument doc = ops.findOne(query, ImageDocument.class);

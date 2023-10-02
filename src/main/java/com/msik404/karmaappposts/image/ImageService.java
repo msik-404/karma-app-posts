@@ -23,12 +23,12 @@ public class ImageService {
     public void save(@NonNull ObjectId postId, byte[] imageData) throws FileProcessingException {
 
         try {
-            var bufferedImage = ImageIO.read(new ByteArrayInputStream(imageData));
+            final var bufferedImage = ImageIO.read(new ByteArrayInputStream(imageData));
             if (bufferedImage == null) {
                 throw new FileProcessingException();
             }
 
-            var byteArrayOutputStream = new ByteArrayOutputStream();
+            final var byteArrayOutputStream = new ByteArrayOutputStream();
 
             ImageIO.write(bufferedImage, "jpeg", byteArrayOutputStream);
 
