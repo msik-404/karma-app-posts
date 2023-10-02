@@ -20,6 +20,7 @@ service Posts {
   rpc findImage(ImageRequest) returns (ImageResponse) {}
   rpc findPostRatings(PostRatingsRequest) returns (PostRatingsResponse) {}
   rpc findPostRatingsWithCreatorId(PostRatingsWithCreatorIdRequest) returns (PostRatingsResponse) {}
+  rpc findPostCreatorId(PostCreatorIdRequest) returns (PostCreatorIdResponse) {}
 
 }
 
@@ -107,4 +108,12 @@ message PostRatingsResponse {
 message PostRatingsWithCreatorIdRequest {
   optional PostRatingsRequest posts_ratings_request = 1 [(buf.validate.field).required = true];
   optional string creator_id = 2 [(buf.validate.field).string.len = 24, (buf.validate.field).required = true];
+}
+
+message PostCreatorIdRequest {
+  optional string post_id = 1 [(buf.validate.field).string.len = 24, (buf.validate.field).required = true];
+}
+
+message PostCreatorIdResponse {
+  optional string user_id = 1 [(buf.validate.field).string.len = 24];
 }

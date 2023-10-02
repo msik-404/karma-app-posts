@@ -8,6 +8,7 @@ import com.msik404.karmaappposts.MongoConfiguration;
 import com.msik404.karmaappposts.TestingDataGenerator;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
+import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrder;
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
@@ -259,6 +260,34 @@ class PostRepositoryTest {
             assertEquals(groundTruth.get(i), results.get(i));
         }
 
+    }
+
+    @Test
+    void findCreatorIdByPostId_PostExists_CreatorIsFound() {
+
+        // given
+        final PostDocument post = dataGenerator.getTestPostDocs().get(0);
+        final ObjectId postId = post.getId();
+
+        // when
+        final Optional<UserIdOnlyDto> optionalObjectId = repository.findByPostId(postId);
+
+        // then
+        assertTrue(optionalObjectId.isPresent());
+        assertEquals(post.getUserId(), optionalObjectId.get().userId());
+    }
+
+    @Test
+    void findCreatorIdByPostId_PostDoesNotExist_CreatorIsNotFound() {
+
+        // given
+        final ObjectId postId = ObjectId.get();
+
+        // when
+        final Optional<UserIdOnlyDto> optionalObjectId = repository.findByPostId(postId);
+
+        // then
+        assertTrue(optionalObjectId.isEmpty());
     }
 
 }

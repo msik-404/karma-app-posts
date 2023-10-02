@@ -22,7 +22,9 @@ import com.msik404.karmaappposts.image.repository.ImageRepository;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.PostService;
 import com.msik404.karmaappposts.post.Visibility;
+import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
+import com.msik404.karmaappposts.post.repository.PostRepository;
 import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -36,6 +38,7 @@ import org.springframework.stereotype.Component;
 public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     private final PostService postService;
+    private final PostRepository postRepository;
     private final PostRepositoryGrpcHandler postRepositoryHandler;
     private final RatingRepositoryGrpcHandler ratingRepositoryHandler;
     private final ImageRepository imageRepository;
@@ -322,6 +325,27 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
                 .build();
 
         responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void findPostCreatorId(
+            PostCreatorIdRequest request,
+            StreamObserver<PostCreatorIdResponse> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
+
+        final Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findByPostId(
+                new ObjectId(request.getPostId()));
+
+        final PostCreatorIdResponse.Builder responseBuilder = PostCreatorIdResponse.newBuilder();
+
+        optionalCreatorId.ifPresent(userIdOnlyDto -> responseBuilder.setUserId(userIdOnlyDto.toString()));
+
+        responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
 
