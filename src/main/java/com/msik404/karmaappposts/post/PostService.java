@@ -115,10 +115,10 @@ public class PostService {
         final var params = new FindParametersDto(size, position, visibilities, order);
 
         return postRepository.findFirstN(
-                params.getSize(),
-                params.getPosition(),
-                params.getVisibilities(),
-                params.getOrder()
+                params.size(),
+                params.position(),
+                params.visibilities(),
+                params.order()
         );
     }
 
@@ -132,11 +132,11 @@ public class PostService {
         final var params = new FindParametersDto(size, position, visibilities, order);
 
         return postRepository.findFirstN(
-                params.getSize(),
+                params.size(),
                 creatorId,
-                params.getPosition(),
-                params.getVisibilities(),
-                params.getOrder()
+                params.position(),
+                params.visibilities(),
+                params.order()
         );
     }
 

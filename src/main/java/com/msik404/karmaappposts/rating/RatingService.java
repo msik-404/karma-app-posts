@@ -31,11 +31,11 @@ public class RatingService {
         final var params = new FindParametersDto(size, position, visibilities, order);
 
         return ratingRepository.findFirstN(
-                params.getSize(),
+                params.size(),
                 clientId,
-                params.getPosition(),
-                params.getVisibilities(),
-                params.getOrder()
+                params.position(),
+                params.visibilities(),
+                params.order()
         );
     }
 
@@ -50,12 +50,12 @@ public class RatingService {
         final var params = new FindParametersDto(size, position, visibilities, order);
 
         return ratingRepository.findFirstN(
-                params.getSize(),
+                params.size(),
                 creatorId,
                 clientId,
-                params.getPosition(),
-                params.getVisibilities(),
-                params.getOrder()
+                params.position(),
+                params.visibilities(),
+                params.order()
         );
     }
 
