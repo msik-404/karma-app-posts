@@ -1,7 +1,6 @@
 package com.msik404.karmaappposts.rating.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Field;

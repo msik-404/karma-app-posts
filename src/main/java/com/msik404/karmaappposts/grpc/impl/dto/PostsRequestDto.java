@@ -11,17 +11,11 @@ import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
-import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
 
-@Getter
-public class PostsRequestDto {
-
-    private final Integer size;
-    private final PostDocScrollPositionConcrete position;
-    private final List<Visibility> visibilities;
-    private final PostDocRetrievalOrderStrategy order;
+public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete position, List<Visibility> visibilities,
+                              PostDocRetrievalOrderStrategy order) {
 
     public static PostDocScrollPositionConcrete map(@NonNull ScrollPosition position) {
 
@@ -36,19 +30,18 @@ public class PostsRequestDto {
     }
 
     public PostsRequestDto() {
-
-        this.size = null;
-        this.position = null;
-        this.visibilities = null;
-        this.order = null;
+        this(null, null, null, null);
     }
 
     public PostsRequestDto(PostsRequest request) throws UnsupportedVisibilityException {
 
-        this.size = request.hasSize() ? request.getSize() : null;
-        this.position = request.hasPosition() ? PostsRequestDto.map(request.getPosition()) : null;
-        this.visibilities = request.getVisibilitiesCount() != 0 ? request.getVisibilitiesList().stream().map(VisibilityMapper::map).toList() : null;
-        this.order = request.hasIsDescending() ? PostsRequestDto.map(request.getIsDescending()) : null;
+        this(
+                request.hasSize() ? request.getSize() : null,
+                request.hasPosition() ? PostsRequestDto.map(request.getPosition()) : null,
+                request.getVisibilitiesCount() != 0 ? request.getVisibilitiesList().stream()
+                        .map(VisibilityMapper::map).toList() : null,
+                request.hasIsDescending() ? PostsRequestDto.map(request.getIsDescending()) : null
+        );
     }
 
 }

@@ -18,23 +18,23 @@ public class RatingRepositoryGrpcHandler {
     List<PostIdAndIsPositiveOnlyDto> findFirstN(PostRatingsRequestDto request) {
 
         return ratingService.findFirstN(
-                request.getSize(),
-                request.getClientId(),
-                request.getPosition(),
-                request.getVisibilities(),
-                request.getOrder()
+                request.postsRequestDto().size(),
+                request.clientId(),
+                request.postsRequestDto().position(),
+                request.postsRequestDto().visibilities(),
+                request.postsRequestDto().order()
         );
     }
 
     List<PostIdAndIsPositiveOnlyDto> findFirstN(PostRatingsWithCreatorIdRequestDto request) {
 
         return ratingService.findFirstN(
-                request.getSize(),
-                request.getCreatorId(),
-                request.getClientId(),
-                request.getPosition(),
-                request.getVisibilities(),
-                request.getOrder()
+                request.postRatingsRequestDto().postsRequestDto().size(),
+                request.creatorId(),
+                request.postRatingsRequestDto().clientId(),
+                request.postRatingsRequestDto().postsRequestDto().position(),
+                request.postRatingsRequestDto().postsRequestDto().visibilities(),
+                request.postRatingsRequestDto().postsRequestDto().order()
         );
     }
 

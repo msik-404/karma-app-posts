@@ -19,21 +19,21 @@ public class PostRepositoryGrpcHandler {
     List<PostDocument> findFirstN(@NonNull PostsRequestDto request) {
 
         return postService.findFirstN(
-                request.getSize(),
-                request.getPosition(),
-                request.getVisibilities(),
-                request.getOrder()
+                request.size(),
+                request.position(),
+                request.visibilities(),
+                request.order()
         );
     }
 
     List<PostDocument> findFirstN(@NonNull PostsWithCreatorIdRequestDto request) {
 
         return postService.findFirstN(
-                request.getSize(),
-                request.getCreatorId(),
-                request.getPosition(),
-                request.getVisibilities(),
-                request.getOrder()
+                request.postsRequestDto().size(),
+                request.creatorId(),
+                request.postsRequestDto().position(),
+                request.postsRequestDto().visibilities(),
+                request.postsRequestDto().order()
         );
     }
 
