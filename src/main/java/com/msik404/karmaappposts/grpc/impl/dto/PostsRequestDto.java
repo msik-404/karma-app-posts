@@ -1,6 +1,6 @@
 package com.msik404.karmaappposts.grpc.impl.dto;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.msik404.karmaappposts.grpc.PostsRequest;
 import com.msik404.karmaappposts.grpc.ScrollPosition;
@@ -14,7 +14,7 @@ import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
 
-public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete position, List<Visibility> visibilities,
+public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete position, Collection<Visibility> visibilities,
                               PostDocRetrievalOrderStrategy order) {
 
     public static PostDocScrollPositionConcrete map(@NonNull ScrollPosition position) {
