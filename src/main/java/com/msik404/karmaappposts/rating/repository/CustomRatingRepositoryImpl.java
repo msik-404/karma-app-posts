@@ -11,7 +11,7 @@ import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.post.repository.criteria.PostDocScrollingCriteria;
 import com.msik404.karmaappposts.rating.RatingDocument;
-import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -30,7 +30,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
     private final MongoOperations ops;
 
-    private List<PostIdAndIsPositiveOnlyDto> findFirstNImpl(
+    private List<IdAndIsPositiveOnlyDto> findFirstNImpl(
             int size,
             @Nullable ObjectId creatorId,
             @NonNull ObjectId clientId,
@@ -108,14 +108,13 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         final TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
 
         // run query
-        final AggregationResults<PostIdAndIsPositiveOnlyDto> results = ops.aggregate(
-                agg, PostIdAndIsPositiveOnlyDto.class);
+        final AggregationResults<IdAndIsPositiveOnlyDto> results = ops.aggregate(agg, IdAndIsPositiveOnlyDto.class);
 
         return results.getMappedResults();
     }
 
     @Override
-    public List<PostIdAndIsPositiveOnlyDto> findFirstN(
+    public List<IdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId clientId,
             @NonNull PostDocScrollPositionConcrete position,
@@ -126,7 +125,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     }
 
     @Override
-    public List<PostIdAndIsPositiveOnlyDto> findFirstN(
+    public List<IdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId creatorId,
             @NonNull ObjectId clientId,

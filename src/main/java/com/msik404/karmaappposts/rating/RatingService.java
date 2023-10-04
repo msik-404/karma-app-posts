@@ -7,7 +7,7 @@ import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.dto.FindParametersDto;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
-import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import com.msik404.karmaappposts.rating.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -21,7 +21,7 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
 
-    public List<PostIdAndIsPositiveOnlyDto> findFirstN(
+    public List<IdAndIsPositiveOnlyDto> findFirstN(
             @Nullable Integer size,
             @NonNull ObjectId clientId,
             @Nullable PostDocScrollPositionConcrete position,
@@ -39,7 +39,7 @@ public class RatingService {
         );
     }
 
-    public List<PostIdAndIsPositiveOnlyDto> findFirstN(
+    public List<IdAndIsPositiveOnlyDto> findFirstN(
             @Nullable Integer size,
             @NonNull ObjectId creatorId,
             @NonNull ObjectId clientId,

@@ -25,7 +25,7 @@ import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.repository.PostRepository;
-import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -285,7 +285,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        final List<PostIdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+        final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
 
         final var response = PostRatingsResponse
                 .newBuilder()
@@ -317,7 +317,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        final List<PostIdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+        final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
 
         final var response = PostRatingsResponse
                 .newBuilder()

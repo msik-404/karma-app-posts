@@ -14,7 +14,6 @@ import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
 import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.rating.RatingDocument;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
-import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +95,7 @@ class RatingRepositoryTest {
         final ObjectId clientObjectId = TestingDataGenerator.TEST_USER_IDS.get(userId);
         final int size = 30;
         final List<Visibility> visibilities = List.of(Visibility.ACTIVE, Visibility.HIDDEN, Visibility.DELETED);
-        List<PostIdAndIsPositiveOnlyDto> groundTruth = TestingDataGenerator.getRatings(
+        List<IdAndIsPositiveOnlyDto> groundTruth = TestingDataGenerator.getRatings(
                 dataGenerator.getTestPostDocs(),
                 dataGenerator.getTestRatingDocs(),
                 clientObjectId,
@@ -106,7 +105,7 @@ class RatingRepositoryTest {
         groundTruth = groundTruth.subList(0, Math.min(groundTruth.size(), size));
 
         // when
-        final List<PostIdAndIsPositiveOnlyDto> results = ratingRepository.findFirstN(
+        final List<IdAndIsPositiveOnlyDto> results = ratingRepository.findFirstN(
                 size,
                 clientObjectId,
                 PostDocScrollPosition.initial(),
@@ -130,7 +129,7 @@ class RatingRepositoryTest {
         final int skip = 3;
         final PostDocument lastDoc = dataGenerator.getTestPostDocs().get(skip - 1);
         final List<Visibility> visibilities = List.of(Visibility.ACTIVE, Visibility.HIDDEN);
-        List<PostIdAndIsPositiveOnlyDto> groundTruth = TestingDataGenerator.getRatings(
+        List<IdAndIsPositiveOnlyDto> groundTruth = TestingDataGenerator.getRatings(
                 dataGenerator.getTestPostDocs(),
                 dataGenerator.getTestRatingDocs(),
                 clientObjectId,
@@ -140,7 +139,7 @@ class RatingRepositoryTest {
         groundTruth = groundTruth.subList(skip, Math.min(groundTruth.size(), size));
 
         // when
-        final List<PostIdAndIsPositiveOnlyDto> results = ratingRepository.findFirstN(
+        final List<IdAndIsPositiveOnlyDto> results = ratingRepository.findFirstN(
                 size,
                 clientObjectId,
                 PostDocScrollPosition.of(lastDoc.getKarmaScore(), lastDoc.getId()),
@@ -173,7 +172,7 @@ class RatingRepositoryTest {
         final PostDocument lastDoc = posts.get(skip - 1);
 
         final List<Visibility> visibilities = List.of(Visibility.ACTIVE, Visibility.HIDDEN);
-        List<PostIdAndIsPositiveOnlyDto> groundTruth = TestingDataGenerator.getRatings(
+        List<IdAndIsPositiveOnlyDto> groundTruth = TestingDataGenerator.getRatings(
                 posts,
                 dataGenerator.getTestRatingDocs(),
                 clientObjectId,
@@ -183,7 +182,7 @@ class RatingRepositoryTest {
         groundTruth = groundTruth.subList(skip, Math.min(groundTruth.size(), size));
 
         // when
-        final List<PostIdAndIsPositiveOnlyDto> results = ratingRepository.findFirstN(
+        final List<IdAndIsPositiveOnlyDto> results = ratingRepository.findFirstN(
                 size,
                 creatorObjectId,
                 clientObjectId,

@@ -3,7 +3,7 @@ package com.msik404.karmaappposts.grpc.impl.mapper;
 import com.msik404.karmaappposts.grpc.Post;
 import com.msik404.karmaappposts.grpc.PostRating;
 import com.msik404.karmaappposts.post.PostDocument;
-import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 
 public class DocToGrpcMapper {
 
@@ -33,15 +33,15 @@ public class DocToGrpcMapper {
         return builder.build();
     }
 
-    public static PostRating map(PostIdAndIsPositiveOnlyDto doc) {
+    public static PostRating map(IdAndIsPositiveOnlyDto doc) {
 
         PostRating.Builder builder = PostRating.newBuilder();
 
-        if (doc.getPostId() != null) {
-            builder.setPostId(doc.getPostId().toString());
+        if (doc.id() != null) {
+            builder.setPostId(doc.id().toString());
         }
-        if (doc.getIsPositive() != null) {
-            builder.setIsPositive(doc.getIsPositive());
+        if (doc.isPositive() != null) {
+            builder.setIsPositive(doc.isPositive());
         }
 
         return builder.build();

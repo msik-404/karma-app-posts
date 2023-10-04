@@ -7,7 +7,7 @@ import com.msik404.karmaappposts.image.ImageDocument;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.rating.RatingDocument;
-import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import lombok.Getter;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
@@ -49,7 +49,7 @@ public class TestingDataGenerator {
 
     }
 
-    public static List<PostIdAndIsPositiveOnlyDto> getRatings(
+    public static List<IdAndIsPositiveOnlyDto> getRatings(
             @NonNull List<PostDocument> postDocs,
             @NonNull List<RatingDocument> ratingDocs,
             @NonNull ObjectId userId,
@@ -61,7 +61,7 @@ public class TestingDataGenerator {
 
         return postDocs.stream()
                 .filter(post -> visibilities.contains(post.getVisibility()))
-                .map(post -> new PostIdAndIsPositiveOnlyDto(
+                .map(post -> new IdAndIsPositiveOnlyDto(
                         post.getId(), ratedDocsByUser.getOrDefault(post.getId(), null)))
                 .toList();
     }
