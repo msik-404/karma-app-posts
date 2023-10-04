@@ -1,7 +1,7 @@
 package com.msik404.karmaappposts.grpc.impl.mapper;
 
 import com.msik404.karmaappposts.grpc.PostVisibility;
-import com.msik404.karmaappposts.grpc.impl.mapper.exception.UnsupportedVisibilityException;
+import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.post.Visibility;
 
 public class VisibilityMapper {

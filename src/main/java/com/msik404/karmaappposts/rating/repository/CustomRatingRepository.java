@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.msik404.karmaappposts.post.Visibility;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
+import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.rating.dto.PostIdAndIsPositiveOnlyDto;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;

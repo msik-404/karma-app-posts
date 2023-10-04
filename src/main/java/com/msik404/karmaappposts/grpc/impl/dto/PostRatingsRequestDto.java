@@ -3,10 +3,10 @@ package com.msik404.karmaappposts.grpc.impl.dto;
 import java.util.List;
 
 import com.msik404.karmaappposts.grpc.PostRatingsRequest;
-import com.msik404.karmaappposts.grpc.impl.mapper.exception.UnsupportedVisibilityException;
+import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.post.Visibility;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
+import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 

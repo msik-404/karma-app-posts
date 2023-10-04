@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.msik404.karmaappposts.grpc.PostsRequest;
 import com.msik404.karmaappposts.grpc.ScrollPosition;
+import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.grpc.impl.mapper.VisibilityMapper;
-import com.msik404.karmaappposts.grpc.impl.mapper.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.post.Visibility;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrder;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPosition;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
+import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
+import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;

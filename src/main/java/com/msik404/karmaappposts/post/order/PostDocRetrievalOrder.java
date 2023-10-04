@@ -1,4 +1,4 @@
-package com.msik404.karmaappposts.post.repository.order;
+package com.msik404.karmaappposts.post.order;
 
 public class PostDocRetrievalOrder {
 

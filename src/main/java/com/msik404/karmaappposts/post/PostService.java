@@ -6,11 +6,11 @@ import java.util.Optional;
 
 import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
+import com.msik404.karmaappposts.post.dto.FindParametersDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
+import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.post.repository.PostRepository;
-import com.msik404.karmaappposts.post.repository.dto.FindParametersDto;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.rating.RatingDocument;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import com.msik404.karmaappposts.rating.repository.RatingRepository;

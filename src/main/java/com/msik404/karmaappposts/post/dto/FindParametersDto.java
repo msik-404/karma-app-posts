@@ -1,13 +1,13 @@
-package com.msik404.karmaappposts.post.repository.dto;
+package com.msik404.karmaappposts.post.dto;
 
 import java.util.Collection;
 import java.util.List;
 
 import com.msik404.karmaappposts.post.Visibility;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrder;
-import com.msik404.karmaappposts.post.repository.order.PostDocRetrievalOrderStrategy;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPosition;
-import com.msik404.karmaappposts.post.repository.position.PostDocScrollPositionConcrete;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
+import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
+import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import lombok.Getter;
 import org.springframework.lang.Nullable;
 

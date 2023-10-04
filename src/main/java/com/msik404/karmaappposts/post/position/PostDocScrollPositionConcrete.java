@@ -1,4 +1,4 @@
-package com.msik404.karmaappposts.post.repository.position;
+package com.msik404.karmaappposts.post.position;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

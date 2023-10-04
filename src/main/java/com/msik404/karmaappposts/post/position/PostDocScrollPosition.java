@@ -1,4 +1,4 @@
-package com.msik404.karmaappposts.post.repository.position;
+package com.msik404.karmaappposts.post.position;
 
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
