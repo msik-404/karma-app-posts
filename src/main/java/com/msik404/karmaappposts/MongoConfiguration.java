@@ -2,13 +2,21 @@ package com.msik404.karmaappposts;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.msik404.karmaappposts.post.PostDocument;
+import com.msik404.karmaappposts.rating.RatingDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+import org.springframework.data.mongodb.core.index.IndexOperations;
+import org.springframework.data.mongodb.core.index.IndexResolver;
+import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver;
+import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
+import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 
 @Configuration
 public class MongoConfiguration {
@@ -31,7 +39,21 @@ public class MongoConfiguration {
 
     @Bean
     public MongoTemplate mongoTemplate(MongoDatabaseFactory factory) {
-        return new MongoTemplate(factory);
+
+        final MongoTemplate mongoTemplate = new MongoTemplate(factory);
+
+        final MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> mappingContext = mongoTemplate
+                .getConverter().getMappingContext();
+
+        final IndexResolver resolver = new MongoPersistentEntityIndexResolver(mappingContext);
+
+        IndexOperations indexOps = mongoTemplate.indexOps(PostDocument.class);
+        resolver.resolveIndexFor(PostDocument.class).forEach(indexOps::ensureIndex);
+
+        indexOps = mongoTemplate.indexOps(RatingDocument.class);
+        resolver.resolveIndexFor(RatingDocument.class).forEach(indexOps::ensureIndex);
+
+        return mongoTemplate;
     }
 
     @Bean
