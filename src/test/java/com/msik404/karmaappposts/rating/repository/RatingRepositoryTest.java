@@ -7,11 +7,11 @@ import com.msik404.karmaappposts.MongoConfiguration;
 import com.msik404.karmaappposts.TestingDataGenerator;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
+import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
+import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.post.repository.CustomPostRepository;
 import com.msik404.karmaappposts.post.repository.CustomPostRepositoryImpl;
 import com.msik404.karmaappposts.post.repository.PostRepository;
-import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
-import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.rating.RatingDocument;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import org.bson.types.ObjectId;
@@ -20,8 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -59,16 +57,14 @@ class RatingRepositoryTest {
         registry.add("spring.data.mongodb.database", () -> "test");
     }
 
-    private final MongoOperations ops;
     private final PostRepository postRepository;
     private final RatingRepository ratingRepository;
 
     private final TestingDataGenerator dataGenerator;
 
     @Autowired
-    RatingRepositoryTest(MongoTemplate template, PostRepository postRepository, RatingRepository ratingRepository) {
+    RatingRepositoryTest(PostRepository postRepository, RatingRepository ratingRepository) {
 
-        this.ops = template;
         this.postRepository = postRepository;
         this.ratingRepository = ratingRepository;
 
@@ -84,7 +80,8 @@ class RatingRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        ops.dropCollection(ops.getCollectionName(PostDocument.class));
+        postRepository.deleteAll();
+        ratingRepository.deleteAll();
     }
 
     @Test

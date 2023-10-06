@@ -18,8 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -51,15 +49,13 @@ class PostRepositoryTest {
         registry.add("spring.data.mongodb.database", () -> "test");
     }
 
-    private final MongoOperations ops;
     private final PostRepository repository;
 
     private final TestingDataGenerator dataGenerator;
 
     @Autowired
-    PostRepositoryTest(MongoTemplate template, PostRepository repository) {
+    PostRepositoryTest(PostRepository repository) {
 
-        this.ops = template;
         this.repository = repository;
 
         dataGenerator = new TestingDataGenerator();
@@ -72,7 +68,7 @@ class PostRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        ops.dropCollection(ops.getCollectionName(PostDocument.class));
+        repository.deleteAll();
     }
 
     @Test
