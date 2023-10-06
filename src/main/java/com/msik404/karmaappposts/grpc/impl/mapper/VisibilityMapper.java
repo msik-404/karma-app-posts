@@ -7,6 +7,7 @@ import com.msik404.karmaappposts.post.Visibility;
 public class VisibilityMapper {
 
     public static Visibility map(PostVisibility visibility) throws UnsupportedVisibilityException {
+
         switch (visibility) {
             case VIS_ACTIVE -> {
                 return Visibility.ACTIVE;
@@ -22,6 +23,7 @@ public class VisibilityMapper {
     }
 
     public static PostVisibility map(Visibility visibility) {
+
         switch (visibility) {
             case ACTIVE -> {
                 return PostVisibility.VIS_ACTIVE;
