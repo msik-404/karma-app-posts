@@ -86,7 +86,6 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             );
         } catch (FileProcessingException ex) {
             final String errMessage = ex.getMessage();
-            System.out.println(errMessage);
             responseObserver.onError(Status.INTERNAL
                     .withDescription(errMessage)
                     .asRuntimeException()
