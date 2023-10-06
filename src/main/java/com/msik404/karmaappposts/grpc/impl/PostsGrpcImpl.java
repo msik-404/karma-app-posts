@@ -186,7 +186,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             final var mappedRequest = new PostsRequestDto(request);
+
             final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
+
             final var response = PostsResponse.newBuilder()
                     .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
                     .build();
@@ -214,7 +216,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             final var mappedRequest = new PostsWithCreatorIdRequestDto(request);
+
             final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
+
             final var response = PostsResponse.newBuilder()
                     .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
                     .build();
@@ -266,7 +270,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             final var mappedRequest = new PostRatingsRequestDto(request);
+
             final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+
             final var response = PostRatingsResponse
                     .newBuilder()
                     .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
@@ -295,7 +301,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             final var mappedRequest = new PostRatingsWithCreatorIdRequestDto(request);
+
             final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+
             final var response = PostRatingsResponse
                     .newBuilder()
                     .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
