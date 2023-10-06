@@ -84,17 +84,17 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
                     request.hasText() ? request.getText() : null,
                     request.hasImageData() ? request.getImageData().toByteArray() : null
             );
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
         } catch (FileProcessingException ex) {
             final String errMessage = ex.getMessage();
             responseObserver.onError(Status.INTERNAL
                     .withDescription(errMessage)
                     .asRuntimeException()
             );
-            return;
         }
-
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -111,16 +111,16 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
                     new ObjectId(request.getUserId()),
                     request.getIsPositive()
             );
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
         } catch (PostNotFoundException ex) {
             responseObserver.onError(Status.NOT_FOUND
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -136,16 +136,16 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
                     new ObjectId(request.getPostId()),
                     new ObjectId(request.getUserId())
             );
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
         } catch (PostNotFoundException ex) {
             responseObserver.onError(Status.NOT_FOUND
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -159,6 +159,10 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         try {
             final Visibility visibility = VisibilityMapper.map(request.getVisibility());
             postService.findAndSetVisibilityById(new ObjectId(request.getPostId()), visibility);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(Status.INVALID_ARGUMENT
                     .withDescription(ex.getMessage())
@@ -170,9 +174,6 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
                     .asRuntimeException()
             );
         }
-
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -183,26 +184,22 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        PostsRequestDto mappedRequest;
-
         try {
-            mappedRequest = new PostsRequestDto(request);
+            final var mappedRequest = new PostsRequestDto(request);
+            final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
+            final var response = PostsResponse.newBuilder()
+                    .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(Status.INVALID_ARGUMENT
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
-
-        final PostsResponse response = PostsResponse.newBuilder()
-                .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -215,26 +212,21 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        PostsWithCreatorIdRequestDto mappedRequest;
-
         try {
-            mappedRequest = new PostsWithCreatorIdRequestDto(request);
+            final var mappedRequest = new PostsWithCreatorIdRequestDto(request);
+            final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
+            final var response = PostsResponse.newBuilder()
+                    .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
+                    .build();
+
+            responseObserver.onNext(response);
+
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(Status.INVALID_ARGUMENT
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
-
-        final PostsResponse response = PostsResponse.newBuilder()
-                .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -272,27 +264,23 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        PostRatingsRequestDto mappedRequest;
-
         try {
-            mappedRequest = new PostRatingsRequestDto(request);
+            final var mappedRequest = new PostRatingsRequestDto(request);
+            final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+            final var response = PostRatingsResponse
+                    .newBuilder()
+                    .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(Status.INVALID_ARGUMENT
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
-
-        final var response = PostRatingsResponse
-                .newBuilder()
-                .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -305,26 +293,23 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        PostRatingsWithCreatorIdRequestDto mappedRequest;
         try {
-            mappedRequest = new PostRatingsWithCreatorIdRequestDto(request);
+            final var mappedRequest = new PostRatingsWithCreatorIdRequestDto(request);
+            final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+            final var response = PostRatingsResponse
+                    .newBuilder()
+                    .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(Status.INVALID_ARGUMENT
                     .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
-
-        final var response = PostRatingsResponse
-                .newBuilder()
-                .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
     }
 
     @Override
