@@ -21,6 +21,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
     private final MongoOperations ops;
 
+    @NonNull
     private List<PostDocument> findFirstNImpl(
             int size,
             @Nullable ObjectId creatorId,
@@ -45,6 +46,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return ops.find(query, PostDocument.class);
     }
 
+    @NonNull
     @Override
     public List<PostDocument> findFirstN(
             int size,
@@ -56,6 +58,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return findFirstNImpl(size, creatorId, position, visibilities, order);
     }
 
+    @NonNull
     @Override
     public List<PostDocument> findFirstN(
             int size,

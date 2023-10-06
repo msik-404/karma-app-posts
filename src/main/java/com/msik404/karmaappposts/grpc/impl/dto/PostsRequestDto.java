@@ -17,6 +17,7 @@ import org.springframework.lang.NonNull;
 public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete position, Collection<Visibility> visibilities,
                               PostDocRetrievalOrderStrategy order) {
 
+    @NonNull
     public static PostDocScrollPositionConcrete map(@NonNull ScrollPosition position) {
 
         return PostDocScrollPosition.of(
@@ -25,6 +26,7 @@ public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete positi
         );
     }
 
+    @NonNull
     public static PostDocRetrievalOrderStrategy map(boolean isDescending) {
         return isDescending ? PostDocRetrievalOrder.desc() : PostDocRetrievalOrder.asc();
     }
@@ -33,7 +35,7 @@ public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete positi
         this(null, null, null, null);
     }
 
-    public PostsRequestDto(PostsRequest request) throws UnsupportedVisibilityException {
+    public PostsRequestDto(@NonNull PostsRequest request) throws UnsupportedVisibilityException {
 
         this(
                 request.hasSize() ? request.getSize() : null,

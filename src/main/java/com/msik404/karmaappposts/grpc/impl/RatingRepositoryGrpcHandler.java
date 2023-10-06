@@ -7,6 +7,7 @@ import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsWithCreatorIdRequestDt
 import com.msik404.karmaappposts.rating.RatingService;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +16,8 @@ public class RatingRepositoryGrpcHandler {
 
     RatingService ratingService;
 
-    List<IdAndIsPositiveOnlyDto> findFirstN(PostRatingsRequestDto request) {
+    @NonNull
+    List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull PostRatingsRequestDto request) {
 
         return ratingService.findFirstN(
                 request.postsRequestDto().size(),
@@ -26,7 +28,8 @@ public class RatingRepositoryGrpcHandler {
         );
     }
 
-    List<IdAndIsPositiveOnlyDto> findFirstN(PostRatingsWithCreatorIdRequestDto request) {
+    @NonNull
+    List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull PostRatingsWithCreatorIdRequestDto request) {
 
         return ratingService.findFirstN(
                 request.postRatingsRequestDto().postsRequestDto().size(),

@@ -30,6 +30,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
     private final MongoOperations ops;
 
+    @NonNull
     private List<IdAndIsPositiveOnlyDto> findFirstNImpl(
             int size,
             @Nullable ObjectId creatorId,
@@ -113,6 +114,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         return results.getMappedResults();
     }
 
+    @NonNull
     @Override
     public List<IdAndIsPositiveOnlyDto> findFirstN(
             int size,
@@ -124,6 +126,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         return findFirstNImpl(size, null, clientId, position, visibilities, order);
     }
 
+    @NonNull
     @Override
     public List<IdAndIsPositiveOnlyDto> findFirstN(
             int size,

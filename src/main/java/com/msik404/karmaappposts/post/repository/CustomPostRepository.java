@@ -12,6 +12,7 @@ import org.springframework.lang.NonNull;
 
 public interface CustomPostRepository {
 
+    @NonNull
     List<PostDocument> findFirstN(
             int size,
             @NonNull PostDocScrollPositionConcrete position,
@@ -19,6 +20,7 @@ public interface CustomPostRepository {
             @NonNull PostDocRetrievalOrderStrategy order
     );
 
+    @NonNull
     List<PostDocument> findFirstN(
             int size,
             @NonNull ObjectId creatorId,

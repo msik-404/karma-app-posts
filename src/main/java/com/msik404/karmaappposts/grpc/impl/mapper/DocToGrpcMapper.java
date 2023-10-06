@@ -4,10 +4,12 @@ import com.msik404.karmaappposts.grpc.Post;
 import com.msik404.karmaappposts.grpc.PostRating;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
+import org.springframework.lang.NonNull;
 
 public class DocToGrpcMapper {
 
-    public static Post map(PostDocument doc) {
+    @NonNull
+    public static Post map(@NonNull PostDocument doc) {
 
         Post.Builder builder = Post.newBuilder();
 
@@ -33,7 +35,8 @@ public class DocToGrpcMapper {
         return builder.build();
     }
 
-    public static PostRating map(IdAndIsPositiveOnlyDto doc) {
+    @NonNull
+    public static PostRating map(@NonNull IdAndIsPositiveOnlyDto doc) {
 
         PostRating.Builder builder = PostRating.newBuilder();
 

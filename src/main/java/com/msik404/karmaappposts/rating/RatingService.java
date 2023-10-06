@@ -21,6 +21,7 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
 
+    @NonNull
     public List<IdAndIsPositiveOnlyDto> findFirstN(
             @Nullable Integer size,
             @NonNull ObjectId clientId,
@@ -39,6 +40,7 @@ public class RatingService {
         );
     }
 
+    @NonNull
     public List<IdAndIsPositiveOnlyDto> findFirstN(
             @Nullable Integer size,
             @NonNull ObjectId creatorId,

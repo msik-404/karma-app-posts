@@ -19,6 +19,7 @@ public interface PostRepository extends MongoRepository<PostDocument, ObjectId>,
     @Update("{ '$set' : { 'visibility' :  ?1 } }")
     long findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility);
 
+    @NonNull
     @Query("{ '_id' :  ?0 }")
     Optional<UserIdOnlyDto> findByPostId(@NonNull ObjectId postId);
 

@@ -11,6 +11,7 @@ import org.springframework.lang.NonNull;
 
 public interface RatingRepository extends MongoRepository<RatingDocument, ObjectId>, CustomRatingRepository {
 
+    @NonNull
     Optional<IdAndIsPositiveOnlyDto> findByPostIdAndUserId(@NonNull ObjectId postId, @NonNull ObjectId userId);
 
     @Update("{ '$set' : { 'isPositive' : ?1 } }")

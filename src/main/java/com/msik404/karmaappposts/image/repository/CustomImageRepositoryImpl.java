@@ -16,6 +16,7 @@ public class CustomImageRepositoryImpl implements CustomImageRepository {
 
     private final MongoOperations ops;
 
+    @NonNull
     @Override
     public Optional<Binary> findImageDataById(@NonNull ObjectId id) {
 

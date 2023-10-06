@@ -12,6 +12,7 @@ import org.springframework.lang.NonNull;
 
 public interface CustomRatingRepository {
 
+    @NonNull
     List<IdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId clientId,
@@ -20,6 +21,7 @@ public interface CustomRatingRepository {
             @NonNull PostDocRetrievalOrderStrategy order
     );
 
+    @NonNull
     List<IdAndIsPositiveOnlyDto> findFirstN(
             int size,
             @NonNull ObjectId creatorId,

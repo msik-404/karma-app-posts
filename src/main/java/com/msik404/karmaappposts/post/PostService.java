@@ -106,6 +106,7 @@ public class PostService {
         ratingRepository.deleteById(ratingDoc.id());
     }
 
+    @NonNull
     public List<PostDocument> findFirstN(
             @Nullable Integer size,
             @Nullable PostDocScrollPositionConcrete position,
@@ -122,6 +123,7 @@ public class PostService {
         );
     }
 
+    @NonNull
     public List<PostDocument> findFirstN(
             @Nullable Integer size,
             @NonNull ObjectId creatorId,

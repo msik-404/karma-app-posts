@@ -3,10 +3,12 @@ package com.msik404.karmaappposts.grpc.impl.mapper;
 import com.msik404.karmaappposts.grpc.PostVisibility;
 import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.post.Visibility;
+import org.springframework.lang.NonNull;
 
 public class VisibilityMapper {
 
-    public static Visibility map(PostVisibility visibility) throws UnsupportedVisibilityException {
+    @NonNull
+    public static Visibility map(@NonNull PostVisibility visibility) throws UnsupportedVisibilityException {
 
         switch (visibility) {
             case VIS_ACTIVE -> {
@@ -22,7 +24,8 @@ public class VisibilityMapper {
         }
     }
 
-    public static PostVisibility map(Visibility visibility) {
+    @NonNull
+    public static PostVisibility map(@NonNull Visibility visibility) {
 
         switch (visibility) {
             case ACTIVE -> {

@@ -49,6 +49,7 @@ public class TestingDataGenerator {
 
     }
 
+    @NonNull
     public static List<IdAndIsPositiveOnlyDto> getRatings(
             @NonNull List<PostDocument> postDocs,
             @NonNull List<RatingDocument> ratingDocs,
@@ -66,6 +67,7 @@ public class TestingDataGenerator {
                 .toList();
     }
 
+    @NonNull
     private static List<ObjectId> getTestUserIds() {
 
         final int userAmount = 5;
@@ -76,6 +78,7 @@ public class TestingDataGenerator {
         return userIds;
     }
 
+    @NonNull
     public static PostDocument getTestPostDoc(
             @NonNull ObjectId id,
             @NonNull ObjectId userId,
