@@ -8,10 +8,12 @@ import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-public record FindParametersDto(int size, PostDocScrollPositionConcrete position, Collection<Visibility> visibilities,
-                                PostDocRetrievalOrderStrategy order) {
+public record FindParametersDto(int size, @NonNull PostDocScrollPositionConcrete position,
+                                @NonNull Collection<Visibility> visibilities,
+                                @NonNull PostDocRetrievalOrderStrategy order) {
 
     private static final int DEFAULT_SIZE = 100;
     private static final PostDocScrollPositionConcrete DEFAULT_POSITION = PostDocScrollPosition.initial();

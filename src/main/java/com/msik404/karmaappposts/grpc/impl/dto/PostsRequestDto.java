@@ -13,9 +13,11 @@ import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
-public record PostsRequestDto(Integer size, PostDocScrollPositionConcrete position, Collection<Visibility> visibilities,
-                              PostDocRetrievalOrderStrategy order) {
+public record PostsRequestDto(@Nullable Integer size, @Nullable PostDocScrollPositionConcrete position,
+                              @Nullable Collection<Visibility> visibilities,
+                              @Nullable PostDocRetrievalOrderStrategy order) {
 
     @NonNull
     public static PostDocScrollPositionConcrete map(@NonNull ScrollPosition position) {

@@ -5,7 +5,7 @@ import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityExcept
 import org.bson.types.ObjectId;
 import org.springframework.lang.NonNull;
 
-public record PostsWithCreatorIdRequestDto(PostsRequestDto postsRequestDto, ObjectId creatorId) {
+public record PostsWithCreatorIdRequestDto(@NonNull PostsRequestDto postsRequestDto, @NonNull ObjectId creatorId) {
 
     public PostsWithCreatorIdRequestDto(@NonNull PostsWithCreatorIdRequest request) throws UnsupportedVisibilityException {
 
