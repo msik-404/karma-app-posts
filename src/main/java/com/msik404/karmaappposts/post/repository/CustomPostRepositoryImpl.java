@@ -32,7 +32,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         assert !visibilities.isEmpty();
 
         final Query query = position.isInitial() ? new Query() : new Query(
-                PostDocScrollingCriteria.getNonInitial(position.getKarmaScore(), position.getPostId()));
+                PostDocScrollingCriteria.getNonInitial(position.karmaScore(), position.postId()));
 
         query.addCriteria(Criteria.where("visibility").in(visibilities));
 

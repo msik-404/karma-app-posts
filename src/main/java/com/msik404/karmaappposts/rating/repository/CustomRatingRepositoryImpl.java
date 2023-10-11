@@ -50,7 +50,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
         if (!position.isInitial()) {
             additionalCriteria.add(
-                    PostDocScrollingCriteria.getNonInitial(position.getKarmaScore(), position.getPostId()));
+                    PostDocScrollingCriteria.getNonInitial(position.karmaScore(), position.postId()));
         }
 
         if (creatorId != null) {
