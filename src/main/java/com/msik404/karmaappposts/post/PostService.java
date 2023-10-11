@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
 import com.msik404.karmaappposts.post.dto.FindParametersDto;
+import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
@@ -140,6 +141,11 @@ public class PostService {
                 params.visibilities(),
                 params.order()
         );
+    }
+
+    @NonNull
+    public PostDocumentWithImageData findPostWithImageData(@NonNull ObjectId postId) throws PostNotFoundException {
+        return postRepository.findDocumentWithImageData(postId).orElseThrow(PostNotFoundException::new);
     }
 
 }
