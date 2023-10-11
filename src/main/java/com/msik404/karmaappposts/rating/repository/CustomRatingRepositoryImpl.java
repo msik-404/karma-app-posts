@@ -87,18 +87,18 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
                 ops.getCollectionName(RatingDocument.class),
                 Let.just(postIdVar),
                 Aggregation.newAggregation(multiFieldLeftOuterJoinOperation).getPipeline(),
-                Fields.field("rating")
+                Fields.field("rating_docs")
         ));
 
         // projection
         final AggregationExpression arrayIsNotEmpty = ComparisonOperators.Gt.valueOf(
-                        ArrayOperators.Size.lengthOfArray("rating.isPositive"))
+                        ArrayOperators.Size.lengthOfArray("rating_docs.isPositive"))
                 .greaterThanValue(0);
 
-        final AggregationExpression getFirstEl = ArrayOperators.arrayOf("rating.isPositive")
+        final AggregationExpression getFirstEl = ArrayOperators.arrayOf("rating_docs.isPositive")
                 .elementAt(0);
 
-        final var projectionOperation = Aggregation.project("_id").and("rating.isPositive")
+        final var projectionOperation = Aggregation.project("_id").and("rating_docs.isPositive")
                 .applyCondition(Cond.when(arrayIsNotEmpty)
                         .thenValueOf(getFirstEl)
                         .otherwise("$$REMOVE"));
