@@ -6,8 +6,13 @@ import java.util.Set;
 
 import com.msik404.karmaappposts.MongoConfiguration;
 import com.msik404.karmaappposts.TestingDataGenerator;
+import com.msik404.karmaappposts.image.ImageDocument;
+import com.msik404.karmaappposts.image.repository.CustomImageRepository;
+import com.msik404.karmaappposts.image.repository.CustomImageRepositoryImpl;
+import com.msik404.karmaappposts.image.repository.ImageRepository;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
+import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrder;
 import com.msik404.karmaappposts.post.position.PostDocScrollPosition;
@@ -25,16 +30,21 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {
+        // config bean
         MongoConfiguration.class,
+        // post repository beans
         PostRepository.class,
         CustomPostRepository.class,
-        CustomPostRepositoryImpl.class
+        CustomPostRepositoryImpl.class,
+        // image repository beans
+        ImageRepository.class,
+        CustomImageRepository.class,
+        CustomImageRepositoryImpl.class
 })
-@EnableMongoRepositories
+@EnableMongoRepositories(basePackageClasses = {PostRepository.class, ImageRepository.class})
 @Testcontainers
 class PostRepositoryTest {
 
@@ -50,13 +60,15 @@ class PostRepositoryTest {
     }
 
     private final PostRepository repository;
+    private final ImageRepository imageRepository;
 
     private final TestingDataGenerator dataGenerator;
 
     @Autowired
-    PostRepositoryTest(PostRepository repository) {
+    PostRepositoryTest(PostRepository repository, ImageRepository imageRepository) {
 
         this.repository = repository;
+        this.imageRepository = imageRepository;
 
         dataGenerator = new TestingDataGenerator();
     }
@@ -284,6 +296,95 @@ class PostRepositoryTest {
 
         // then
         assertTrue(optionalObjectId.isEmpty());
+    }
+
+    @Test
+    void findDocumentWithImageData_PostDocumentAndImageDocumentExist_PostDocumentWithImageDataIsReturned() {
+
+        // save image docs
+        imageRepository.insert(dataGenerator.getTestImageDocs());
+
+        // given
+        final int postDocIdx = 0;
+        final PostDocument postDocument = dataGenerator.getTestPostDocs().get(postDocIdx);
+
+        final int imageDocIdx = 0;
+        final ImageDocument imageDocument = dataGenerator.getTestImageDocs().get(imageDocIdx);
+
+        assertEquals(postDocument.getId(), imageDocument.getPostId());
+
+        final PostDocumentWithImageData groundTruth = new PostDocumentWithImageData(
+                postDocument.getId(),
+                postDocument.getUserId(),
+                postDocument.getHeadline(),
+                postDocument.getText(),
+                postDocument.getKarmaScore(),
+                postDocument.getVisibility(),
+                imageDocument.getImageData()
+        );
+
+        // when
+        final Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageData(
+                postDocument.getId());
+
+        // then
+        assertTrue(optionalResult.isPresent());
+        assertEquals(groundTruth, optionalResult.get());
+
+        // clear image docs
+        imageRepository.deleteAll();
+    }
+
+    @Test
+    void findDocumentWithImageData_PostDocumentExistsAndImageDocumentDoesNotExist_PostDocumentWithImageDataIsReturnedWithNullImageDataField() {
+
+        // save image docs
+        imageRepository.insert(dataGenerator.getTestImageDocs());
+
+        // given
+        final int postDocIdx = 4;
+        final PostDocument postDocument = dataGenerator.getTestPostDocs().get(postDocIdx);
+
+        for (var imageDocument : dataGenerator.getTestImageDocs()) {
+            assertNotEquals(postDocument.getId(), imageDocument.getPostId());
+        }
+
+        final PostDocumentWithImageData groundTruth = new PostDocumentWithImageData(
+                postDocument.getId(),
+                postDocument.getUserId(),
+                postDocument.getHeadline(),
+                postDocument.getText(),
+                postDocument.getKarmaScore(),
+                postDocument.getVisibility(),
+                null
+        );
+
+        // when
+        final Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageData(
+                postDocument.getId());
+
+        // then
+        assertTrue(optionalResult.isPresent());
+        assertEquals(groundTruth, optionalResult.get());
+
+        // clear image docs
+        imageRepository.deleteAll();
+    }
+
+    @Test
+    void findDocumentWithImageData_PostDocumentDoesNotExists_EmptyOptionalIsReturned() {
+
+        // save image docs
+        imageRepository.insert(dataGenerator.getTestImageDocs());
+
+        // when
+        final Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageData(ObjectId.get());
+
+        // then
+        assertTrue(optionalResult.isEmpty());
+
+        // clear image docs
+        imageRepository.deleteAll();
     }
 
 }

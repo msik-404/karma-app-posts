@@ -2,9 +2,11 @@ package com.msik404.karmaappposts.post.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
+import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import org.bson.types.ObjectId;
@@ -28,5 +30,8 @@ public interface CustomPostRepository {
             @NonNull Collection<Visibility> visibilities,
             @NonNull PostDocRetrievalOrderStrategy order
     );
+
+    @NonNull
+    Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull ObjectId postId);
 
 }
