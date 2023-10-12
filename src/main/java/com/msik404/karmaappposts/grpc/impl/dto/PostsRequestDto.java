@@ -24,7 +24,7 @@ public record PostsRequestDto(@Nullable Integer size, @Nullable PostDocScrollPos
 
         return PostDocScrollPosition.of(
                 position.getKarmaScore(),
-                new ObjectId(position.getPostId())
+                new ObjectId(position.getPostId().getHexString())
         );
     }
 

@@ -22,6 +22,7 @@ import com.msik404.karmaappposts.image.repository.ImageRepository;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.PostService;
 import com.msik404.karmaappposts.post.Visibility;
+import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.repository.PostRepository;
@@ -79,7 +80,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             postService.create(
-                    new ObjectId(request.getUserId()),
+                    new ObjectId(request.getUserId().getHexString()),
                     request.hasHeadline() ? request.getHeadline() : null,
                     request.hasText() ? request.getText() : null,
                     request.hasImageData() ? request.getImageData().toByteArray() : null
@@ -107,8 +108,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             postService.rate(
-                    new ObjectId(request.getPostId()),
-                    new ObjectId(request.getUserId()),
+                    new ObjectId(request.getPostId().getHexString()),
+                    new ObjectId(request.getUserId().getHexString()),
                     request.getIsPositive()
             );
 
@@ -133,8 +134,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             postService.unrate(
-                    new ObjectId(request.getPostId()),
-                    new ObjectId(request.getUserId())
+                    new ObjectId(request.getPostId().getHexString()),
+                    new ObjectId(request.getUserId().getHexString())
             );
 
             responseObserver.onNext(Empty.getDefaultInstance());
@@ -158,7 +159,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             final Visibility visibility = VisibilityMapper.map(request.getVisibility());
-            postService.findAndSetVisibilityById(new ObjectId(request.getPostId()), visibility);
+            postService.findAndSetVisibilityById(new ObjectId(request.getPostId().getHexString()), visibility);
 
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();
@@ -243,7 +244,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        final Optional<Binary> optionalData = imageRepository.findImageDataById(new ObjectId(request.getPostId()));
+        final Optional<Binary> optionalData = imageRepository.findImageDataById(
+                new ObjectId(request.getPostId().getHexString()));
+
         if (optionalData.isEmpty()) {
             responseObserver.onError(Status.NOT_FOUND
                     .withDescription("Image for post with provided post_id was not found")
@@ -331,14 +334,39 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
 
         final Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findByPostId(
-                new ObjectId(request.getPostId()));
+                new ObjectId(request.getPostId().getHexString()));
 
         final PostCreatorIdResponse.Builder responseBuilder = PostCreatorIdResponse.newBuilder();
 
-        optionalCreatorId.ifPresent(userIdOnlyDto -> responseBuilder.setUserId(userIdOnlyDto.toString()));
+        optionalCreatorId.ifPresent(userIdOnlyDto ->
+                responseBuilder.setUserId(MongoObjectId.newBuilder().setHexString(userIdOnlyDto.toString()).build())
+        );
 
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public void findPostWithImageData(PostRequest request, StreamObserver<PostWithImageData> responseObserver) {
+
+        final boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
+
+        try {
+            final PostDocumentWithImageData post = postService.findPostWithImageData(
+                    new ObjectId(request.getPostId().getHexString()));
+
+            responseObserver.onNext(DocToGrpcMapper.map(post));
+            responseObserver.onCompleted();
+
+        } catch (PostNotFoundException ex) {
+            responseObserver.onError(Status.NOT_FOUND
+                    .withDescription(ex.getMessage())
+                    .asRuntimeException()
+            );
+        }
     }
 
 }

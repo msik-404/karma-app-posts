@@ -11,7 +11,7 @@ public record PostRatingsRequestDto(@NonNull PostsRequestDto postsRequestDto, @N
 
         this(
                 request.hasPostsRequest() ? new PostsRequestDto(request.getPostsRequest()) : new PostsRequestDto(),
-                new ObjectId(request.getClientId())
+                new ObjectId(request.getClientId().getHexString())
         );
     }
 }

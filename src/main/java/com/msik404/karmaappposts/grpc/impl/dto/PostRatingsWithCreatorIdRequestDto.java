@@ -13,7 +13,7 @@ public record PostRatingsWithCreatorIdRequestDto(@NonNull PostRatingsRequestDto 
 
         this(
                 new PostRatingsRequestDto(request.getPostsRatingsRequest()),
-                new ObjectId(request.getCreatorId())
+                new ObjectId(request.getCreatorId().getHexString())
         );
     }
 

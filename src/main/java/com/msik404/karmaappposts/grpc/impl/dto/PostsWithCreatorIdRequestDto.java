@@ -11,7 +11,7 @@ public record PostsWithCreatorIdRequestDto(@NonNull PostsRequestDto postsRequest
 
         this(
                 request.hasPostsRequest() ? new PostsRequestDto(request.getPostsRequest()) : new PostsRequestDto(),
-                new ObjectId(request.getCreatorId())
+                new ObjectId(request.getCreatorId().getHexString())
         );
     }
 }
