@@ -64,7 +64,7 @@ public class PostService {
     }
 
     @Transactional
-    public void rate(
+    public int rate(
             @NonNull ObjectId postId,
             @NonNull ObjectId userId,
             boolean isPositive) throws PostNotFoundException {
@@ -80,23 +80,25 @@ public class PostService {
             final var ratingDoc = optionalDoc.get();
             if (ratingDoc.isPositive() == isPositive) {
                 // desired effect is already in place.
-                return;
+                return 0;
             }
             delta = isPositive ? 2 : -2;
             ratingRepository.findAndSetIsPositiveById(ratingDoc.id(), isPositive);
         }
 
         findAndIncrementKarmaScoreById(postId, delta);
+
+        return delta;
     }
 
     @Transactional
-    public void unrate(@NonNull ObjectId postId, @NonNull ObjectId userId) throws PostNotFoundException {
+    public int unrate(@NonNull ObjectId postId, @NonNull ObjectId userId) throws PostNotFoundException {
 
         final Optional<IdAndIsPositiveOnlyDto> optionalDoc = ratingRepository.findByPostIdAndUserId(postId, userId);
 
         if (optionalDoc.isEmpty()) {
             // desired effect is already in place.
-            return;
+            return 0 ;
         }
 
         final var ratingDoc = optionalDoc.get();
@@ -105,6 +107,8 @@ public class PostService {
 
         findAndIncrementKarmaScoreById(postId, delta);
         ratingRepository.deleteById(ratingDoc.id());
+
+        return delta;
     }
 
     @NonNull

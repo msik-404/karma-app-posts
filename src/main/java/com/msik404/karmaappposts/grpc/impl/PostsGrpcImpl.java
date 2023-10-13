@@ -99,7 +99,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void ratePost(RatePostRequest request, StreamObserver<Empty> responseObserver) {
+    public void ratePost(RatePostRequest request, StreamObserver<ChangedRatingResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -107,13 +107,17 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
 
         try {
-            postService.rate(
+            final int delta = postService.rate(
                     new ObjectId(request.getPostId().getHexString()),
                     new ObjectId(request.getUserId().getHexString()),
                     request.getIsPositive()
             );
 
-            responseObserver.onNext(Empty.getDefaultInstance());
+            final var response = ChangedRatingResponse.newBuilder()
+                    .setDelta(delta)
+                    .build();
+
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
 
         } catch (PostNotFoundException ex) {
@@ -125,7 +129,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void unratePost(UnratePostRequest request, StreamObserver<Empty> responseObserver) {
+    public void unratePost(UnratePostRequest request, StreamObserver<ChangedRatingResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -133,12 +137,16 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
 
         try {
-            postService.unrate(
+            final int delta = postService.unrate(
                     new ObjectId(request.getPostId().getHexString()),
                     new ObjectId(request.getUserId().getHexString())
             );
 
-            responseObserver.onNext(Empty.getDefaultInstance());
+            final var response = ChangedRatingResponse.newBuilder()
+                    .setDelta(delta)
+                    .build();
+
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
 
         } catch (PostNotFoundException ex) {
