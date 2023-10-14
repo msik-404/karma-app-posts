@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.lang.NonNull;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
@@ -36,7 +37,7 @@ class ImageRepositoryTest {
             .withExposedPorts(27017);
 
     @DynamicPropertySource
-    private static void registerRedisProperties(DynamicPropertyRegistry registry) {
+    private static void registerRedisProperties(@NonNull DynamicPropertyRegistry registry) {
 
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.mongodb.database", () -> "test");
