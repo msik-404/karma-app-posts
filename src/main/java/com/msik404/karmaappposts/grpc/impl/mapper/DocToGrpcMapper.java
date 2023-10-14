@@ -17,9 +17,9 @@ public class DocToGrpcMapper {
 
         final Post.Builder builder = Post.newBuilder();
 
-        builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.getId().toString()).build());
+        builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.getId().toHexString()).build());
 
-        builder.setUserId(MongoObjectId.newBuilder().setHexString(doc.getUserId().toString()).build());
+        builder.setUserId(MongoObjectId.newBuilder().setHexString(doc.getUserId().toHexString()).build());
 
         if (doc.headline != null) {
             builder.setHeadline(doc.getHeadline());
@@ -41,7 +41,7 @@ public class DocToGrpcMapper {
         final PostRating.Builder builder = PostRating.newBuilder();
 
         if (doc.id() != null) {
-            builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toString()).build());
+            builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toHexString()).build());
         }
         if (doc.isPositive() != null) {
             builder.setIsPositive(doc.isPositive());

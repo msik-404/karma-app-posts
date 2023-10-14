@@ -8,6 +8,7 @@ import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
 import com.msik404.karmaappposts.post.dto.FindParametersDto;
 import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
+import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
@@ -98,7 +99,7 @@ public class PostService {
 
         if (optionalDoc.isEmpty()) {
             // desired effect is already in place.
-            return 0 ;
+            return 0;
         }
 
         final var ratingDoc = optionalDoc.get();
@@ -150,6 +151,18 @@ public class PostService {
     @NonNull
     public PostDocumentWithImageData findPostWithImageData(@NonNull ObjectId postId) throws PostNotFoundException {
         return postRepository.findDocumentWithImageData(postId).orElseThrow(PostNotFoundException::new);
+    }
+
+    @NonNull
+    public ObjectId findPostCreatorId(@NonNull ObjectId postId) throws PostNotFoundException {
+
+        final Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findByPostId(postId);
+
+        if (optionalCreatorId.isEmpty()) {
+            throw new PostNotFoundException();
+        }
+
+        return optionalCreatorId.get().userId();
     }
 
 }

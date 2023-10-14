@@ -1,7 +1,6 @@
 package com.msik404.karmaappposts.grpc.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import build.buf.protovalidate.ValidationResult;
 import build.buf.protovalidate.Validator;
@@ -17,20 +16,18 @@ import com.msik404.karmaappposts.grpc.impl.dto.PostsWithCreatorIdRequestDto;
 import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.grpc.impl.mapper.DocToGrpcMapper;
 import com.msik404.karmaappposts.grpc.impl.mapper.VisibilityMapper;
+import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
-import com.msik404.karmaappposts.image.repository.ImageRepository;
+import com.msik404.karmaappposts.image.exception.ImageNotFoundException;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.PostService;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
-import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
-import com.msik404.karmaappposts.post.repository.PostRepository;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
@@ -39,10 +36,9 @@ import org.springframework.stereotype.Component;
 public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     private final PostService postService;
-    private final PostRepository postRepository;
     private final PostRepositoryGrpcHandler postRepositoryHandler;
     private final RatingRepositoryGrpcHandler ratingRepositoryHandler;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
     private static <T> boolean validate(Message request, StreamObserver<T> responseObserver) {
 
@@ -252,23 +248,22 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        final Optional<Binary> optionalData = imageRepository.findImageDataById(
-                new ObjectId(request.getPostId().getHexString()));
+        try {
+            final byte[] imageData = imageService.findImageByPostId(new ObjectId(request.getPostId().getHexString()));
 
-        if (optionalData.isEmpty()) {
+            final var response = ImageResponse.newBuilder()
+                    .setImageData(ByteString.copyFrom(imageData))
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+        } catch (ImageNotFoundException ex) {
             responseObserver.onError(Status.NOT_FOUND
-                    .withDescription("Image for post with provided post_id was not found")
+                    .withDescription(ex.getMessage())
                     .asRuntimeException()
             );
-            return;
         }
-
-        final var response = ImageResponse.newBuilder()
-                .setImageData(ByteString.copyFrom(optionalData.get().getData()))
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
     }
 
     @Override
@@ -341,17 +336,22 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             return;
         }
 
-        final Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findByPostId(
-                new ObjectId(request.getPostId().getHexString()));
+        try {
+            final ObjectId creatorId = postService.findPostCreatorId(new ObjectId(request.getPostId().getHexString()));
 
-        final PostCreatorIdResponse.Builder responseBuilder = PostCreatorIdResponse.newBuilder();
+            final PostCreatorIdResponse response = PostCreatorIdResponse.newBuilder()
+                    .setUserId(MongoObjectId.newBuilder().setHexString(creatorId.toHexString()).build())
+                    .build();
 
-        optionalCreatorId.ifPresent(userIdOnlyDto ->
-                responseBuilder.setUserId(MongoObjectId.newBuilder().setHexString(userIdOnlyDto.toString()).build())
-        );
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
 
-        responseObserver.onNext(responseBuilder.build());
-        responseObserver.onCompleted();
+        } catch (PostNotFoundException ex) {
+            responseObserver.onError(Status.NOT_FOUND
+                    .withDescription(ex.getMessage())
+                    .asRuntimeException()
+            );
+        }
     }
 
     @Override
