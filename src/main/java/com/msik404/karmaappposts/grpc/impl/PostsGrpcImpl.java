@@ -29,6 +29,7 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -40,7 +41,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     private final RatingRepositoryGrpcHandler ratingRepositoryHandler;
     private final ImageService imageService;
 
-    private static <T> boolean validate(Message request, StreamObserver<T> responseObserver) {
+    private static <T> boolean validate(@NonNull Message request, @NonNull StreamObserver<T> responseObserver) {
 
         final Validator validator = new Validator();
         try {
@@ -67,7 +68,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void createPost(CreatePostRequest request, StreamObserver<Empty> responseObserver) {
+    public void createPost(@NonNull CreatePostRequest request, @NonNull StreamObserver<Empty> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -95,7 +96,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void ratePost(RatePostRequest request, StreamObserver<ChangedRatingResponse> responseObserver) {
+    public void ratePost(
+            @NonNull RatePostRequest request,
+            @NonNull StreamObserver<ChangedRatingResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -125,7 +128,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void unratePost(UnratePostRequest request, StreamObserver<ChangedRatingResponse> responseObserver) {
+    public void unratePost(
+            @NonNull UnratePostRequest request,
+            @NonNull StreamObserver<ChangedRatingResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -154,7 +159,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void changePostVisibility(ChangePostVisibilityRequest request, StreamObserver<Empty> responseObserver) {
+    public void changePostVisibility(
+            @NonNull ChangePostVisibilityRequest request,
+            @NonNull StreamObserver<Empty> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -182,7 +189,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void findPosts(PostsRequest request, StreamObserver<PostsResponse> responseObserver) {
+    public void findPosts(
+            @NonNull PostsRequest request,
+            @NonNull StreamObserver<PostsResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -211,8 +220,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostsWithCreatorId(
-            PostsWithCreatorIdRequest request,
-            StreamObserver<PostsResponse> responseObserver) {
+            @NonNull PostsWithCreatorIdRequest request,
+            @NonNull StreamObserver<PostsResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -240,8 +249,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findImage(
-            ImageRequest request,
-            StreamObserver<ImageResponse> responseObserver) {
+            @NonNull ImageRequest request,
+            @NonNull StreamObserver<ImageResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -267,7 +276,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void findPostRatings(PostRatingsRequest request, StreamObserver<PostRatingsResponse> responseObserver) {
+    public void findPostRatings(
+            @NonNull PostRatingsRequest request,
+            @NonNull StreamObserver<PostRatingsResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -297,8 +308,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostRatingsWithCreatorId(
-            PostRatingsWithCreatorIdRequest request,
-            StreamObserver<PostRatingsResponse> responseObserver) {
+            @NonNull PostRatingsWithCreatorIdRequest request,
+            @NonNull StreamObserver<PostRatingsResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -328,8 +339,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostCreatorId(
-            PostCreatorIdRequest request,
-            StreamObserver<PostCreatorIdResponse> responseObserver) {
+            @NonNull PostCreatorIdRequest request,
+            @NonNull StreamObserver<PostCreatorIdResponse> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -355,7 +366,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     }
 
     @Override
-    public void findPostWithImageData(PostRequest request, StreamObserver<PostWithImageData> responseObserver) {
+    public void findPostWithImageData(
+            @NonNull PostRequest request,
+            @NonNull StreamObserver<PostWithImageData> responseObserver) {
 
         final boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
