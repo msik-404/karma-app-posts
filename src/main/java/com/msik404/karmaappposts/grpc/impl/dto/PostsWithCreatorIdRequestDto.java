@@ -7,7 +7,8 @@ import org.springframework.lang.NonNull;
 
 public record PostsWithCreatorIdRequestDto(@NonNull PostsRequestDto postsRequestDto, @NonNull ObjectId creatorId) {
 
-    public PostsWithCreatorIdRequestDto(@NonNull PostsWithCreatorIdRequest request) throws UnsupportedVisibilityException {
+    public PostsWithCreatorIdRequestDto(
+            @NonNull final PostsWithCreatorIdRequest request) throws UnsupportedVisibilityException {
 
         this(
                 request.hasPostsRequest() ? new PostsRequestDto(request.getPostsRequest()) : new PostsRequestDto(),

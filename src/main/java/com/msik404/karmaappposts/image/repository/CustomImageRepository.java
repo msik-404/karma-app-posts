@@ -9,6 +9,6 @@ import org.springframework.lang.NonNull;
 public interface CustomImageRepository {
 
     @NonNull
-    Optional<Binary> findImageDataById(@NonNull ObjectId id);
+    Optional<Binary> findImageDataById(@NonNull final ObjectId id);
 
 }

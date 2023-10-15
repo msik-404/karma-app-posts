@@ -11,7 +11,7 @@ public class PostDocScrollPosition {
     }
 
     @NonNull
-    public static PostDocScrollPositionConcrete of(long karmaScore, @NonNull ObjectId postId) {
+    public static PostDocScrollPositionConcrete of(final long karmaScore, @NonNull final ObjectId postId) {
         return new PostDocScrollPositionConcrete(karmaScore, postId);
     }
 

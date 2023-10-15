@@ -7,7 +7,7 @@ import org.springframework.lang.NonNull;
 public class PostDocScrollingCriteria {
 
     @NonNull
-    public static Criteria getNonInitial(long karmaScore, @NonNull ObjectId postId) {
+    public static Criteria getNonInitial(final long karmaScore, @NonNull final ObjectId postId) {
         return new Criteria().orOperator(
                 Criteria.where("karmaScore").lt(karmaScore),
                 Criteria.where("karmaScore").is(karmaScore).and("_id").gt(postId)

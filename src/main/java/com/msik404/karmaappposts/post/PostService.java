@@ -32,7 +32,9 @@ public class PostService {
 
     private final ImageService imageService;
 
-    public void findAndIncrementKarmaScoreById(@NonNull ObjectId id, int increment) throws PostNotFoundException {
+    public void findAndIncrementKarmaScoreById(
+            @NonNull final ObjectId id,
+            final int increment) throws PostNotFoundException {
 
         final long affectedDocs = postRepository.findAndIncrementKarmaScoreById(id, increment);
         if (affectedDocs == 0) {
@@ -41,8 +43,8 @@ public class PostService {
     }
 
     public void findAndSetVisibilityById(
-            @NonNull ObjectId id,
-            @NonNull Visibility visibility) throws PostNotFoundException {
+            @NonNull final ObjectId id,
+            @NonNull final Visibility visibility) throws PostNotFoundException {
 
         final long affectedDocs = postRepository.findAndSetVisibilityById(id, visibility);
         if (affectedDocs == 0) {
@@ -52,10 +54,10 @@ public class PostService {
 
     @Transactional
     public void create(
-            @NonNull ObjectId userId,
-            @Nullable String headline,
-            @Nullable String text,
-            @Nullable byte[] imageData) throws FileProcessingException {
+            @NonNull final ObjectId userId,
+            @Nullable final String headline,
+            @Nullable final String text,
+            @Nullable final byte[] imageData) throws FileProcessingException {
 
         final PostDocument post = new PostDocument(userId, headline, text);
         postRepository.save(post);
@@ -66,9 +68,9 @@ public class PostService {
 
     @Transactional
     public int rate(
-            @NonNull ObjectId postId,
-            @NonNull ObjectId userId,
-            boolean isPositive) throws PostNotFoundException {
+            @NonNull final ObjectId postId,
+            @NonNull final ObjectId userId,
+            final boolean isPositive) throws PostNotFoundException {
 
         final Optional<IdAndIsPositiveOnlyDto> optionalDoc = ratingRepository.findByPostIdAndUserId(postId, userId);
 
@@ -93,7 +95,9 @@ public class PostService {
     }
 
     @Transactional
-    public int unrate(@NonNull ObjectId postId, @NonNull ObjectId userId) throws PostNotFoundException {
+    public int unrate(
+            @NonNull final ObjectId postId,
+            @NonNull final ObjectId userId) throws PostNotFoundException {
 
         final Optional<IdAndIsPositiveOnlyDto> optionalDoc = ratingRepository.findByPostIdAndUserId(postId, userId);
 
@@ -114,10 +118,10 @@ public class PostService {
 
     @NonNull
     public List<PostDocument> findFirstN(
-            @Nullable Integer size,
-            @Nullable PostDocScrollPositionConcrete position,
-            @Nullable Collection<Visibility> visibilities,
-            @Nullable PostDocRetrievalOrderStrategy order) {
+            @Nullable final Integer size,
+            @Nullable final PostDocScrollPositionConcrete position,
+            @Nullable final Collection<Visibility> visibilities,
+            @Nullable final PostDocRetrievalOrderStrategy order) {
 
         final var params = new FindParametersDto(size, position, visibilities, order);
 
@@ -131,11 +135,11 @@ public class PostService {
 
     @NonNull
     public List<PostDocument> findFirstN(
-            @Nullable Integer size,
-            @NonNull ObjectId creatorId,
-            @Nullable PostDocScrollPositionConcrete position,
-            @Nullable Collection<Visibility> visibilities,
-            @Nullable PostDocRetrievalOrderStrategy order) {
+            @Nullable final Integer size,
+            @NonNull final ObjectId creatorId,
+            @Nullable final PostDocScrollPositionConcrete position,
+            @Nullable final Collection<Visibility> visibilities,
+            @Nullable final PostDocRetrievalOrderStrategy order) {
 
         final var params = new FindParametersDto(size, position, visibilities, order);
 
@@ -149,12 +153,12 @@ public class PostService {
     }
 
     @NonNull
-    public PostDocumentWithImageData findPostWithImageData(@NonNull ObjectId postId) throws PostNotFoundException {
+    public PostDocumentWithImageData findPostWithImageData(@NonNull final ObjectId postId) throws PostNotFoundException {
         return postRepository.findDocumentWithImageData(postId).orElseThrow(PostNotFoundException::new);
     }
 
     @NonNull
-    public ObjectId findPostCreatorId(@NonNull ObjectId postId) throws PostNotFoundException {
+    public ObjectId findPostCreatorId(@NonNull final ObjectId postId) throws PostNotFoundException {
 
         final Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findByPostId(postId);
 

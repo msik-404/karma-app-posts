@@ -13,7 +13,7 @@ import org.springframework.lang.NonNull;
 public class DocToGrpcMapper {
 
     @NonNull
-    public static Post map(@NonNull PostDocument doc) {
+    public static Post map(@NonNull final PostDocument doc) {
 
         final Post.Builder builder = Post.newBuilder();
 
@@ -36,7 +36,7 @@ public class DocToGrpcMapper {
     }
 
     @NonNull
-    public static PostRating map(@NonNull IdAndIsPositiveOnlyDto doc) {
+    public static PostRating map(@NonNull final IdAndIsPositiveOnlyDto doc) {
 
         return PostRating.newBuilder()
                 .setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toHexString()).build())

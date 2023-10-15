@@ -32,12 +32,12 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
     @NonNull
     private List<IdAndIsPositiveOnlyDto> findFirstNImpl(
-            int size,
-            @Nullable ObjectId creatorId,
-            @NonNull ObjectId clientId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order) {
+            final int size,
+            @Nullable final ObjectId creatorId,
+            @NonNull final ObjectId clientId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order) {
 
         assert !visibilities.isEmpty();
 
@@ -117,11 +117,11 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     @NonNull
     @Override
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            int size,
-            @NonNull ObjectId clientId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order) {
+            final int size,
+            @NonNull final ObjectId clientId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, null, clientId, position, visibilities, order);
     }
@@ -129,12 +129,12 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     @NonNull
     @Override
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            int size,
-            @NonNull ObjectId creatorId,
-            @NonNull ObjectId clientId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order) {
+            final int size,
+            @NonNull final ObjectId creatorId,
+            @NonNull final ObjectId clientId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, creatorId, clientId, position, visibilities, order);
     }

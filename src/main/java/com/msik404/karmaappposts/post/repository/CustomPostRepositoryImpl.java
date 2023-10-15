@@ -28,11 +28,11 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
     @NonNull
     private List<PostDocument> findFirstNImpl(
-            int size,
-            @Nullable ObjectId creatorId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order) {
+            final int size,
+            @Nullable final ObjectId creatorId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order) {
 
         assert !visibilities.isEmpty();
 
@@ -54,11 +54,11 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     @NonNull
     @Override
     public List<PostDocument> findFirstN(
-            int size,
-            @NonNull ObjectId creatorId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order) {
+            final int size,
+            @NonNull final ObjectId creatorId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, creatorId, position, visibilities, order);
     }
@@ -66,17 +66,17 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     @NonNull
     @Override
     public List<PostDocument> findFirstN(
-            int size,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order) {
+            final int size,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, null, position, visibilities, order);
     }
 
     @NonNull
     @Override
-    public Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull ObjectId postId) {
+    public Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull final ObjectId postId) {
 
         final List<AggregationOperation> aggOps = new ArrayList<>();
 

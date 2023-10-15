@@ -16,22 +16,22 @@ public interface CustomPostRepository {
 
     @NonNull
     List<PostDocument> findFirstN(
-            int size,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order
+            final int size,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order
     );
 
     @NonNull
     List<PostDocument> findFirstN(
-            int size,
-            @NonNull ObjectId creatorId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order
+            final int size,
+            @NonNull final ObjectId creatorId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order
     );
 
     @NonNull
-    Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull ObjectId postId);
+    Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull final ObjectId postId);
 
 }

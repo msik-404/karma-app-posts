@@ -14,21 +14,21 @@ public interface CustomRatingRepository {
 
     @NonNull
     List<IdAndIsPositiveOnlyDto> findFirstN(
-            int size,
-            @NonNull ObjectId clientId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order
+            final int size,
+            @NonNull final ObjectId clientId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order
     );
 
     @NonNull
     List<IdAndIsPositiveOnlyDto> findFirstN(
-            int size,
-            @NonNull ObjectId creatorId,
-            @NonNull ObjectId clientId,
-            @NonNull PostDocScrollPositionConcrete position,
-            @NonNull Collection<Visibility> visibilities,
-            @NonNull PostDocRetrievalOrderStrategy order
+            final int size,
+            @NonNull final ObjectId creatorId,
+            @NonNull final ObjectId clientId,
+            @NonNull final PostDocScrollPositionConcrete position,
+            @NonNull final Collection<Visibility> visibilities,
+            @NonNull final PostDocRetrievalOrderStrategy order
     );
 
 }

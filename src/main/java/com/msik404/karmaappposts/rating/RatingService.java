@@ -23,11 +23,11 @@ public class RatingService {
 
     @NonNull
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            @Nullable Integer size,
-            @NonNull ObjectId clientId,
-            @Nullable PostDocScrollPositionConcrete position,
-            @Nullable Collection<Visibility> visibilities,
-            @Nullable PostDocRetrievalOrderStrategy order) {
+            @Nullable final Integer size,
+            @NonNull final ObjectId clientId,
+            @Nullable final PostDocScrollPositionConcrete position,
+            @Nullable final Collection<Visibility> visibilities,
+            @Nullable final PostDocRetrievalOrderStrategy order) {
 
         final var params = new FindParametersDto(size, position, visibilities, order);
 
@@ -42,12 +42,12 @@ public class RatingService {
 
     @NonNull
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            @Nullable Integer size,
-            @NonNull ObjectId creatorId,
-            @NonNull ObjectId clientId,
-            @Nullable PostDocScrollPositionConcrete position,
-            @Nullable Collection<Visibility> visibilities,
-            @Nullable PostDocRetrievalOrderStrategy order) {
+            @Nullable final Integer size,
+            @NonNull final ObjectId creatorId,
+            @NonNull final ObjectId clientId,
+            @Nullable final PostDocScrollPositionConcrete position,
+            @Nullable final Collection<Visibility> visibilities,
+            @Nullable final PostDocRetrievalOrderStrategy order) {
 
         final var params = new FindParametersDto(size, position, visibilities, order);
 

@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 public class VisibilityMapper {
 
     @NonNull
-    public static Visibility map(@NonNull PostVisibility visibility) throws UnsupportedVisibilityException {
+    public static Visibility map(@NonNull final PostVisibility visibility) throws UnsupportedVisibilityException {
 
         switch (visibility) {
             case VIS_ACTIVE -> {
@@ -25,7 +25,7 @@ public class VisibilityMapper {
     }
 
     @NonNull
-    public static PostVisibility map(@NonNull Visibility visibility) {
+    public static PostVisibility map(@NonNull final Visibility visibility) {
 
         switch (visibility) {
             case ACTIVE -> {

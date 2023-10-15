@@ -20,7 +20,7 @@ public record PostsRequestDto(@Nullable Integer size, @Nullable PostDocScrollPos
                               @Nullable PostDocRetrievalOrderStrategy order) {
 
     @NonNull
-    public static PostDocScrollPositionConcrete map(@NonNull ScrollPosition position) {
+    public static PostDocScrollPositionConcrete map(@NonNull final ScrollPosition position) {
 
         return PostDocScrollPosition.of(
                 position.getKarmaScore(),
@@ -29,7 +29,7 @@ public record PostsRequestDto(@Nullable Integer size, @Nullable PostDocScrollPos
     }
 
     @NonNull
-    public static PostDocRetrievalOrderStrategy map(boolean isDescending) {
+    public static PostDocRetrievalOrderStrategy map(final boolean isDescending) {
         return isDescending ? PostDocRetrievalOrder.desc() : PostDocRetrievalOrder.asc();
     }
 
@@ -37,7 +37,7 @@ public record PostsRequestDto(@Nullable Integer size, @Nullable PostDocScrollPos
         this(null, null, null, null);
     }
 
-    public PostsRequestDto(@NonNull PostsRequest request) throws UnsupportedVisibilityException {
+    public PostsRequestDto(@NonNull final PostsRequest request) throws UnsupportedVisibilityException {
 
         this(
                 request.hasSize() ? request.getSize() : null,

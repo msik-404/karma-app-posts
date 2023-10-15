@@ -31,9 +31,9 @@ public class PostDocument {
     private Visibility visibility;
 
     public PostDocument(
-            @NonNull ObjectId userId,
-            @Nullable String headline,
-            @Nullable String text) {
+            @NonNull final ObjectId userId,
+            @Nullable final String headline,
+            @Nullable final String text) {
 
         this.id = ObjectId.get();
         this.userId = userId;
