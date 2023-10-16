@@ -14,4 +14,4 @@ docker image rm karma-app-posts-backend
 docker volume rm karma-app-posts_db-config && docker volume rm karma-app-posts_db-data
 
 # delete network
-docker network rm karma-app-posts_karma-app-net
+docker network rm karma-app-net
