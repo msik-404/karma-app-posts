@@ -25,6 +25,7 @@ import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.exception.RatingNotFoundException;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -91,11 +92,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (FileProcessingException ex) {
-            final String errMessage = ex.getMessage();
-            responseObserver.onError(Status.INTERNAL
-                    .withDescription(errMessage)
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -123,11 +120,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
 
-        } catch (PostNotFoundException ex) {
-            responseObserver.onError(Status.NOT_FOUND
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+        } catch (PostNotFoundException | RatingNotFoundException ex) {
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -155,10 +149,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (PostNotFoundException ex) {
-            responseObserver.onError(Status.NOT_FOUND
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -179,16 +170,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();
 
-        } catch (UnsupportedVisibilityException ex) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
-        } catch (PostNotFoundException ex) {
-            responseObserver.onError(Status.NOT_FOUND
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+        } catch (UnsupportedVisibilityException | PostNotFoundException ex) {
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -215,10 +198,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -244,10 +224,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onNext(response);
 
         } catch (UnsupportedVisibilityException ex) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -272,10 +249,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (ImageNotFoundException ex) {
-            responseObserver.onError(Status.NOT_FOUND
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -303,10 +277,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -334,10 +305,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -362,10 +330,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (PostNotFoundException ex) {
-            responseObserver.onError(Status.NOT_FOUND
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
@@ -387,10 +352,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             responseObserver.onCompleted();
 
         } catch (PostNotFoundException ex) {
-            responseObserver.onError(Status.NOT_FOUND
-                    .withDescription(ex.getMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(ex.asStatusRuntimeException());
         }
     }
 
