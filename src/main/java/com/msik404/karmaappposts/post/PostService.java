@@ -14,7 +14,9 @@ import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import com.msik404.karmaappposts.post.repository.PostRepository;
 import com.msik404.karmaappposts.rating.RatingDocument;
+import com.msik404.karmaappposts.rating.RatingService;
 import com.msik404.karmaappposts.rating.dto.IdAndIsPositiveOnlyDto;
+import com.msik404.karmaappposts.rating.exception.RatingNotFoundException;
 import com.msik404.karmaappposts.rating.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -30,6 +32,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final RatingRepository ratingRepository;
 
+    private final RatingService ratingService;
     private final ImageService imageService;
 
     public void findAndIncrementKarmaScoreById(
@@ -70,7 +73,7 @@ public class PostService {
     public int rate(
             @NonNull final ObjectId postId,
             @NonNull final ObjectId userId,
-            final boolean isPositive) throws PostNotFoundException {
+            final boolean isPositive) throws PostNotFoundException, RatingNotFoundException {
 
         final Optional<IdAndIsPositiveOnlyDto> optionalDoc = ratingRepository.findByPostIdAndUserId(postId, userId);
 
@@ -86,7 +89,7 @@ public class PostService {
                 return 0;
             }
             delta = isPositive ? 2 : -2;
-            ratingRepository.findAndSetIsPositiveById(ratingDoc.id(), isPositive);
+            ratingService.findAndSetIsPositiveById(ratingDoc.id(), isPositive);
         }
 
         findAndIncrementKarmaScoreById(postId, delta);
