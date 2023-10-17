@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 
 public class UnsupportedVisibilityException extends RuntimeException implements EncodableException, GrpcStatusException {
 
+    private final static String Id = "UnsupportedVisibility";
     private final static String ERROR_MESSAGE = "Unsupported visibility provided.";
 
     public UnsupportedVisibilityException() {
@@ -17,7 +18,13 @@ public class UnsupportedVisibilityException extends RuntimeException implements 
     @NonNull
     @Override
     public String getEncodedException() {
-        return ExceptionEncoder.encode(UnsupportedVisibilityException.class.getSimpleName(), ERROR_MESSAGE);
+        return ExceptionEncoder.encode(getExceptionId(), ERROR_MESSAGE);
+    }
+
+    @NonNull
+    @Override
+    public String getExceptionId() {
+        return Id;
     }
 
     @NonNull

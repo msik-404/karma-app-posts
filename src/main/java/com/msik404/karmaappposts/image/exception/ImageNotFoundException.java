@@ -1,14 +1,13 @@
 package com.msik404.karmaappposts.image.exception;
 
-import com.msik404.karmaappposts.encoding.EncodableException;
-import com.msik404.karmaappposts.encoding.ExceptionEncoder;
-import com.msik404.karmaappposts.grpc.impl.exception.GrpcStatusException;
+import com.msik404.karmaappposts.grpc.impl.exception.EncodableGrpcStatusException;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.springframework.lang.NonNull;
 
-public class ImageNotFoundException extends RuntimeException implements EncodableException, GrpcStatusException {
+public class ImageNotFoundException extends EncodableGrpcStatusException {
 
+    private final static String Id = "ImageNotFound";
     private final static String ERROR_MESSAGE = "Requested image was not found";
 
     public ImageNotFoundException() {
@@ -17,8 +16,8 @@ public class ImageNotFoundException extends RuntimeException implements Encodabl
 
     @NonNull
     @Override
-    public String getEncodedException() {
-        return ExceptionEncoder.encode(ImageNotFoundException.class.getSimpleName(), ERROR_MESSAGE);
+    public String getExceptionId() {
+        return Id;
     }
 
     @NonNull

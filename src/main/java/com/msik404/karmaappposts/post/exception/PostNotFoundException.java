@@ -1,14 +1,13 @@
 package com.msik404.karmaappposts.post.exception;
 
-import com.msik404.karmaappposts.encoding.EncodableException;
-import com.msik404.karmaappposts.encoding.ExceptionEncoder;
-import com.msik404.karmaappposts.grpc.impl.exception.GrpcStatusException;
+import com.msik404.karmaappposts.grpc.impl.exception.EncodableGrpcStatusException;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.springframework.lang.NonNull;
 
-public class PostNotFoundException extends RuntimeException implements EncodableException, GrpcStatusException {
+public class PostNotFoundException extends EncodableGrpcStatusException {
 
+    private static final String Id = "PostNotFound";
     private static final String ERROR_MESSAGE = "Post with provided id was not found.";
 
     public PostNotFoundException() {
@@ -17,8 +16,8 @@ public class PostNotFoundException extends RuntimeException implements Encodable
 
     @NonNull
     @Override
-    public String getEncodedException() {
-        return ExceptionEncoder.encode(PostNotFoundException.class.getSimpleName(), ERROR_MESSAGE);
+    public String getExceptionId() {
+        return Id;
     }
 
     @NonNull

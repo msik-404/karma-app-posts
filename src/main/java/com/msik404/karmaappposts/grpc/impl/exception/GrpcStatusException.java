@@ -6,6 +6,9 @@ import org.springframework.lang.NonNull;
 public interface GrpcStatusException {
 
     @NonNull
+    String getExceptionId();
+
+    @NonNull
     StatusRuntimeException asStatusRuntimeException();
 
 }
