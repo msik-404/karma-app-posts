@@ -4,11 +4,11 @@ import org.springframework.lang.NonNull;
 
 public class ExceptionEncoder {
 
-    private final static char SEPARATOR_CHAR = ';';
+    public final static String EXCEPTION_ID_PREFIX = "exceptionId: ";
 
     @NonNull
     public static String encode(@NonNull final String exceptionIdString, @NonNull final String errorMessage) {
-        return String.format("%s%c%s", exceptionIdString, SEPARATOR_CHAR, errorMessage);
+        return String.format("%s%s %s", EXCEPTION_ID_PREFIX, exceptionIdString, errorMessage);
     }
 
 }
