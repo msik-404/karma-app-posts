@@ -34,12 +34,12 @@ public class MongoConfiguration {
     }
 
     @Bean
-    public MongoDatabaseFactory mongoDatabaseFactory(@NonNull MongoClient client) {
+    public MongoDatabaseFactory mongoDatabaseFactory(MongoClient client) {
         return new SimpleMongoClientDatabaseFactory(client, databaseName);
     }
 
     @Bean
-    public MongoTemplate mongoTemplate(@NonNull MongoDatabaseFactory factory) {
+    public MongoTemplate mongoTemplate(MongoDatabaseFactory factory) {
 
         MongoTemplate mongoTemplate = new MongoTemplate(factory);
 
@@ -58,7 +58,7 @@ public class MongoConfiguration {
     }
 
     @Bean
-    MongoTransactionManager transactionManager(@NonNull MongoDatabaseFactory factory) {
+    MongoTransactionManager transactionManager(MongoDatabaseFactory factory) {
         return new MongoTransactionManager(factory);
     }
 
