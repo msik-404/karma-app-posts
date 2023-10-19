@@ -192,7 +192,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
             var responseBuilder = PostsResponse.newBuilder();
 
-            for(PostDocument post : posts) {
+            for (PostDocument post : posts) {
                 responseBuilder.addPosts(DocToGrpcMapper.map(post));
             }
 
@@ -263,7 +263,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         var responseBuilder = PostRatingsResponse.newBuilder();
 
-        for (IdAndIsPositiveOnlyDto rating: ratings) {
+        for (IdAndIsPositiveOnlyDto rating : ratings) {
             responseBuilder.addPostRatings(DocToGrpcMapper.map(rating));
         }
 
