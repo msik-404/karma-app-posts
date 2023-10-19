@@ -22,15 +22,15 @@ public class ImageService {
 
     private final ImageRepository repository;
 
-    public void save(@NonNull final ObjectId postId, @NonNull final byte[] imageData) throws FileProcessingException {
+    public void save(@NonNull ObjectId postId, @NonNull byte[] imageData) throws FileProcessingException {
 
         try {
-            final var bufferedImage = ImageIO.read(new ByteArrayInputStream(imageData));
+            var bufferedImage = ImageIO.read(new ByteArrayInputStream(imageData));
             if (bufferedImage == null) {
                 throw new FileProcessingException();
             }
 
-            final var byteArrayOutputStream = new ByteArrayOutputStream();
+            var byteArrayOutputStream = new ByteArrayOutputStream();
 
             ImageIO.write(bufferedImage, "jpeg", byteArrayOutputStream);
 
@@ -41,9 +41,9 @@ public class ImageService {
     }
 
     @NonNull
-    public byte[] findImageByPostId(@NonNull final ObjectId postId) throws ImageNotFoundException {
+    public byte[] findImageByPostId(@NonNull ObjectId postId) throws ImageNotFoundException {
 
-        final Optional<Binary> optionalImage = repository.findImageDataById(postId);
+        Optional<Binary> optionalImage = repository.findImageDataById(postId);
 
         if (optionalImage.isEmpty()) {
             throw new ImageNotFoundException();

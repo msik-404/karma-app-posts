@@ -21,10 +21,10 @@ public record FindParametersDto(int size, @NonNull PostDocScrollPositionConcrete
     private static final PostDocRetrievalOrderStrategy DEFAULT_ORDER = PostDocRetrievalOrder.desc();
 
     public FindParametersDto(
-            @Nullable final Integer size,
-            @Nullable final PostDocScrollPositionConcrete position,
-            @Nullable final Collection<Visibility> visibilities,
-            @Nullable final PostDocRetrievalOrderStrategy order) {
+            @Nullable Integer size,
+            @Nullable PostDocScrollPositionConcrete position,
+            @Nullable Collection<Visibility> visibilities,
+            @Nullable PostDocRetrievalOrderStrategy order) {
 
         this(
                 size == null ? DEFAULT_SIZE : size,

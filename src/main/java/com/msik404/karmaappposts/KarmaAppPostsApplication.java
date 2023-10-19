@@ -23,7 +23,7 @@ public class KarmaAppPostsApplication {
     @Value("${KarmaAppPosts.grpc.default.port}")
     private int defaultGrpcPort;
 
-    private final PostsGrpcImpl grpcImpl;
+    private PostsGrpcImpl grpcImpl;
 
     public static void main(String[] args) {
         SpringApplication.run(KarmaAppPostsApplication.class, args);
@@ -34,9 +34,9 @@ public class KarmaAppPostsApplication {
         return (args) -> {
             System.out.println("GRPC SERVER WILL RUN HERE");
 
-            final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(threadPoolSize);
+            ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(threadPoolSize);
 
-            final Server server = ServerBuilder
+            Server server = ServerBuilder
                     .forPort(defaultGrpcPort)
                     .executor(threadPoolExecutor)
                     .addService(grpcImpl)

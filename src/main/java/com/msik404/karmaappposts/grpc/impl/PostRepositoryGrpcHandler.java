@@ -17,7 +17,7 @@ public class PostRepositoryGrpcHandler {
     private final PostService postService;
 
     @NonNull
-    List<PostDocument> findFirstN(@NonNull final PostsRequestDto request) {
+    List<PostDocument> findFirstN(@NonNull PostsRequestDto request) {
 
         return postService.findFirstN(
                 request.size(),
@@ -28,7 +28,7 @@ public class PostRepositoryGrpcHandler {
     }
 
     @NonNull
-    List<PostDocument> findFirstN(@NonNull final PostsWithCreatorIdRequestDto request) {
+    List<PostDocument> findFirstN(@NonNull PostsWithCreatorIdRequestDto request) {
 
         return postService.findFirstN(
                 request.postsRequestDto().size(),

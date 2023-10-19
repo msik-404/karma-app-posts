@@ -17,7 +17,7 @@ public class RatingRepositoryGrpcHandler {
     RatingService ratingService;
 
     @NonNull
-    List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull final PostRatingsRequestDto request) {
+    List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull PostRatingsRequestDto request) {
 
         return ratingService.findFirstN(
                 request.postsRequestDto().size(),
@@ -29,7 +29,7 @@ public class RatingRepositoryGrpcHandler {
     }
 
     @NonNull
-    List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull final PostRatingsWithCreatorIdRequestDto request) {
+    List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull PostRatingsWithCreatorIdRequestDto request) {
 
         return ratingService.findFirstN(
                 request.postRatingsRequestDto().postsRequestDto().size(),

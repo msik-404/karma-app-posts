@@ -37,7 +37,7 @@ class ImageRepositoryTest {
             .withExposedPorts(27017);
 
     @DynamicPropertySource
-    private static void registerRedisProperties(@NonNull DynamicPropertyRegistry registry) {
+    private static void registerRedisProperties(DynamicPropertyRegistry registry) {
 
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.mongodb.database", () -> "test");
@@ -69,11 +69,11 @@ class ImageRepositoryTest {
     void findImageDataById_RequestedDocExistsAndHasImage_OnlyImageDataIsFetched() {
 
         // given
-        final int idx = 0;
-        final var groundTruth = dataGenerator.getTestImageDocs().get(idx);
+        int idx = 0;
+        var groundTruth = dataGenerator.getTestImageDocs().get(idx);
 
         // when
-        final Optional<Binary> optionalImageData = repository.findImageDataById(groundTruth.getPostId());
+        Optional<Binary> optionalImageData = repository.findImageDataById(groundTruth.getPostId());
 
         // then
         assertTrue(optionalImageData.isPresent());
@@ -84,10 +84,10 @@ class ImageRepositoryTest {
     void findImageDataById_RequestedDocDoesNotExist_OptionalEmpty() {
 
         // given
-        final ObjectId nonExistingId = ObjectId.get();
+        ObjectId nonExistingId = ObjectId.get();
 
         // when
-        final Optional<Binary> optionalImageData = repository.findImageDataById(nonExistingId);
+        Optional<Binary> optionalImageData = repository.findImageDataById(nonExistingId);
 
         // then
         assertTrue(optionalImageData.isEmpty());

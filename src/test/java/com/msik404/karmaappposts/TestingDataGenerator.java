@@ -56,7 +56,7 @@ public class TestingDataGenerator {
             @NonNull ObjectId userId,
             @NonNull Collection<Visibility> visibilities) {
 
-        final Map<ObjectId, Boolean> ratedDocsByUser = ratingDocs.stream()
+        Map<ObjectId, Boolean> ratedDocsByUser = ratingDocs.stream()
                 .filter(rating -> rating.getUserId().equals(userId))
                 .collect(Collectors.toMap(RatingDocument::getPostId, RatingDocument::isPositive));
 
@@ -70,7 +70,7 @@ public class TestingDataGenerator {
     @NonNull
     private static List<ObjectId> getTestUserIds() {
 
-        final int userAmount = 5;
+        int userAmount = 5;
         List<ObjectId> userIds = new ArrayList<>(userAmount);
         for (int i = 0; i < userAmount; i++) {
             userIds.add(ObjectId.get());
@@ -100,7 +100,7 @@ public class TestingDataGenerator {
 
         assert karmaScore != 0;
 
-        final boolean isPositive = karmaScore > 0;
+        boolean isPositive = karmaScore > 0;
 
         for (int i = 0; i < Math.abs(karmaScore); i++) {
             ratingsDocs.add(new RatingDocument(ObjectId.get(), postId, TEST_USER_IDS.get(i), isPositive));
@@ -118,8 +118,8 @@ public class TestingDataGenerator {
 
         assert karmaScore <= TEST_USER_IDS.size();
 
-        final ObjectId userObjectId = TEST_USER_IDS.get(userIdx);
-        final ObjectId postObjectId = ObjectId.get();
+        ObjectId userObjectId = TEST_USER_IDS.get(userIdx);
+        ObjectId postObjectId = ObjectId.get();
         postDocs.add(getTestPostDoc(postObjectId, userObjectId, karmaScore, visibility));
 
         if (karmaScore != 0) {

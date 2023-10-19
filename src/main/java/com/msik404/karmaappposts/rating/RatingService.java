@@ -24,17 +24,17 @@ public class RatingService {
 
     @NonNull
     public IdAndIsPositiveOnlyDto findByPostIdAndUserId(
-            @NonNull final ObjectId postId,
-            @NonNull final ObjectId userId) throws RatingNotFoundException {
+            @NonNull ObjectId postId,
+            @NonNull ObjectId userId) throws RatingNotFoundException {
 
         return ratingRepository.findByPostIdAndUserId(postId, userId).orElseThrow(RatingNotFoundException::new);
     }
 
     public void findAndSetIsPositiveById(
-            @NonNull final ObjectId postId,
-            final boolean isPositive) throws RatingNotFoundException {
+            @NonNull ObjectId postId,
+            boolean isPositive) throws RatingNotFoundException {
 
-        final long affectedDocs = ratingRepository.findAndSetIsPositiveById(postId, isPositive);
+        long affectedDocs = ratingRepository.findAndSetIsPositiveById(postId, isPositive);
         if (affectedDocs == 0) {
             throw new RatingNotFoundException();
         }
@@ -42,13 +42,13 @@ public class RatingService {
 
     @NonNull
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            @Nullable final Integer size,
-            @NonNull final ObjectId clientId,
-            @Nullable final PostDocScrollPositionConcrete position,
-            @Nullable final Collection<Visibility> visibilities,
-            @Nullable final PostDocRetrievalOrderStrategy order) {
+            @Nullable Integer size,
+            @NonNull ObjectId clientId,
+            @Nullable PostDocScrollPositionConcrete position,
+            @Nullable Collection<Visibility> visibilities,
+            @Nullable PostDocRetrievalOrderStrategy order) {
 
-        final var params = new FindParametersDto(size, position, visibilities, order);
+        var params = new FindParametersDto(size, position, visibilities, order);
 
         return ratingRepository.findFirstN(
                 params.size(),
@@ -61,14 +61,14 @@ public class RatingService {
 
     @NonNull
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            @Nullable final Integer size,
-            @NonNull final ObjectId creatorId,
-            @NonNull final ObjectId clientId,
-            @Nullable final PostDocScrollPositionConcrete position,
-            @Nullable final Collection<Visibility> visibilities,
-            @Nullable final PostDocRetrievalOrderStrategy order) {
+            @Nullable Integer size,
+            @NonNull ObjectId creatorId,
+            @NonNull ObjectId clientId,
+            @Nullable PostDocScrollPositionConcrete position,
+            @Nullable Collection<Visibility> visibilities,
+            @Nullable PostDocRetrievalOrderStrategy order) {
 
-        final var params = new FindParametersDto(size, position, visibilities, order);
+        var params = new FindParametersDto(size, position, visibilities, order);
 
         return ratingRepository.findFirstN(
                 params.size(),

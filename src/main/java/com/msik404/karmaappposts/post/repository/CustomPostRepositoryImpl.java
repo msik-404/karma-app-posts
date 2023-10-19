@@ -28,15 +28,15 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
     @NonNull
     private List<PostDocument> findFirstNImpl(
-            final int size,
-            @Nullable final ObjectId creatorId,
-            @NonNull final PostDocScrollPositionConcrete position,
-            @NonNull final Collection<Visibility> visibilities,
-            @NonNull final PostDocRetrievalOrderStrategy order) {
+            int size,
+            @Nullable ObjectId creatorId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
 
         assert !visibilities.isEmpty();
 
-        final Query query = position.isInitial() ? new Query() : new Query(
+        Query query = position.isInitial() ? new Query() : new Query(
                 PostDocScrollingCriteria.getNonInitial(position.karmaScore(), position.postId()));
 
         query.addCriteria(Criteria.where("visibility").in(visibilities));
@@ -54,11 +54,11 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     @NonNull
     @Override
     public List<PostDocument> findFirstN(
-            final int size,
-            @NonNull final ObjectId creatorId,
-            @NonNull final PostDocScrollPositionConcrete position,
-            @NonNull final Collection<Visibility> visibilities,
-            @NonNull final PostDocRetrievalOrderStrategy order) {
+            int size,
+            @NonNull ObjectId creatorId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, creatorId, position, visibilities, order);
     }
@@ -66,19 +66,19 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     @NonNull
     @Override
     public List<PostDocument> findFirstN(
-            final int size,
-            @NonNull final PostDocScrollPositionConcrete position,
-            @NonNull final Collection<Visibility> visibilities,
-            @NonNull final PostDocRetrievalOrderStrategy order) {
+            int size,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, null, position, visibilities, order);
     }
 
     @NonNull
     @Override
-    public Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull final ObjectId postId) {
+    public Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull ObjectId postId) {
 
-        final List<AggregationOperation> aggOps = new ArrayList<>();
+        List<AggregationOperation> aggOps = new ArrayList<>();
 
         // match
         aggOps.add(new MatchOperation(Criteria.where("_id").is(postId)));
@@ -92,11 +92,11 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         ));
 
         // projection
-        final AggregationExpression arrayIsNotEmpty = ComparisonOperators.Gt.valueOf(
+        AggregationExpression arrayIsNotEmpty = ComparisonOperators.Gt.valueOf(
                         ArrayOperators.Size.lengthOfArray("image_docs.imageData"))
                 .greaterThanValue(0);
 
-        final AggregationExpression getFirstEl = ArrayOperators.arrayOf("image_docs.imageData")
+        AggregationExpression getFirstEl = ArrayOperators.arrayOf("image_docs.imageData")
                 .elementAt(0);
 
         aggOps.add(Aggregation.project(PostDocument.class).and("image_docs.imageData")
@@ -105,9 +105,9 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                         .otherwise("$$REMOVE"))
         );
 
-        final TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
+        TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
 
-        final AggregationResults<PostDocumentWithImageData> aggResults = ops.aggregate(
+        AggregationResults<PostDocumentWithImageData> aggResults = ops.aggregate(
                 agg, PostDocumentWithImageData.class);
 
         if (aggResults.getMappedResults().isEmpty()) {

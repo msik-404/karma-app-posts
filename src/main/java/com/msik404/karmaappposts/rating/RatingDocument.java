@@ -28,7 +28,7 @@ public class RatingDocument {
 
     private boolean isPositive;
 
-    public RatingDocument(@NonNull final ObjectId postId, @NonNull final ObjectId userId, final boolean isPositive) {
+    public RatingDocument(@NonNull ObjectId postId, @NonNull ObjectId userId, boolean isPositive) {
 
         this.id = ObjectId.get();
         this.postId = postId;

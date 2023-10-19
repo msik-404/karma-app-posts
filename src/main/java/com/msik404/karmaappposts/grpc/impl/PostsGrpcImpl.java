@@ -43,12 +43,12 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
     private final ImageService imageService;
 
     private static <T> boolean validate(
-            @NonNull final Message request,
-            @NonNull final StreamObserver<T> responseObserver) {
+            @NonNull Message request,
+            @NonNull StreamObserver<T> responseObserver) {
 
-        final Validator validator = new Validator();
+        Validator validator = new Validator();
         try {
-            final ValidationResult result = validator.validate(request);
+            ValidationResult result = validator.validate(request);
             // Check if there are any validation violations
             if (!result.isSuccess()) {
                 responseObserver.onError(Status.INVALID_ARGUMENT
@@ -59,7 +59,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             }
         } catch (ValidationException ex) {
             // Catch and print any ValidationExceptions thrown during the validation process
-            final String errMessage = ex.getMessage();
+            String errMessage = ex.getMessage();
             System.out.println("Validation failed: " + errMessage);
             responseObserver.onError(Status.INTERNAL
                     .withDescription(errMessage)
@@ -72,10 +72,10 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void createPost(
-            @NonNull final CreatePostRequest request,
-            @NonNull final StreamObserver<Empty> responseObserver) {
+            @NonNull CreatePostRequest request,
+            @NonNull StreamObserver<Empty> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
@@ -98,22 +98,22 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void ratePost(
-            @NonNull final RatePostRequest request,
-            @NonNull final StreamObserver<ChangedRatingResponse> responseObserver) {
+            @NonNull RatePostRequest request,
+            @NonNull StreamObserver<ChangedRatingResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final int delta = postService.rate(
+            int delta = postService.rate(
                     new ObjectId(request.getPostId().getHexString()),
                     new ObjectId(request.getUserId().getHexString()),
                     request.getIsPositive()
             );
 
-            final var response = ChangedRatingResponse.newBuilder()
+            var response = ChangedRatingResponse.newBuilder()
                     .setDelta(delta)
                     .build();
 
@@ -127,21 +127,21 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void unratePost(
-            @NonNull final UnratePostRequest request,
-            @NonNull final StreamObserver<ChangedRatingResponse> responseObserver) {
+            @NonNull UnratePostRequest request,
+            @NonNull StreamObserver<ChangedRatingResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final int delta = postService.unrate(
+            int delta = postService.unrate(
                     new ObjectId(request.getPostId().getHexString()),
                     new ObjectId(request.getUserId().getHexString())
             );
 
-            final var response = ChangedRatingResponse.newBuilder()
+            var response = ChangedRatingResponse.newBuilder()
                     .setDelta(delta)
                     .build();
 
@@ -155,16 +155,16 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void changePostVisibility(
-            @NonNull final ChangePostVisibilityRequest request,
-            @NonNull final StreamObserver<Empty> responseObserver) {
+            @NonNull ChangePostVisibilityRequest request,
+            @NonNull StreamObserver<Empty> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final Visibility visibility = VisibilityMapper.map(request.getVisibility());
+            Visibility visibility = VisibilityMapper.map(request.getVisibility());
             postService.findAndSetVisibilityById(new ObjectId(request.getPostId().getHexString()), visibility);
 
             responseObserver.onNext(Empty.getDefaultInstance());
@@ -177,20 +177,20 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPosts(
-            @NonNull final PostsRequest request,
-            @NonNull final StreamObserver<PostsResponse> responseObserver) {
+            @NonNull PostsRequest request,
+            @NonNull StreamObserver<PostsResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final var mappedRequest = new PostsRequestDto(request);
+            var mappedRequest = new PostsRequestDto(request);
 
-            final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
+            List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
 
-            final var responseBuilder = PostsResponse.newBuilder();
+            var responseBuilder = PostsResponse.newBuilder();
 
             for(PostDocument post : posts) {
                 responseBuilder.addPosts(DocToGrpcMapper.map(post));
@@ -206,20 +206,20 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostsWithCreatorId(
-            @NonNull final PostsWithCreatorIdRequest request,
-            @NonNull final StreamObserver<PostsResponse> responseObserver) {
+            @NonNull PostsWithCreatorIdRequest request,
+            @NonNull StreamObserver<PostsResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final var mappedRequest = new PostsWithCreatorIdRequestDto(request);
+            var mappedRequest = new PostsWithCreatorIdRequestDto(request);
 
-            final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
+            List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
 
-            final var responseBuilder = PostsResponse.newBuilder();
+            var responseBuilder = PostsResponse.newBuilder();
 
             for (PostDocument post : posts) {
                 responseBuilder.addPosts(DocToGrpcMapper.map(post));
@@ -234,18 +234,18 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findImage(
-            @NonNull final ImageRequest request,
-            @NonNull final StreamObserver<ImageResponse> responseObserver) {
+            @NonNull ImageRequest request,
+            @NonNull StreamObserver<ImageResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final byte[] imageData = imageService.findImageByPostId(new ObjectId(request.getPostId().getHexString()));
+            byte[] imageData = imageService.findImageByPostId(new ObjectId(request.getPostId().getHexString()));
 
-            final var response = ImageResponse.newBuilder()
+            var response = ImageResponse.newBuilder()
                     .setImageData(ByteString.copyFrom(imageData))
                     .build();
 
@@ -259,9 +259,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @NonNull
     private static PostRatingsResponse buildPostRatingsResponse(
-            @NonNull final List<IdAndIsPositiveOnlyDto> ratings) {
+            @NonNull List<IdAndIsPositiveOnlyDto> ratings) {
 
-        final var responseBuilder = PostRatingsResponse.newBuilder();
+        var responseBuilder = PostRatingsResponse.newBuilder();
 
         for (IdAndIsPositiveOnlyDto rating: ratings) {
             responseBuilder.addPostRatings(DocToGrpcMapper.map(rating));
@@ -272,18 +272,18 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostRatings(
-            @NonNull final PostRatingsRequest request,
-            @NonNull final StreamObserver<PostRatingsResponse> responseObserver) {
+            @NonNull PostRatingsRequest request,
+            @NonNull StreamObserver<PostRatingsResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final var mappedRequest = new PostRatingsRequestDto(request);
+            var mappedRequest = new PostRatingsRequestDto(request);
 
-            final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+            List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
 
             responseObserver.onNext(buildPostRatingsResponse(ratings));
             responseObserver.onCompleted();
@@ -295,18 +295,18 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostRatingsWithCreatorId(
-            @NonNull final PostRatingsWithCreatorIdRequest request,
-            @NonNull final StreamObserver<PostRatingsResponse> responseObserver) {
+            @NonNull PostRatingsWithCreatorIdRequest request,
+            @NonNull StreamObserver<PostRatingsResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final var mappedRequest = new PostRatingsWithCreatorIdRequestDto(request);
+            var mappedRequest = new PostRatingsWithCreatorIdRequestDto(request);
 
-            final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
+            List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
 
             responseObserver.onNext(buildPostRatingsResponse(ratings));
             responseObserver.onCompleted();
@@ -318,18 +318,18 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostCreatorId(
-            @NonNull final PostCreatorIdRequest request,
-            @NonNull final StreamObserver<PostCreatorIdResponse> responseObserver) {
+            @NonNull PostCreatorIdRequest request,
+            @NonNull StreamObserver<PostCreatorIdResponse> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final ObjectId creatorId = postService.findPostCreatorId(new ObjectId(request.getPostId().getHexString()));
+            ObjectId creatorId = postService.findPostCreatorId(new ObjectId(request.getPostId().getHexString()));
 
-            final PostCreatorIdResponse response = PostCreatorIdResponse.newBuilder()
+            PostCreatorIdResponse response = PostCreatorIdResponse.newBuilder()
                     .setUserId(MongoObjectId.newBuilder().setHexString(creatorId.toHexString()).build())
                     .build();
 
@@ -343,16 +343,16 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostWithImageData(
-            @NonNull final PostRequest request,
-            @NonNull final StreamObserver<PostWithImageData> responseObserver) {
+            @NonNull PostRequest request,
+            @NonNull StreamObserver<PostWithImageData> responseObserver) {
 
-        final boolean isSuccess = validate(request, responseObserver);
+        boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
             return;
         }
 
         try {
-            final PostDocumentWithImageData post = postService.findPostWithImageData(
+            PostDocumentWithImageData post = postService.findPostWithImageData(
                     new ObjectId(request.getPostId().getHexString()));
 
             responseObserver.onNext(DocToGrpcMapper.map(post));

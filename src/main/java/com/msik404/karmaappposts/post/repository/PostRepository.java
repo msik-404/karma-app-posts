@@ -14,13 +14,13 @@ import org.springframework.lang.NonNull;
 public interface PostRepository extends MongoRepository<PostDocument, ObjectId>, CustomPostRepository {
 
     @Update("{ '$inc' : { 'karmaScore' : ?1 } }")
-    long findAndIncrementKarmaScoreById(@NonNull final ObjectId id, final int increment);
+    long findAndIncrementKarmaScoreById(@NonNull ObjectId id, int increment);
 
     @Update("{ '$set' : { 'visibility' :  ?1 } }")
-    long findAndSetVisibilityById(@NonNull final ObjectId id, @NonNull final Visibility visibility);
+    long findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility);
 
     @NonNull
     @Query("{ '_id' :  ?0 }")
-    Optional<UserIdOnlyDto> findByPostId(@NonNull final ObjectId postId);
+    Optional<UserIdOnlyDto> findByPostId(@NonNull ObjectId postId);
 
 }

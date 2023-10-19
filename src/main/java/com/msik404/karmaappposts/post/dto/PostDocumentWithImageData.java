@@ -17,13 +17,13 @@ public class PostDocumentWithImageData extends PostDocument {
     private Binary imageData;
 
     public PostDocumentWithImageData(
-            @NonNull final ObjectId id,
-            @NonNull final ObjectId userId,
-            @Nullable final String headline,
-            @Nullable final String text,
-            final long karmaScore,
-            @NonNull final Visibility visibility,
-            @Nullable final Binary imageData) {
+            @NonNull ObjectId id,
+            @NonNull ObjectId userId,
+            @Nullable String headline,
+            @Nullable String text,
+            long karmaScore,
+            @NonNull Visibility visibility,
+            @Nullable Binary imageData) {
 
         super(id, userId, headline, text, karmaScore, visibility);
 

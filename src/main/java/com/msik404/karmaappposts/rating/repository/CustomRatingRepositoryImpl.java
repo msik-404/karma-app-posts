@@ -32,21 +32,21 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
 
     @NonNull
     private List<IdAndIsPositiveOnlyDto> findFirstNImpl(
-            final int size,
-            @Nullable final ObjectId creatorId,
-            @NonNull final ObjectId clientId,
-            @NonNull final PostDocScrollPositionConcrete position,
-            @NonNull final Collection<Visibility> visibilities,
-            @NonNull final PostDocRetrievalOrderStrategy order) {
+            int size,
+            @Nullable ObjectId creatorId,
+            @NonNull ObjectId clientId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
 
         assert !visibilities.isEmpty();
 
-        final List<AggregationOperation> aggOps = new ArrayList<>();
+        List<AggregationOperation> aggOps = new ArrayList<>();
 
         // matching - query
-        final var matchCriteria = Criteria.where("visibility").in(visibilities);
+        var matchCriteria = Criteria.where("visibility").in(visibilities);
 
-        final List<Criteria> additionalCriteria = new ArrayList<>();
+        List<Criteria> additionalCriteria = new ArrayList<>();
 
         if (!position.isInitial()) {
             additionalCriteria.add(
@@ -70,9 +70,9 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         aggOps.add(new SortOperation(order.getOrderStrategy()));
 
         // lookup - outer left join
-        final var postIdVar = ExpressionVariable.newVariable("postId").forField("_id");
+        var postIdVar = ExpressionVariable.newVariable("postId").forField("_id");
 
-        final Bson bsonQuery = new Document("$match",
+        Bson bsonQuery = new Document("$match",
                 new Document("$expr",
                         new Document("$and", List.of(
                                 new Document("$eq", Arrays.asList("$postId", "$$postId")),
@@ -81,7 +81,7 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
                 )
         );
 
-        final AggregationOperation multiFieldLeftOuterJoinOperation = Aggregation.stage(bsonQuery);
+        AggregationOperation multiFieldLeftOuterJoinOperation = Aggregation.stage(bsonQuery);
 
         aggOps.add(new LookupOperation(
                 ops.getCollectionName(RatingDocument.class),
@@ -91,14 +91,14 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         ));
 
         // projection
-        final AggregationExpression arrayIsNotEmpty = ComparisonOperators.Gt.valueOf(
+        AggregationExpression arrayIsNotEmpty = ComparisonOperators.Gt.valueOf(
                         ArrayOperators.Size.lengthOfArray("rating_docs.isPositive"))
                 .greaterThanValue(0);
 
-        final AggregationExpression getFirstEl = ArrayOperators.arrayOf("rating_docs.isPositive")
+        AggregationExpression getFirstEl = ArrayOperators.arrayOf("rating_docs.isPositive")
                 .elementAt(0);
 
-        final var projectionOperation = Aggregation.project("_id").and("rating_docs.isPositive")
+        var projectionOperation = Aggregation.project("_id").and("rating_docs.isPositive")
                 .applyCondition(Cond.when(arrayIsNotEmpty)
                         .thenValueOf(getFirstEl)
                         .otherwise("$$REMOVE"));
@@ -106,10 +106,10 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
         aggOps.add(projectionOperation);
 
         // build aggregation query
-        final TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
+        TypedAggregation<PostDocument> agg = Aggregation.newAggregation(PostDocument.class, aggOps);
 
         // run query
-        final AggregationResults<IdAndIsPositiveOnlyDto> results = ops.aggregate(agg, IdAndIsPositiveOnlyDto.class);
+        AggregationResults<IdAndIsPositiveOnlyDto> results = ops.aggregate(agg, IdAndIsPositiveOnlyDto.class);
 
         return results.getMappedResults();
     }
@@ -117,11 +117,11 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     @NonNull
     @Override
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            final int size,
-            @NonNull final ObjectId clientId,
-            @NonNull final PostDocScrollPositionConcrete position,
-            @NonNull final Collection<Visibility> visibilities,
-            @NonNull final PostDocRetrievalOrderStrategy order) {
+            int size,
+            @NonNull ObjectId clientId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, null, clientId, position, visibilities, order);
     }
@@ -129,12 +129,12 @@ public class CustomRatingRepositoryImpl implements CustomRatingRepository {
     @NonNull
     @Override
     public List<IdAndIsPositiveOnlyDto> findFirstN(
-            final int size,
-            @NonNull final ObjectId creatorId,
-            @NonNull final ObjectId clientId,
-            @NonNull final PostDocScrollPositionConcrete position,
-            @NonNull final Collection<Visibility> visibilities,
-            @NonNull final PostDocRetrievalOrderStrategy order) {
+            int size,
+            @NonNull ObjectId creatorId,
+            @NonNull ObjectId clientId,
+            @NonNull PostDocScrollPositionConcrete position,
+            @NonNull Collection<Visibility> visibilities,
+            @NonNull PostDocRetrievalOrderStrategy order) {
 
         return findFirstNImpl(size, creatorId, clientId, position, visibilities, order);
     }

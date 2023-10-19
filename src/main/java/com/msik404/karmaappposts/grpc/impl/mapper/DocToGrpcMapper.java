@@ -13,9 +13,9 @@ import org.springframework.lang.NonNull;
 public class DocToGrpcMapper {
 
     @NonNull
-    public static Post map(@NonNull final PostDocument doc) {
+    public static Post map(@NonNull PostDocument doc) {
 
-        final Post.Builder builder = Post.newBuilder();
+        Post.Builder builder = Post.newBuilder();
 
         builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.getId().toHexString()).build());
 
@@ -36,7 +36,7 @@ public class DocToGrpcMapper {
     }
 
     @NonNull
-    public static PostRating map(@NonNull final IdAndIsPositiveOnlyDto doc) {
+    public static PostRating map(@NonNull IdAndIsPositiveOnlyDto doc) {
 
         return PostRating.newBuilder()
                 .setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toHexString()).build())
@@ -47,7 +47,7 @@ public class DocToGrpcMapper {
     @NonNull
     public static PostWithImageData map(@NonNull PostDocumentWithImageData doc) {
 
-        final PostWithImageData.Builder builder = PostWithImageData.newBuilder();
+        PostWithImageData.Builder builder = PostWithImageData.newBuilder();
 
         builder.setPost(map((PostDocument) doc));
 

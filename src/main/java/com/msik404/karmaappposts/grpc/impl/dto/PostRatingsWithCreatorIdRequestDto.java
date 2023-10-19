@@ -9,7 +9,7 @@ public record PostRatingsWithCreatorIdRequestDto(@NonNull PostRatingsRequestDto 
                                                  @NonNull ObjectId creatorId) {
 
     public PostRatingsWithCreatorIdRequestDto(
-            @NonNull final PostRatingsWithCreatorIdRequest request) throws UnsupportedVisibilityException {
+            @NonNull PostRatingsWithCreatorIdRequest request) throws UnsupportedVisibilityException {
 
         this(
                 new PostRatingsRequestDto(request.getPostsRatingsRequest()),
