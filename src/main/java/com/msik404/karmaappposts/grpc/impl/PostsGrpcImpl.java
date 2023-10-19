@@ -190,11 +190,13 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
             final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
 
-            final var response = PostsResponse.newBuilder()
-                    .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
-                    .build();
+            final var responseBuilder = PostsResponse.newBuilder();
 
-            responseObserver.onNext(response);
+            for(PostDocument post : posts) {
+                responseBuilder.addPosts(DocToGrpcMapper.map(post));
+            }
+
+            responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
@@ -217,11 +219,13 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
             final List<PostDocument> posts = postRepositoryHandler.findFirstN(mappedRequest);
 
-            final var response = PostsResponse.newBuilder()
-                    .addAllPosts(posts.stream().map(DocToGrpcMapper::map).toList())
-                    .build();
+            final var responseBuilder = PostsResponse.newBuilder();
 
-            responseObserver.onNext(response);
+            for (PostDocument post : posts) {
+                responseBuilder.addPosts(DocToGrpcMapper.map(post));
+            }
+
+            responseObserver.onNext(responseBuilder.build());
 
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(ex.asStatusRuntimeException());
@@ -253,6 +257,19 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
     }
 
+    @NonNull
+    private static PostRatingsResponse buildPostRatingsResponse(
+            @NonNull final List<IdAndIsPositiveOnlyDto> ratings) {
+
+        final var responseBuilder = PostRatingsResponse.newBuilder();
+
+        for (IdAndIsPositiveOnlyDto rating: ratings) {
+            responseBuilder.addPostRatings(DocToGrpcMapper.map(rating));
+        }
+
+        return responseBuilder.build();
+    }
+
     @Override
     public void findPostRatings(
             @NonNull final PostRatingsRequest request,
@@ -268,12 +285,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
             final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
 
-            final var response = PostRatingsResponse
-                    .newBuilder()
-                    .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
-                    .build();
-
-            responseObserver.onNext(response);
+            responseObserver.onNext(buildPostRatingsResponse(ratings));
             responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
@@ -296,12 +308,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
             final List<IdAndIsPositiveOnlyDto> ratings = ratingRepositoryHandler.findFirstN(mappedRequest);
 
-            final var response = PostRatingsResponse
-                    .newBuilder()
-                    .addAllPostRatings(ratings.stream().map(DocToGrpcMapper::map).toList())
-                    .build();
-
-            responseObserver.onNext(response);
+            responseObserver.onNext(buildPostRatingsResponse(ratings));
             responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
