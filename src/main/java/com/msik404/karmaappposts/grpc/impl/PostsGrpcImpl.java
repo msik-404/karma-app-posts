@@ -13,6 +13,7 @@ import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsWithCreatorIdRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostsRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostsWithCreatorIdRequestDto;
+import com.msik404.karmaappposts.grpc.impl.exception.FailedValidationException;
 import com.msik404.karmaappposts.grpc.impl.exception.UnsupportedVisibilityException;
 import com.msik404.karmaappposts.grpc.impl.mapper.DocToGrpcMapper;
 import com.msik404.karmaappposts.grpc.impl.mapper.VisibilityMapper;
@@ -50,11 +51,10 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         try {
             ValidationResult result = validator.validate(request);
             // Check if there are any validation violations
+
             if (!result.isSuccess()) {
-                responseObserver.onError(Status.INVALID_ARGUMENT
-                        .withDescription(result.toString())
-                        .asRuntimeException()
-                );
+                var exception = new FailedValidationException(result.toString());
+                responseObserver.onError(exception.asStatusRuntimeException());
                 return false;
             }
         } catch (ValidationException ex) {
