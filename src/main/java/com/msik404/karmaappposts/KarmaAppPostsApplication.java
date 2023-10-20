@@ -23,7 +23,7 @@ public class KarmaAppPostsApplication {
     @Value("${KarmaAppPosts.grpc.default.port}")
     private int defaultGrpcPort;
 
-    private PostsGrpcImpl grpcImpl;
+    private final PostsGrpcImpl grpcImpl;
 
     public static void main(String[] args) {
         SpringApplication.run(KarmaAppPostsApplication.class, args);
