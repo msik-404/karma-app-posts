@@ -224,8 +224,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
             for (PostDocument post : posts) {
                 responseBuilder.addPosts(DocToGrpcMapper.map(post));
             }
-
             responseObserver.onNext(responseBuilder.build());
+            responseObserver.onCompleted();
 
         } catch (UnsupportedVisibilityException ex) {
             responseObserver.onError(ex.asStatusRuntimeException());
