@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RatingRepositoryGrpcHandler {
 
-    RatingService ratingService;
+    private final RatingService ratingService;
 
     @NonNull
     List<IdAndIsPositiveOnlyDto> findFirstN(@NonNull PostRatingsRequestDto request) {
