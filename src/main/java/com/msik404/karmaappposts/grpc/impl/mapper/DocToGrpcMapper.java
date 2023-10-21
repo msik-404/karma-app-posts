@@ -38,10 +38,15 @@ public class DocToGrpcMapper {
     @NonNull
     public static PostRating map(@NonNull IdAndIsPositiveOnlyDto doc) {
 
-        return PostRating.newBuilder()
-                .setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toHexString()).build())
-                .setIsPositive(doc.isPositive())
-                .build();
+        var builder = PostRating.newBuilder();
+
+        builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toHexString()).build());
+
+        if (doc.isPositive() != null) {
+            builder.setIsPositive(doc.isPositive());
+        }
+
+        return builder.build();
     }
 
     @NonNull
