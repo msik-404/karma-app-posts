@@ -35,6 +35,7 @@ public interface CustomPostRepository {
     @NonNull
     Optional<PostDocumentWithImageData> findDocumentWithImageDataById(@NonNull ObjectId postId);
 
+    @NonNull
     UpdateResult findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility);
 
 }
