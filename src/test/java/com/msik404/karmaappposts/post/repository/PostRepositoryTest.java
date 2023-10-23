@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.mongodb.client.result.UpdateResult;
 import com.msik404.karmaappposts.MongoConfiguration;
 import com.msik404.karmaappposts.TestingDataGenerator;
 import com.msik404.karmaappposts.image.ImageDocument;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.repository.Update;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -133,9 +135,10 @@ class PostRepositoryTest {
         );
 
         // when
-        assertEquals(1, repository.findAndSetVisibilityById(preUpdate.getId(), newVisibility));
+        UpdateResult result = repository.findAndSetVisibilityById(preUpdate.getId(), newVisibility);
 
         // then
+        assertEquals(1, result.getMatchedCount());
         Optional<PostDocument> optionalUpdatedPostDoc = repository.findById(preUpdate.getId());
         assertTrue(optionalUpdatedPostDoc.isPresent());
         PostDocument updatedPostDoc = optionalUpdatedPostDoc.get();
@@ -149,8 +152,11 @@ class PostRepositoryTest {
         ObjectId nonPersistedObjectId = ObjectId.get();
         Visibility newVisibility = Visibility.DELETED;
 
-        // when then
-        assertEquals(0, repository.findAndSetVisibilityById(nonPersistedObjectId, newVisibility));
+        // when
+        UpdateResult result = repository.findAndSetVisibilityById(nonPersistedObjectId, newVisibility);
+
+        // then
+        assertEquals(0, result.getMatchedCount());
     }
 
     @Test

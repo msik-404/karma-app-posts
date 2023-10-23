@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.mongodb.client.result.UpdateResult;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
 import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.Update;
 import org.springframework.lang.NonNull;
 
 public interface CustomPostRepository {
@@ -33,5 +35,7 @@ public interface CustomPostRepository {
 
     @NonNull
     Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull ObjectId postId);
+
+    UpdateResult findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility);
 
 }

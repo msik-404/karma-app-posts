@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.mongodb.client.result.UpdateResult;
 import com.msik404.karmaappposts.image.ImageDocument;
 import com.msik404.karmaappposts.post.PostDocument;
 import com.msik404.karmaappposts.post.Visibility;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -114,6 +116,16 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
             return Optional.empty();
         }
         return Optional.of(aggResults.getMappedResults().get(0));
+    }
+
+    @Override
+    public UpdateResult findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility) {
+
+        return ops.updateFirst(
+                new Query(Criteria.where("_id").is(id)),
+                Update.update("visibility", visibility),
+                PostDocument.class
+        );
     }
 
 }

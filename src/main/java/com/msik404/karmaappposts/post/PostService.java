@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.mongodb.client.result.UpdateResult;
 import com.msik404.karmaappposts.image.ImageService;
 import com.msik404.karmaappposts.image.exception.FileProcessingException;
 import com.msik404.karmaappposts.post.dto.FindParametersDto;
@@ -50,8 +51,9 @@ public class PostService {
             @NonNull ObjectId id,
             @NonNull Visibility visibility) throws PostNotFoundException {
 
-        long affectedDocs = postRepository.findAndSetVisibilityById(id, visibility);
-        if (affectedDocs == 0) { // this is also true when this visibility is already set.
+        // Ignores case in which requested visibility is already in place.
+        UpdateResult result = postRepository.findAndSetVisibilityById(id, visibility);
+        if (result.getMatchedCount() == 0) {
             throw new PostNotFoundException();
         }
     }

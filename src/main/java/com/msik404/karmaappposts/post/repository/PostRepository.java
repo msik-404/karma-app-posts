@@ -17,9 +17,6 @@ public interface PostRepository extends MongoRepository<PostDocument, ObjectId>,
     @Update("{ '$inc' : { 'karmaScore' : ?1 } }")
     long findAndIncrementKarmaScoreById(@NonNull ObjectId id, int increment);
 
-    @Update("{ '$set' : { 'visibility' :  ?1 } }")
-    long findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility);
-
     @NonNull
     @Query("{ '_id' :  ?0 }")
     Optional<VisibilityOnlyDto> findVisibilityById(@NonNull ObjectId id);
