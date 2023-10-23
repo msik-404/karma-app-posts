@@ -50,7 +50,7 @@ public class PostService {
             @NonNull Visibility visibility) throws PostNotFoundException {
 
         long affectedDocs = postRepository.findAndSetVisibilityById(id, visibility);
-        if (affectedDocs == 0) {
+        if (affectedDocs == 0) { // this is also true when this visibility is already set.
             throw new PostNotFoundException();
         }
     }
