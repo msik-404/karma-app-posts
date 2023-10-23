@@ -363,4 +363,28 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
     }
 
+    @Override
+    public void findPostVisibility(
+            MongoObjectId request,
+            StreamObserver<PostVisibilityResponse> responseObserver) {
+
+        boolean isSuccess = validate(request, responseObserver);
+        if (!isSuccess) {
+            return;
+        }
+
+        try {
+            Visibility visibility = postService.findVisibility(new ObjectId(request.getHexString()));
+
+            responseObserver.onNext(PostVisibilityResponse.newBuilder()
+                    .setVisibility(VisibilityMapper.map(visibility))
+                    .build()
+            );
+            responseObserver.onCompleted();
+
+        } catch (PostNotFoundException ex) {
+            responseObserver.onError(ex.asStatusRuntimeException());
+        }
+    }
+
 }

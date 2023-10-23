@@ -9,6 +9,7 @@ import com.msik404.karmaappposts.image.exception.FileProcessingException;
 import com.msik404.karmaappposts.post.dto.FindParametersDto;
 import com.msik404.karmaappposts.post.dto.PostDocumentWithImageData;
 import com.msik404.karmaappposts.post.dto.UserIdOnlyDto;
+import com.msik404.karmaappposts.post.dto.VisibilityOnlyDto;
 import com.msik404.karmaappposts.post.exception.PostNotFoundException;
 import com.msik404.karmaappposts.post.order.PostDocRetrievalOrderStrategy;
 import com.msik404.karmaappposts.post.position.PostDocScrollPositionConcrete;
@@ -170,6 +171,18 @@ public class PostService {
         }
 
         return optionalCreatorId.get().userId();
+    }
+
+    @NonNull
+    public Visibility findVisibility(@NonNull ObjectId postId) throws PostNotFoundException {
+
+        Optional<VisibilityOnlyDto> optionalVisibility = postRepository.findVisibilityById(postId);
+
+        if (optionalVisibility.isEmpty()) {
+            throw new PostNotFoundException();
+        }
+
+        return optionalVisibility.get().visibility();
     }
 
 }
