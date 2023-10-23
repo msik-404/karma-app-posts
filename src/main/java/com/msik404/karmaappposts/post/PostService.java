@@ -160,7 +160,7 @@ public class PostService {
 
     @NonNull
     public PostDocumentWithImageData findPostWithImageData(@NonNull ObjectId postId) throws PostNotFoundException {
-        return postRepository.findDocumentWithImageData(postId).orElseThrow(PostNotFoundException::new);
+        return postRepository.findDocumentWithImageDataById(postId).orElseThrow(PostNotFoundException::new);
     }
 
     @NonNull

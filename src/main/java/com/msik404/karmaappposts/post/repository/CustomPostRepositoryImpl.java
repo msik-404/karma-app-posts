@@ -78,7 +78,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
     @NonNull
     @Override
-    public Optional<PostDocumentWithImageData> findDocumentWithImageData(@NonNull ObjectId postId) {
+    public Optional<PostDocumentWithImageData> findDocumentWithImageDataById(@NonNull ObjectId postId) {
 
         List<AggregationOperation> aggOps = new ArrayList<>();
 
@@ -118,6 +118,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return Optional.of(aggResults.getMappedResults().get(0));
     }
 
+    @NonNull
     @Override
     public UpdateResult findAndSetVisibilityById(@NonNull ObjectId id, @NonNull Visibility visibility) {
 

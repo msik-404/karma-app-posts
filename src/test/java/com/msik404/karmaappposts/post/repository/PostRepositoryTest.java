@@ -24,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.repository.Update;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -330,7 +329,7 @@ class PostRepositoryTest {
         );
 
         // when
-        Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageData(
+        Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageDataById(
                 postDocument.getId());
 
         // then
@@ -366,7 +365,7 @@ class PostRepositoryTest {
         );
 
         // when
-        Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageData(
+        Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageDataById(
                 postDocument.getId());
 
         // then
@@ -384,7 +383,7 @@ class PostRepositoryTest {
         imageRepository.insert(dataGenerator.getTestImageDocs());
 
         // when
-        Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageData(ObjectId.get());
+        Optional<PostDocumentWithImageData> optionalResult = repository.findDocumentWithImageDataById(ObjectId.get());
 
         // then
         assertTrue(optionalResult.isEmpty());
