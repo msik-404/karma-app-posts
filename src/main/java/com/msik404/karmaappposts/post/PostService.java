@@ -163,7 +163,7 @@ public class PostService {
     @NonNull
     public ObjectId findPostCreatorId(@NonNull ObjectId postId) throws PostNotFoundException {
 
-        Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findByPostId(postId);
+        Optional<UserIdOnlyDto> optionalCreatorId = postRepository.findUserIdById(postId);
 
         if (optionalCreatorId.isEmpty()) {
             throw new PostNotFoundException();

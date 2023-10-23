@@ -278,7 +278,7 @@ class PostRepositoryTest {
         ObjectId postId = post.getId();
 
         // when
-        Optional<UserIdOnlyDto> optionalObjectId = repository.findByPostId(postId);
+        Optional<UserIdOnlyDto> optionalObjectId = repository.findUserIdById(postId);
 
         // then
         assertTrue(optionalObjectId.isPresent());
@@ -292,7 +292,7 @@ class PostRepositoryTest {
         ObjectId postId = ObjectId.get();
 
         // when
-        Optional<UserIdOnlyDto> optionalObjectId = repository.findByPostId(postId);
+        Optional<UserIdOnlyDto> optionalObjectId = repository.findUserIdById(postId);
 
         // then
         assertTrue(optionalObjectId.isEmpty());

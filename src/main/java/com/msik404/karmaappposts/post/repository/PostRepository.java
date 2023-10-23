@@ -21,6 +21,6 @@ public interface PostRepository extends MongoRepository<PostDocument, ObjectId>,
 
     @NonNull
     @Query("{ '_id' :  ?0 }")
-    Optional<UserIdOnlyDto> findByPostId(@NonNull ObjectId postId);
+    Optional<UserIdOnlyDto> findUserIdById(@NonNull ObjectId id);
 
 }
