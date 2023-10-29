@@ -15,13 +15,13 @@ services:
 
   mongo:
     image: mongo
-    hostname: ${DB_HOST}
+    hostname: ${KARMA_APP_POSTS_DB_HOST}
     ports:
       - 27017:27017
     networks:
       - karma-app-net
     environment:
-      - MONGO_INITDB_ROOT_DATABASE=${DB_NAME}
+      - MONGO_INITDB_ROOT_DATABASE=${KARMA_APP_POSTS_DB_NAME}
     volumes:
       - db-data:/data/db
       - db-config:/data/configdb
@@ -35,7 +35,7 @@ services:
     networks:
       - karma-app-net
     environment:
-      ME_CONFIG_MONGODB_SERVER: ${DB_NAME}
+      ME_CONFIG_MONGODB_SERVER: ${KARMA_APP_POSTS_DB_NAME}
       ME_CONFIG_MONGODB_PORT: "27017"
 
 volumes:
