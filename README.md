@@ -1,6 +1,16 @@
 # karma-app-posts
 Posts microservice for karma-app microservices version. karma-app-posts is grpc server with access to mongodb database.
 
+# Technologies used
+- Java spring
+- spring-boot-starter-data-mongodb
+- spring-boot-starter-test
+- spring-boot-testcontainers
+- junit-jupiter
+- [Java grpc](https://github.com/grpc/grpc-java) 
+- [protovalidate-java](https://github.com/bufbuild/protovalidate-java)
+- lombok
+
 # Grpc, Protobuf and protovalidate
 Thanks to the use of grpc all available service methods and messages can be 
 inspected inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
