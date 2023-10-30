@@ -7,7 +7,7 @@ Posts microservice for karma-app microservices version. karma-app-posts is grpc 
 - spring-boot-starter-test
 - spring-boot-testcontainers
 - junit-jupiter
-- [Java grpc](https://github.com/grpc/grpc-java) 
+- [grpc-java](https://github.com/grpc/grpc-java) 
 - [protovalidate-java](https://github.com/bufbuild/protovalidate-java)
 - lombok
 
