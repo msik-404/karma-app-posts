@@ -3,9 +3,9 @@ Posts microservice for karma-app microservices version. karma-app-posts is grpc 
 
 # Technologies used
 - Java spring
-- spring-boot-starter-data-mongodb
+- [spring-boot-starter-data-mongodb](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/)
 - spring-boot-starter-test
-- spring-boot-testcontainers
+- [spring-boot-testcontainers](https://spring.io/blog/2023/06/23/improved-testcontainers-support-in-spring-boot-3-1)
 - junit-jupiter
 - [grpc-java](https://github.com/grpc/grpc-java) 
 - [protovalidate-java](https://github.com/bufbuild/protovalidate-java)
