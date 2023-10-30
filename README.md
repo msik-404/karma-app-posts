@@ -46,14 +46,16 @@ positively again doesn't do anything.
 - Changing visibility to Active, Hidden or Deleted. This operation is also idempotent Active->Active etc.
 - Getting paginated posts. Posts are paginated using key-set pagination on tuple (karmaScore, userId) if two karmaScores
 are the same, greater userId is first.
-- Getting paginated posts created by given user.
-- Get image of given post.
+- Getting paginated posts created by a given user.
+- Get image of a given post.
 - Get ratings of a given client user. Ratings are paginated and returned in the same order as posts. So client can easily
 combine data from these two sources to present data to the frontend.
 - Getting paginated ratings of some client user of posts created by given creator user.
 - Get user id by post id
 - Get post data with image by post id
 - Get post visibility by post id
+
+To see message structure look inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
 
 # Bulding the project
 To get target folder and build the project with maven simply run: 
