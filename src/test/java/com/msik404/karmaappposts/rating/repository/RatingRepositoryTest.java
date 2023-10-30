@@ -46,9 +46,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 class RatingRepositoryTest {
 
-    @Container
     public static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest")
             .withExposedPorts(27017);
+
+    static {
+        mongoDBContainer.start();
+    }
 
     @DynamicPropertySource
     private static void registerRedisProperties(DynamicPropertyRegistry registry) {
