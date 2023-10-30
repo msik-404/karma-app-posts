@@ -106,15 +106,23 @@ sudo chmod 744 *.sh
 and then use:
 ```
 ./start.sh
+```
+```
 ./stop.sh
+```
+```
 ./clean.sh
 ```
 
 ### Pure docker method
 ```
 docker compose up
-# when all containers are runing, run the following commands in the seperate command line
+```
+When all containers are runing, run the following commands in the seperate command line
+```
 docker exec -it karma-app-posts-mongo-1 mongosh --eval "rs.initiate()"
+```
+```
 docker restart karma-app-posts-mongo-express-1
 ``` 
 
