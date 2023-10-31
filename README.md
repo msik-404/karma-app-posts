@@ -50,21 +50,44 @@ service Posts {
 }
 ```
 Running from top to bottom:
-- Creating post with optional image. The Image if present, will get compressed with jpeg for storing efficiency. 
+#### rpc createPost(CreatePostRequest) returns (google.protobuf.Empty) {}
+- Create post with optional image. The Image if present, will get compressed with jpeg for storing efficiency. 
 Initially post has zero karma score and active visibility.
-- Rating positively, negatively. Operation is idempotent if post was already rated positively by some client rating it 
+
+#### rpc ratePost(RatePostRequest) returns (ChangedRatingResponse) {}
+- Rate positively, negatively. Operation is idempotent if post was already rated positively by some client rating it 
 positively again doesn't do anything.
-- Unrating posts. This operation is also idempotent.
-- Changing visibility to Active, Hidden or Deleted. This operation is also idempotent Active->Active etc.
-- Getting paginated posts. Posts are paginated using key-set pagination on tuple (karmaScore, userId) if two karmaScores
+
+#### rpc unratePost(UnratePostRequest) returns (ChangedRatingResponse) {}
+- Unrate posts. This operation is also idempotent.
+
+#### rpc changePostVisibility(ChangePostVisibilityRequest) returns (google.protobuf.Empty) {}
+- Change visibility to Active, Hidden or Deleted. This operation is also idempotent Active->Active etc.
+
+#### rpc findPosts(PostsRequest) returns (PostsResponse) {}
+- Get paginated posts. Posts are paginated using key-set pagination on tuple (karmaScore, userId) if two karmaScores
 are the same, greater userId is first.
-- Getting paginated posts created by a given user.
+
+#### rpc findPostsWithCreatorId(PostsWithCreatorIdRequest) returns (PostsResponse) {}
+- Get paginated posts created by a given user.
+
+#### rpc findImage(ImageRequest) returns (ImageResponse) {}
 - Get image of a given post.
-- Get ratings of a given client user. Ratings are paginated and returned in the same order as posts. So client can easily
+
+#### rpc findPostRatings(PostRatingsRequest) returns (PostRatingsResponse) {}
+ - Get ratings of a given client user. Ratings are paginated and returned in the same order as posts. So client can easily
 combine data from these two sources to present data to the frontend.
-- Getting paginated ratings of some client user of posts created by given creator user.
+
+#### rpc findPostRatingsWithCreatorId(PostRatingsWithCreatorIdRequest) returns (PostRatingsResponse) {}
+- Get paginated ratings of some client user of posts created by given creator user.
+
+#### rpc findPostCreatorId(PostCreatorIdRequest) returns (PostCreatorIdResponse) {}
 - Get user id by post id
+
+#### rpc findPostWithImageData(PostRequest) returns (PostWithImageData) {}
 - Get post data with image by post id
+
+#### rpc findPostVisibility(MongoObjectId) returns (PostVisibilityResponse) {}
 - Get post visibility by post id
 
 To see message structure look inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
@@ -80,6 +103,24 @@ simple regex.
 
 Each encodable exception must implement [EncodableException](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/encoding/EncodableException.java)
 and [GrpcStatusException](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/grpc/impl/exception/GrpcStatusException.java)
+
+# Environment variables
+
+Backend requires two environment variables to be set:
+- KARMA_APP_POSTS_DB_HOST
+- KARMA_APP_POSTS_DB_NAME
+
+Additionally, [docker-compose.yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml) uses:
+- KARMA_APP_POSTS_HOST
+
+Simply create .env and place it in the root of project.
+
+For example:
+```
+KARMA_APP_POSTS_DB_HOST=posts-db
+KARMA_APP_POSTS_DB_NAME=posts-db
+KARMA_APP_POSTS_HOST=karma-app-posts
+```
 
 # Bulding the project
 To get target folder and build the project with maven simply run: 
