@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -31,17 +30,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 class ImageRepositoryTest {
 
-    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest")
+    public static final MongoDBContainer MONGO_DB_CONTAINER = new MongoDBContainer("mongo:latest")
             .withExposedPorts(27017);
 
     static {
-        mongoDBContainer.start();
+        MONGO_DB_CONTAINER.start();
     }
 
     @DynamicPropertySource
     private static void registerRedisProperties(DynamicPropertyRegistry registry) {
 
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        registry.add("spring.data.mongodb.uri", MONGO_DB_CONTAINER::getReplicaSetUrl);
         registry.add("spring.data.mongodb.database", () -> "test");
     }
 
