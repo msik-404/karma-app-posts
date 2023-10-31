@@ -106,7 +106,7 @@ which simply inserts "exceptionId EXCEPTION_ID" at the begging of error message.
 simple regex.
 
 Each encodable exception must implement [EncodableException](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/encoding/EncodableException.java)
-and [GrpcStatusException](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/grpc/impl/exception/GrpcStatusException.java)
+and [GrpcStatusException](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/grpc/impl/exception/GrpcStatusException.java).
 
 # Environment variables
 
@@ -114,7 +114,7 @@ Backend requires two environment variables to be set:
 - KARMA_APP_POSTS_DB_HOST
 - KARMA_APP_POSTS_DB_NAME
 
-for details see: [application.yaml](https://github.com/msik-404/karma-app-posts/blob/main/src/main/resources/application.yaml)
+for details see: [application.yaml](https://github.com/msik-404/karma-app-posts/blob/main/src/main/resources/application.yaml).
 
 Additionally, [docker-compose.yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml) uses:
 - KARMA_APP_POSTS_HOST
@@ -147,7 +147,7 @@ All the code which comes into contact with data persistence is tested in integra
 The rest of the code is much simpler and easier to follow and was tested manually using postman.
 
 # Starting the microservice | deployment for testing
-In this repository one can find [docker-compose-yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml)
+In this repository one can find [docker-compose-yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml).
 
 To start the microservice one should use provided bash scripts but pure docker can also be used.
 
@@ -179,7 +179,7 @@ and then use:
 ```
 docker compose up
 ```
-When all containers are runing, run the following commands in the seperate command line
+When all containers are runing, run the following commands in the separate command line.
 ```
 docker exec -it karma-app-posts-mongo-1 mongosh --eval "rs.initiate()"
 ```
