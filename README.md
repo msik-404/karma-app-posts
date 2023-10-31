@@ -154,11 +154,11 @@ To start the microservice one should use provided bash scripts but pure docker c
 ### Bash scripts
 Bash scripts can be found under scripts/ folder. 
 
-Starting microservice: [start.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/start.sh), 
+Starting microservice: [start.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/start.sh)
 
 Stopping microservice: [stop.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/stop.sh) 
 
-Cleaning after microservice: [clean.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/clean.sh).
+Cleaning after microservice: [clean.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/clean.sh)
 
 To run the scripts make them executable for example:
 ```
