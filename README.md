@@ -110,6 +110,8 @@ Backend requires two environment variables to be set:
 - KARMA_APP_POSTS_DB_HOST
 - KARMA_APP_POSTS_DB_NAME
 
+for details see: [application.yaml](https://github.com/msik-404/karma-app-posts/blob/main/src/main/resources/application.yaml)
+
 Additionally, [docker-compose.yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml) uses:
 - KARMA_APP_POSTS_HOST
 
