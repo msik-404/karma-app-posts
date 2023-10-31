@@ -145,7 +145,7 @@ The rest of the code is much simpler and easier to follow and was tested manuall
 # Starting the microservice | deployment for testing
 In this repository one can find [docker-compose-yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml)
 
-To start the microservice one should use provided bash scripts but only docker can also be used.
+To start the microservice one should use provided bash scripts but pure docker can also be used.
 
 ### Bash scripts
 Bash scripts can be found under scripts/ folder. 
