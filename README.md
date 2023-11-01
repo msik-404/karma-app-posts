@@ -128,7 +128,7 @@ KARMA_APP_POSTS_DB_NAME=posts-db
 KARMA_APP_POSTS_HOST=karma-app-posts
 ```
 
-# Bulding the project
+# Building the project
 To get target folder and build the project with maven simply run: 
 ```
 ./mvnw clean package -DskipTests
