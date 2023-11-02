@@ -24,7 +24,7 @@ This project significantly simplifies validation of messages and reduces the tim
 Additionally potential user of this microservice can see which fields are required and what
 constraints need to be met to build valid message.
 
-### Using postman
+## Using postman
 To test this microservice in postman one must not only import .proto file in postman service definition but also import 
 path to .proto files of protovalidate-java. Usually this path looks something like this: 
 some_personal_path/karma-app-posts/target/protoc-dependencies/some-long-code. Under some-long-code there should be the 
@@ -32,7 +32,7 @@ following files buf/validate/priv/expression.proto and buf/validate/priv/validat
 
 # Features
 
-### Service methods
+## Service methods
 These are all the supported methods.
 
 ```
@@ -54,49 +54,49 @@ service Posts {
 }
 ```
 Running from top to bottom:
-#### rpc createPost(CreatePostRequest) returns (google.protobuf.Empty) {}
+### rpc createPost(CreatePostRequest) returns (google.protobuf.Empty) {}
 - Create post with optional image. The Image if present, will get compressed with jpeg for storing efficiency. 
 Initially post has zero karma score and active visibility.
 
-#### rpc ratePost(RatePostRequest) returns (ChangedRatingResponse) {}
+### rpc ratePost(RatePostRequest) returns (ChangedRatingResponse) {}
 - Rate positively, negatively. Operation is idempotent if post was already rated positively by some client rating it 
 positively again doesn't do anything.
 
-#### rpc unratePost(UnratePostRequest) returns (ChangedRatingResponse) {}
+### rpc unratePost(UnratePostRequest) returns (ChangedRatingResponse) {}
 - Unrate posts. This operation is also idempotent.
 
-#### rpc changePostVisibility(ChangePostVisibilityRequest) returns (google.protobuf.Empty) {}
+### rpc changePostVisibility(ChangePostVisibilityRequest) returns (google.protobuf.Empty) {}
 - Change visibility to Active, Hidden or Deleted. This operation is also idempotent Active->Active etc.
 
-#### rpc findPosts(PostsRequest) returns (PostsResponse) {}
+### rpc findPosts(PostsRequest) returns (PostsResponse) {}
 - Get paginated posts. Posts are paginated using key-set pagination on tuple (karmaScore, userId) if two karmaScores
 are the same, greater userId is first.
 
-#### rpc findPostsWithCreatorId(PostsWithCreatorIdRequest) returns (PostsResponse) {}
+### rpc findPostsWithCreatorId(PostsWithCreatorIdRequest) returns (PostsResponse) {}
 - Get paginated posts created by a given user.
 
-#### rpc findImage(ImageRequest) returns (ImageResponse) {}
+### rpc findImage(ImageRequest) returns (ImageResponse) {}
 - Get image of a given post.
 
-#### rpc findPostRatings(PostRatingsRequest) returns (PostRatingsResponse) {}
+### rpc findPostRatings(PostRatingsRequest) returns (PostRatingsResponse) {}
  - Get ratings of a given client user. Ratings are paginated and returned in the same order as posts. So client can easily
 combine data from these two sources to present data to the frontend.
 
-#### rpc findPostRatingsWithCreatorId(PostRatingsWithCreatorIdRequest) returns (PostRatingsResponse) {}
+### rpc findPostRatingsWithCreatorId(PostRatingsWithCreatorIdRequest) returns (PostRatingsResponse) {}
 - Get paginated ratings of some client user of posts created by given creator user.
 
-#### rpc findPostCreatorId(PostCreatorIdRequest) returns (PostCreatorIdResponse) {}
+### rpc findPostCreatorId(PostCreatorIdRequest) returns (PostCreatorIdResponse) {}
 - Get user id by post id
 
-#### rpc findPostWithImageData(PostRequest) returns (PostWithImageData) {}
+### rpc findPostWithImageData(PostRequest) returns (PostWithImageData) {}
 - Get post data with image by post id
 
-#### rpc findPostVisibility(MongoObjectId) returns (PostVisibilityResponse) {}
+### rpc findPostVisibility(MongoObjectId) returns (PostVisibilityResponse) {}
 - Get post visibility by post id
 
 To see message structure look inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
 
-### Exception encoding
+## Exception encoding
 When some exception which is not critical is thrown on the backend side, it is being encoded and passed with appropriate
 grpc code to the caller. Each exception has its unique identifier. With this it can be decoded on the caller side.
 In this setup client side can use the same exception classes as backend.
@@ -151,7 +151,7 @@ In this repository one can find [docker-compose-yaml](https://github.com/msik-40
 
 To start the microservice one should use provided bash scripts but pure docker can also be used.
 
-### Bash scripts
+## Bash scripts
 Bash scripts can be found under [scripts](https://github.com/msik-404/karma-app-posts/tree/main/scripts) folder. 
 
 Starting microservice: [start.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/start.sh)
@@ -175,7 +175,7 @@ and then use:
 ./clean.sh
 ```
 
-### Pure docker method
+## Pure docker method
 ```
 docker compose up
 ```
