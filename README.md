@@ -1,6 +1,10 @@
 # karma-app-posts
 Posts microservice for karma-app microservices version. karma-app-posts is grpc server with access to mongodb database.
 
+Check out other karma-app microservices:
+- [karma-app-gateway](https://github.com/msik-404/karma-app-gateway)
+- [karma-app-users](https://github.com/msik-404/karma-app-users)
+
 # Technologies used
 - Java 21
 - MongoDB
