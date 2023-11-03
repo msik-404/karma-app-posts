@@ -9,7 +9,7 @@ Check out other karma-app microservices:
 - Java 21
 - MongoDB
 - Docker
-- GRPC
+- Grpc
 - Java spring
 - [spring-boot-starter-data-mongodb](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/)
 - spring-boot-starter-test
@@ -19,9 +19,10 @@ Check out other karma-app microservices:
 - [protovalidate-java](https://github.com/bufbuild/protovalidate-java)
 - lombok
 
-# Grpc, Protobuf and protovalidate
-Thanks to the use of grpc all available service methods and messages can be 
-inspected inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
+# gRPC, Protobuf and protovalidate
+[gRPC](https://grpc.io/) is a modern open source high performance Remote Procedure Call (RPC) framework that can run in 
+any environment. gRPC simplifies microservices API implementation and latter the usage of the API. gRPC is self-documenting,
+all available service methods and message structures can be found inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
 
 In this project to help with message validation I use: [protovalidate-java](https://github.com/bufbuild/protovalidate-java).
 This project significantly simplifies validation of messages and reduces the time required to build stable system.
