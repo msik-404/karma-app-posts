@@ -103,7 +103,7 @@ To see message structure look inside [proto file](https://github.com/msik-404/ka
 
 ## Exception encoding
 When some exception which is not critical is thrown on the backend side, it is being encoded and passed with appropriate
-grpc code to the caller. Each exception has its unique identifier. With this it can be decoded on the caller side.
+gRPC code to the caller. Each exception has its unique identifier. With this it can be decoded on the caller side.
 In this setup client side can use the same exception classes as backend.
 
 Simple [encoding class](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/encoding/ExceptionEncoder.java)
