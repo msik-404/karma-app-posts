@@ -24,7 +24,7 @@ Check out other karma-app microservices:
 any environment. gRPC simplifies microservices API implementation and later the usage of the API. gRPC is self-documenting,
 all available service methods and message structures can be found inside [proto file](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/karma_app_posts.proto).
 
-In this project to help with message validation I use: [protovalidate-java](https://github.com/bufbuild/protovalidate-java).
+In this project to help with message validation [protovalidate-java](https://github.com/bufbuild/protovalidate-java) is used.
 This project significantly simplifies validation of messages and reduces the time required to build stable system.
 Additionally potential user of this microservice can see which fields are required and what
 constraints need to be met to build valid message.
@@ -148,7 +148,8 @@ If one would like to build the project with running the tests, one must have doc
 ```
 
 # Tests
-Docker is required to run tests locally because I use [Testcontainers for Java](https://java.testcontainers.org/). 
+Docker is required to run tests locally because [Testcontainers for Java](https://java.testcontainers.org/) is used for
+integration tests.
 
 All the code which comes into contact with data persistence is tested in integration tests under 
 [src/test](https://github.com/msik-404/karma-app-posts/tree/main/src/test).
@@ -156,7 +157,7 @@ The rest of the code is much simpler and easier to follow and was tested manuall
 
 # Transaction requirements
 Because backend of this microservice uses transactions, mongodb cannot be run in standalone server mode. It needs
-either replica-set or cluster. In this case I use single node replica-set. Inside  [mongo health-check](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml#L33)
+either replica-set or cluster. In this case single node replica-set is used. Inside  [mongo health-check](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml#L33)
 there is a simple script which checks for replica-set status. If status indicates that replica-set is not initiated,
 initiation happens. If initiation is successful, 1 is returned and container is healthy, else container is unhealthy.
 Other containers wait for mongo container to become healthy.
