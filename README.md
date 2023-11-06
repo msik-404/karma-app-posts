@@ -9,7 +9,7 @@ Check out other karma-app microservices:
 - Java 21
 - MongoDB
 - Docker
-- Grpc
+- gRPC
 - Java spring
 - [spring-boot-starter-data-mongodb](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/)
 - spring-boot-starter-test
