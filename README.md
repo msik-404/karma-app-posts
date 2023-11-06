@@ -114,14 +114,15 @@ Each encodable exception must implement [EncodableException](https://github.com/
 and [GrpcStatusException](https://github.com/msik-404/karma-app-posts/blob/main/src/main/java/com/msik404/karmaappposts/grpc/impl/exception/GrpcStatusException.java).
 
 # Environment variables
-
-Backend requires two environment variables to be set:
+Backend requires four environment variables to be set:
 - KARMA_APP_POSTS_DB_HOST
 - KARMA_APP_POSTS_DB_NAME
+- KARMA_APP_POSTS_DB_USER
+- KARMA_APP_POSTS_DB_PASSWORD
 
 for details see: [application.yaml](https://github.com/msik-404/karma-app-posts/blob/main/src/main/resources/application.yaml).
 
-Additionally, [docker-compose.yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml) uses:
+Additionally, [docker-compose.yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml) needs:
 - KARMA_APP_POSTS_HOST
 
 Simply create .env and place it in the root of project.
@@ -130,6 +131,8 @@ For example:
 ```
 KARMA_APP_POSTS_DB_HOST=posts-db
 KARMA_APP_POSTS_DB_NAME=posts-db
+KARMA_APP_POSTS_DB_USER=dev
+KARMA_APP_POSTS_DB_PASSWORD=dev
 KARMA_APP_POSTS_HOST=karma-app-posts
 ```
 
@@ -151,54 +154,35 @@ All the code which comes into contact with data persistence is tested in integra
 [src/test](https://github.com/msik-404/karma-app-posts/tree/main/src/test).
 The rest of the code is much simpler and easier to follow and was tested manually using postman.
 
+# Transaction requirements
+Because backend of this microservice uses transactions, mongodb cannot be run in standalone server mode. It needs
+either replica-set or cluster. In this case I use single node replica-set. Inside  [mongo health-check](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml#33)
+there is a simple script which checks for replica-set status. If status indicates that replica-set is uninitiated,
+initiation happens. If initiation is successful, 1 is returned and container is healthy, else container is un-healthy.
+Other containers wait for mongo container to become healthy.
+
+Mongo replica-set authentication minimally requires `keyfile`.
+To generate one simply run:
+```
+openssl rand -base64 756 > keyfile
+chmod 600 keyfile
+```
+
 # Starting the microservice | deployment for testing
+
+To start the microservice locally, docker compose is required.
+
 In this repository one can find [docker-compose-yaml](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml).
 
-To start the microservice one should use provided bash scripts but pure docker can also be used.
-
-## Bash scripts
-Bash scripts can be found under [scripts](https://github.com/msik-404/karma-app-posts/tree/main/scripts) folder. 
-
-Starting microservice: [start.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/start.sh)
-
-Stopping microservice: [stop.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/stop.sh) 
-
-Cleaning after microservice: [clean.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/clean.sh)
-
-To run the scripts make them executable for example:
-```
-sudo chmod 744 *.sh
-```
-and then use:
-```
-./start.sh
-```
-```
-./stop.sh
-```
-```
-./clean.sh
-```
-
-## Pure docker method
+To start all containers one should run in the root of the project:
 ```
 docker compose up
 ```
-When all containers are running, run the following commands in the separate command line.
+To stop containers:
 ```
-docker exec -it karma-app-posts-mongo-1 mongosh --eval "rs.initiate()"
+docker compose stop
 ```
+To remove containers and their data:
 ```
-docker restart karma-app-posts-mongo-express-1
-``` 
-
-# Transaction requirements
-Because backend of this microservice uses transactions, mongodb cannot be run in standalone server mode. It needs 
-either replica-set or cluster. In this case I use single node replica-set. Script [mongo_rs_initiate.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/mongo_rs_initiate.sh)
-is used to initiate replica-set after starting mongodb container. Sadly I could not find a reliable way to do this initiation
-inside docker-compose.yaml file, so this need to be made semi-manually with bash script. Also because of this initiation
-[mongo-express](https://github.com/mongo-express/mongo-express) might fail, because of this [reset_mongo_express.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/reset_mongo_express.sh) script exists. 
-All of this is run inside [start.sh](https://github.com/msik-404/karma-app-posts/blob/main/scripts/start.sh). After 5 
-seconds replica-set is being initiated and mongo-express container is being restarted. Of course this might fail because
-of long running ```docker compose up``` when downloading images. To solve this issue after finishing dowloading images,
-simply run ```./clean.sh``` and again ```./start.sh```.
+docker compose down -v
+```
