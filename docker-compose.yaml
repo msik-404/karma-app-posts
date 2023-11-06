@@ -2,17 +2,17 @@ version: '3.9'
 
 services:
   backend:
-    depends_on:
-      mongo:
-        condition: service_healthy
     build: .
-    env_file:
-      - .env
     hostname: ${KARMA_APP_POSTS_HOST}
     ports:
       - 50051:50051
     networks:
       - net
+    env_file:
+      - .env
+    depends_on:
+      mongo:
+        condition: service_healthy
 
   mongo:
     image: mongo
