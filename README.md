@@ -157,8 +157,8 @@ The rest of the code is much simpler and easier to follow and was tested manuall
 # Transaction requirements
 Because backend of this microservice uses transactions, mongodb cannot be run in standalone server mode. It needs
 either replica-set or cluster. In this case I use single node replica-set. Inside  [mongo health-check](https://github.com/msik-404/karma-app-posts/blob/main/docker-compose.yaml#L33)
-there is a simple script which checks for replica-set status. If status indicates that replica-set is uninitiated,
-initiation happens. If initiation is successful, 1 is returned and container is healthy, else container is un-healthy.
+there is a simple script which checks for replica-set status. If status indicates that replica-set is not initiated,
+initiation happens. If initiation is successful, 1 is returned and container is healthy, else container is unhealthy.
 Other containers wait for mongo container to become healthy.
 
 Mongo replica-set authentication minimally requires `keyfile`.
