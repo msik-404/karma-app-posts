@@ -3,7 +3,8 @@ version: '3.9'
 services:
   backend:
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     build: .
     env_file:
       - .env
@@ -11,7 +12,7 @@ services:
     ports:
       - 50051:50051
     networks:
-      - karma-app-net
+      - net
 
   mongo:
     image: mongo
@@ -19,24 +20,35 @@ services:
     ports:
       - 27017:27017
     networks:
-      - karma-app-net
+      - net
     environment:
+      - MONGO_INITDB_ROOT_USERNAME=${KARMA_APP_POSTS_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${KARMA_APP_POSTS_DB_PASSWORD}
       - MONGO_INITDB_ROOT_DATABASE=${KARMA_APP_POSTS_DB_NAME}
     volumes:
       - db-data:/data/db
       - db-config:/data/configdb
-    command: mongod --replSet rs0
+      - ./keyfile:/opt/keyfile/
+    healthcheck: # 94 is an error code returned when rs is not initiated.
+      test: test "$$(mongosh -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet --eval "try {rs.status().ok} catch(e) {if (e.code == 94) {rs.initiate().ok} else {0} }")" -eq 1
+      interval: 10s
+      start_period: 30s
+    command: mongod --replSet rs0 --keyFile /opt/keyfile
 
   mongo-express:
     image: mongo-express
-    restart: always
     ports:
       - 8081:8081
     networks:
-      - karma-app-net
+      - net
     environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${KARMA_APP_POSTS_DB_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${KARMA_APP_POSTS_DB_PASSWORD}
       ME_CONFIG_MONGODB_SERVER: ${KARMA_APP_POSTS_DB_NAME}
       ME_CONFIG_MONGODB_PORT: "27017"
+    depends_on:
+      mongo:
+        condition: service_healthy
 
 volumes:
   db-data:
@@ -45,6 +57,5 @@ volumes:
     driver: local
 
 networks:
-  karma-app-net:
-    name: karma-app-net
+  net:
     driver: bridge

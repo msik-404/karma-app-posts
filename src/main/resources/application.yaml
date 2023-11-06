@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://${KARMA_APP_POSTS_DB_HOST}:27017/?replicaSet=rs0
+      uri: mongodb://${KARMA_APP_POSTS_DB_USER}:${KARMA_APP_POSTS_DB_PASSWORD}@${KARMA_APP_POSTS_DB_HOST}:27017/?replicaSet=rs0
       database: ${KARMA_APP_POSTS_DB_NAME}
 
 logging:
