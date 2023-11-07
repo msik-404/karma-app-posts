@@ -95,6 +95,7 @@ message RatePostRequest {
 
   /** Required value indicating whether rating is positive. */
   optional bool is_positive = 3 [(buf.validate.field).required = true];
+
 }
 
 /**
@@ -139,6 +140,7 @@ message ScrollPosition {
 
   /** Required postId of the last post in the previous post fetch. */
   optional protomongo.ProtoObjectId post_id = 2 [(buf.validate.field).required = true];
+
 }
 
 /**
@@ -146,6 +148,7 @@ message ScrollPosition {
  * a given position.
  */
 message PostsRequest {
+
   /** Optional amount of the requested posts. Default is 100. */
   optional uint32 size = 1;
 
@@ -157,6 +160,7 @@ message PostsRequest {
 
   /** Optional order of the posts. Default is from the posts with highest score to the posts with lowest score. */
   optional bool is_descending = 4;
+
 }
 
 /**
@@ -189,6 +193,7 @@ message PostsWithCreatorIdRequest {
 
   /** Required id of the creator user. */
   optional protomongo.ProtoObjectId creator_id = 2 [(buf.validate.field).required = true];
+
 }
 
 /**
@@ -215,6 +220,7 @@ message PostRatingsRequest {
 
   /** Required id of the client user. */
   optional protomongo.ProtoObjectId client_id = 2 [(buf.validate.field).required = true];
+
 }
 
 /**
@@ -230,6 +236,7 @@ message PostRating {
    * client user.
    */
   optional bool is_positive = 2;
+
 }
 
 /**
@@ -250,6 +257,7 @@ message PostRatingsWithCreatorIdRequest {
 
   /** Required id of a creator user */
   optional protomongo.ProtoObjectId creator_id = 2 [(buf.validate.field).required = true];
+
 }
 
 /**
@@ -267,4 +275,5 @@ message PostVisibilityResponse {
 
   /** Required visibility of the given post */
   optional PostVisibility visibility = 1 [(buf.validate.field).required = true];
+
 }
