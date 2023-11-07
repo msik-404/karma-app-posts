@@ -7,7 +7,6 @@
     - [ChangePostVisibilityRequest](#karmaappposts-ChangePostVisibilityRequest)
     - [ChangedRatingResponse](#karmaappposts-ChangedRatingResponse)
     - [CreatePostRequest](#karmaappposts-CreatePostRequest)
-    - [ImageRequest](#karmaappposts-ImageRequest)
     - [ImageResponse](#karmaappposts-ImageResponse)
     - [Post](#karmaappposts-Post)
     - [PostRating](#karmaappposts-PostRating)
@@ -84,21 +83,6 @@ Represents request for creating new post.
 | headline | [string](#string) | optional | Optional post headline. |
 | text | [string](#string) | optional | Optional post text. |
 | image_data | [bytes](#bytes) | optional | Optional image data. |
-
-
-
-
-
-
-<a name="karmaappposts-ImageRequest"></a>
-
-### ImageRequest
-Represents request for image of a given post.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| post_id | [protomongo.ProtoObjectId](#protomongo-ProtoObjectId) | optional | Required id of the post. |
 
 
 

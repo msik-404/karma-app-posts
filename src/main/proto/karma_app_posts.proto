@@ -197,13 +197,6 @@ message PostsWithCreatorIdRequest {
 }
 
 /**
- * Represents request for image of a given post.
- */
-message ImageRequest {
-  optional protomongo.ProtoObjectId post_id = 1 [(buf.validate.field).required = true]; /** Required id of the post. */
-}
-
-/**
  * Represents image of a given post. If image does not exist, image_data field is not set.
  */
 message ImageResponse {
