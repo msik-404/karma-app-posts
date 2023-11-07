@@ -8,6 +8,7 @@ import build.buf.protovalidate.exceptions.ValidationException;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Message;
+import com.msik404.grpc.mongo.id.ProtoObjectId;
 import com.msik404.karmaappposts.grpc.*;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsRequestDto;
 import com.msik404.karmaappposts.grpc.impl.dto.PostRatingsWithCreatorIdRequestDto;
@@ -234,7 +235,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findImage(
-            ImageRequest request,
+            ProtoObjectId request,
             StreamObserver<ImageResponse> responseObserver) {
 
         boolean isSuccess = validate(request, responseObserver);
@@ -243,7 +244,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
 
         try {
-            byte[] imageData = imageService.findImageByPostId(new ObjectId(request.getPostId().getHexString()));
+            byte[] imageData = imageService.findImageByPostId(new ObjectId(request.getHexString()));
 
             var response = ImageResponse.newBuilder()
                     .setImageData(ByteString.copyFrom(imageData))
@@ -318,8 +319,8 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostCreatorId(
-            PostCreatorIdRequest request,
-            StreamObserver<PostCreatorIdResponse> responseObserver) {
+            ProtoObjectId request,
+            StreamObserver<ProtoObjectId> responseObserver) {
 
         boolean isSuccess = validate(request, responseObserver);
         if (!isSuccess) {
@@ -327,11 +328,9 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
         }
 
         try {
-            ObjectId creatorId = postService.findPostCreatorId(new ObjectId(request.getPostId().getHexString()));
+            ObjectId creatorId = postService.findPostCreatorId(new ObjectId(request.getHexString()));
 
-            PostCreatorIdResponse response = PostCreatorIdResponse.newBuilder()
-                    .setUserId(MongoObjectId.newBuilder().setHexString(creatorId.toHexString()).build())
-                    .build();
+            ProtoObjectId response = ProtoObjectId.newBuilder().setHexString(creatorId.toHexString()).build();
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -343,7 +342,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostWithImageData(
-            PostRequest request,
+            ProtoObjectId request,
             StreamObserver<PostWithImageData> responseObserver) {
 
         boolean isSuccess = validate(request, responseObserver);
@@ -353,7 +352,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
         try {
             PostDocumentWithImageData post = postService.findPostWithImageData(
-                    new ObjectId(request.getPostId().getHexString()));
+                    new ObjectId(request.getHexString()));
 
             responseObserver.onNext(DocToGrpcMapper.map(post));
             responseObserver.onCompleted();
@@ -365,7 +364,7 @@ public class PostsGrpcImpl extends PostsGrpc.PostsImplBase {
 
     @Override
     public void findPostVisibility(
-            MongoObjectId request,
+            ProtoObjectId request,
             StreamObserver<PostVisibilityResponse> responseObserver) {
 
         boolean isSuccess = validate(request, responseObserver);

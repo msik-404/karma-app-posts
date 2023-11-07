@@ -1,7 +1,7 @@
 package com.msik404.karmaappposts.grpc.impl.mapper;
 
 import com.google.protobuf.ByteString;
-import com.msik404.karmaappposts.grpc.MongoObjectId;
+import com.msik404.grpc.mongo.id.ProtoObjectId;
 import com.msik404.karmaappposts.grpc.Post;
 import com.msik404.karmaappposts.grpc.PostRating;
 import com.msik404.karmaappposts.grpc.PostWithImageData;
@@ -17,9 +17,9 @@ public class DocToGrpcMapper {
 
         Post.Builder builder = Post.newBuilder();
 
-        builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.getId().toHexString()).build());
+        builder.setPostId(ProtoObjectId.newBuilder().setHexString(doc.getId().toHexString()).build());
 
-        builder.setUserId(MongoObjectId.newBuilder().setHexString(doc.getUserId().toHexString()).build());
+        builder.setUserId(ProtoObjectId.newBuilder().setHexString(doc.getUserId().toHexString()).build());
 
         if (doc.headline != null) {
             builder.setHeadline(doc.getHeadline());
@@ -40,7 +40,7 @@ public class DocToGrpcMapper {
 
         var builder = PostRating.newBuilder();
 
-        builder.setPostId(MongoObjectId.newBuilder().setHexString(doc.id().toHexString()).build());
+        builder.setPostId(ProtoObjectId.newBuilder().setHexString(doc.id().toHexString()).build());
 
         if (doc.isPositive() != null) {
             builder.setIsPositive(doc.isPositive());
