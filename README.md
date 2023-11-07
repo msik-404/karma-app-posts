@@ -35,14 +35,15 @@ path to .proto files of protovalidate-java. Usually this path looks something li
 some_personal_path/karma-app-posts/target/protoc-dependencies/some-long-code. Under some-long-code there should be the 
 following files buf/validate/priv/expression.proto and buf/validate/priv/validate.proto.
 
-Additionally, because of [mongo_object_id.proto](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/mongo_object_id.proto) file being extracted to reduce code duplication across many microservices,
-this file needs to be imported in the same manner as explained above. Just import path 
-to [proto](https://github.com/msik-404/karma-app-posts/tree/main/src/main/proto) folder.
+Additionally, [mongo_object_id.proto](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/mongo_object_id.proto)
+also needs to be imported in the same manner sa above. Just import path to [proto](https://github.com/msik-404/karma-app-posts/tree/main/src/main/proto) 
+folder. This is because mongo_object_id defines messages which are used in many microservices. Duplicating them would 
+case code-duplication and smelly code.
 
 # Features
 
-## API Documentation
-gRPC API documentation can be found [here](https://github.com/msik-404/karma-app-posts/blob/main/gRPC_API_docs.md)
+## gRPC API
+Documentation for the API can be found [here](https://github.com/msik-404/karma-app-posts/blob/main/gRPC_API_docs.md)
 
 ## Exception encoding
 When some exception which is not critical is thrown on the backend side, it is being encoded and passed with appropriate
