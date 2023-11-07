@@ -35,9 +35,9 @@ path to .proto files of protovalidate-java. Usually this path looks something li
 some_personal_path/karma-app-posts/target/protoc-dependencies/some-long-code. Under some-long-code there should be the 
 following files buf/validate/priv/expression.proto and buf/validate/priv/validate.proto.
 
-Additionally, because of [mongo_object_id.proto] file being extracted to reduce code duplication across many microservices,
+Additionally, because of [mongo_object_id.proto](https://github.com/msik-404/karma-app-posts/blob/main/src/main/proto/mongo_object_id.proto) file being extracted to reduce code duplication across many microservices,
 which would use this message, this file needs to be imported in the same manner as explained above. Just import path 
-to [proto] folder.
+to [proto](https://github.com/msik-404/karma-app-posts/tree/main/src/main/proto) folder.
 
 # Protocol Documentation
 <a name="top"></a>
