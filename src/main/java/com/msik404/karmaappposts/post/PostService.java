@@ -72,6 +72,15 @@ public class PostService {
         }
     }
 
+    /**
+     * @param postId Id of rated post.
+     * @param userId Id of user who is rating.
+     * @param isPositive Value indicating whether rating is positive or not.
+     * @return New score of post.
+     * @throws PostNotFoundException Is thrown when post is not found.
+     * @throws RatingNotFoundException Practically can not be thrown. Could only be thrown if transaction was not working
+     * and rating could not be updated because somehow it got deleted during rating process.
+     */
     @Transactional
     public int rate(
             @NonNull ObjectId postId,
